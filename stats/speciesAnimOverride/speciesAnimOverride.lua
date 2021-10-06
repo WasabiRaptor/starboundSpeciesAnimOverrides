@@ -23,6 +23,11 @@ function initAfterInit()
 	self.species = world.entitySpecies(entity.id())
 	self.gender = world.entityGender(entity.id())
 	self.speciesData = root.assetJson("/humanoid/"..self.species.."/speciesAnimOverride.config")
+	if self.speciesData.scripts ~= nil then
+		for _, script in ipairs(self.speciesData.scripts) do
+			require(script)
+		end
+	end
 
 	for partname, filepath in pairs(self.speciesData.partImages) do
 		animator.setPartTag(partname, "partImage", sb.replaceTags(filepath, { gender = self.gender }))

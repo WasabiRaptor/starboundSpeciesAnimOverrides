@@ -20,11 +20,11 @@ function init()
 	end
 
 	message.setHandler( hand.."ItemLock", function(_,_, lock)
-		locked = lock
+		lockItem(lock)
 	end)
 
 	message.setHandler( item.name().."Lock", function(_,_, lock)
-		locked = lock
+		lockItem(lock)
 	end)
 
 
@@ -32,13 +32,25 @@ function init()
 end
 
 function update(dt, fireMode, shiftHeld, moves)
-	if old.update ~= nil and not locked then
-		old.update(dt, fireMode, shiftHeld, moves)
-	else
+	sb.logInfo(sb.printJson(shiftHeld))
+	sb.logInfo(sb.printJson(moves))
+
+	if old.update ~= nil then
+		if locked then
+			old.update(dt, "none", false, {})
+		else
+			old.update(dt, fireMode, shiftHeld, moves)
+		end
 	end
 end
 
 function lockItem(lock)
+	if not locked and lock then
+		if old.uninit ~= nil then old.uninit() end
+	end
+	if locked and not lock then
+		if old.init ~= nil then old.init() end
+	end
 	locked = lock
 end
 

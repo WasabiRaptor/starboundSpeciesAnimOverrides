@@ -28,6 +28,9 @@ function initAfterInit()
 			require(script)
 		end
 	end
+	self.bodyconfig = root.assetJson(root.assetJson("/species/"..self.species..".species").humanoidConfig or "/humanoid.config")
+	animator.translateTransformationGroup("handoffset", self.bodyconfig.frontHandPosition)
+	animator.translateTransformationGroup("backarmoffset", self.bodyconfig.backArmOffset)
 
 	for partname, filepath in pairs(self.speciesData.partImages) do
 		animator.setPartTag(partname, "partImage", sb.replaceTags(filepath, { gender = self.gender }))
@@ -70,25 +73,48 @@ function loopedMessage(name, eid, message, args, callback, failCallback)
 end
 
 function getHandItems()
-	getHandItem("primary")
-	getHandItem("alt")
+	if mcontroller.facingDirection() < 0 then
+		getHandItem("primary", "frontarms")
+		getHandItem("alt", "backarms")
+	else
+		getHandItem("primary", "backarms")
+		getHandItem("alt", "frontarms")
+	end
 end
 
-function getHandItem(hand)
+function getHandItem(hand, part)
 	local itemDescriptor = world.entityHandItemDescriptor(entity.id(), hand)
-	if itemDescriptor ~= nil and (not itemDescriptor.parameters or not itemDescriptor.parameters.itemHasOverrideLockScript) then
-		loopedMessage("giveItemScript"..hand, entity.id(), "giveHeldItemOverrideLockScript", {itemDescriptor} )
+	if itemDescriptor ~= nil then
+		if root.itemType(itemDescriptor.name) == "activeitem" then
+			if  (not itemDescriptor.parameters or not itemDescriptor.parameters.itemHasOverrideLockScript) then
+				loopedMessage("giveItemScript"..hand, entity.id(), "giveHeldItemOverrideLockScript", {itemDescriptor} )
+			end
+			itemOverrideData = status.statusProperty(hand.."ItemOverrideData") or {}
+			if itemOverrideData.setHoldingItem ~= false then
+				local item = root.itemConfig(itemDescriptor)
+				-- this is going to take a lot more effort I don't want to spend right now
+			else
+
+			end
+		end
+
+	else
+
 	end
+end
+
+function setEmptyHand(hand, part)
 end
 
 setCosmetic = {}
 
 function getCosmeticItems()
-	loopedMessage("getEquips", entity.id(), "animOverrideGetEquips", {}, function(equips)
-		setCosmetic.head(equips.headCosmetic or equips.head)
-		setCosmetic.chest(equips.chestCosmetic or equips.chest)
-		setCosmetic.legs(equips.legsCosmetic or equips.legs)
-		setCosmetic.back(equips.backCosmetic or equips.back)
+	loopedMessage("getEquipsAndLounging", entity.id(), "animOverrideGetEquipsAndLounge", {}, function(data)
+		setCosmetic.head(data.headCosmetic or data.head)
+		setCosmetic.chest(data.chestCosmetic or data.chest)
+		setCosmetic.legs(data.legsCosmetic or data.legs)
+		setCosmetic.back(data.backCosmetic or data.back)
+		self.loungingIn = data.lounging
 	end )
 end
 
@@ -253,31 +279,13 @@ function checkHumanoidAnim()
 		if found1 ~= nil then
 			animator.setGlobalTag( "frontarmPersonality", imageString:sub(found2+1, found2+1) )
 		end
-		-- get arm rotation
-		found1, found2 = imageString:find("backarm.png:rotation")
-		if found1 ~= nil then
-			sb.logInfo(sb.printJson(part))
-		end
-		found1, found2 = imageString:find("frontarm.png:rotation")
-		if found1 ~= nil then
-			sb.logInfo(sb.printJson(part))
-		end
+	end
 
-
-
-		--check for doing a sit animation
-		found1, found2 = imageString:find("body.png:sit.1")
-		if found1 ~= nil then
-			doAnims(self.speciesData.animations.sit)
-			return
-		end
-
-		--check for doing a lay animation
-		found1, found2 = imageString:find("body.png:lay.1")
-		if found1 ~= nil then
-			doAnims(self.speciesData.animations.sit)
-			return
-		end
+	animator.resetTransformationGroup("sitrotation")
+	if self.loungingIn ~= nil then
+		doAnims(self.speciesData.animations[world.getObjectParameter(self.loungingIn, "sitOrientation") or "sit"])
+		animator.rotateTransformationGroup("sitrotation", (world.getObjectParameter(self.loungingIn, "sitAngle") or 0) * math.pi/180)
+		return
 	end
 
 	if mcontroller.onGround() then

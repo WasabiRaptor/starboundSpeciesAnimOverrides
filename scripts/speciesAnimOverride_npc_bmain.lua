@@ -11,6 +11,7 @@ function init()
 			chestCosmetic = npc.getItemSlot("chestCosmetic"),
 			legsCosmetic = npc.getItemSlot("legsCosmetic"),
 			backCosmetic = npc.getItemSlot("backCosmetic"),
+			lounging = npc.loungingIn()
 		}
 	end)
 end

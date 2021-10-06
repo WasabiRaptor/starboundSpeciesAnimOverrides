@@ -1,7 +1,7 @@
 local oldinit = init
 function init()
 	oldinit()
-	message.setHandler("animOverrideGetEquips", function(_,_)
+	message.setHandler("animOverrideGetEquipsAndLounge", function(_,_)
 		return {
 			head = player.equippedItem("head"),
 			chest = player.equippedItem("chest"),
@@ -11,6 +11,7 @@ function init()
 			chestCosmetic = player.equippedItem("chestCosmetic"),
 			legsCosmetic = player.equippedItem("legsCosmetic"),
 			backCosmetic = player.equippedItem("backCosmetic"),
+			lounging = player.loungingIn()
 		}
 	end)
 

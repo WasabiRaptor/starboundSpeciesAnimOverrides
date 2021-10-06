@@ -14,6 +14,8 @@ function init()
 
 	hand = activeItem.hand()
 
+	status.setStatusProperty(hand.."ItemOverrideData", {})
+
 	for funcName, func in pairs(overrideFuncs) do
 		old[funcName] = activeItem[funcName]
 		activeItem[funcName] = func
@@ -32,9 +34,6 @@ function init()
 end
 
 function update(dt, fireMode, shiftHeld, moves)
-	sb.logInfo(sb.printJson(shiftHeld))
-	sb.logInfo(sb.printJson(moves))
-
 	if old.update ~= nil then
 		if locked then
 			old.update(dt, "none", false, {})

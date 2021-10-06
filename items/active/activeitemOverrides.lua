@@ -23,11 +23,23 @@ function init()
 		locked = lock
 	end)
 
+	message.setHandler( item.name().."Lock", function(_,_, lock)
+		locked = lock
+	end)
+
+
 	if old.init ~= nil then old.init() end
 end
 
 function update(dt, fireMode, shiftHeld, moves)
-	if old.update ~= nil and not locked then old.update(dt, fireMode, shiftHeld, moves) end
+	if old.update ~= nil and not locked then
+		old.update(dt, fireMode, shiftHeld, moves)
+	else
+	end
+end
+
+function lockItem(lock)
+	locked = lock
 end
 
 function uninit()

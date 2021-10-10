@@ -16,7 +16,7 @@ function init()
 	end)
 
 	message.setHandler("giveHeldItemOverrideLockScript", function(_,_, itemDescriptor)
-		if root.itemType(itemDescriptor.name) == "activeitem" then
+		if root.itemType(itemDescriptor.name) == "activeitem" and not blacklistedOverrideItem(itemDescriptor.name) then
 			local newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor)
 			if newItemDescriptor ~= nil then
 				if sb.printJson(player.swapSlotItem()) == sb.printJson(itemDescriptor) then
@@ -30,6 +30,11 @@ function init()
 			end
 		end
 	end)
+end
+
+function blacklistedOverrideItem(itemName)
+	local blacklist = root.assetJson("/itemScriptBlacklist.config")
+	return blacklist[itemName]
 end
 
 function reuturnLockScriptItemDescriptor(itemDescriptor)

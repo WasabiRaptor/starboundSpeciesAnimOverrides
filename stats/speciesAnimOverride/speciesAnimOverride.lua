@@ -31,6 +31,7 @@ function initAfterInit()
 	self.bodyconfig = root.assetJson(root.assetJson("/species/"..self.species..".species").humanoidConfig or "/humanoid.config")
 	animator.translateTransformationGroup("handoffset", self.bodyconfig.frontHandPosition)
 	animator.translateTransformationGroup("backarmoffset", self.bodyconfig.backArmOffset)
+	animator.translateTransformationGroup("globalOffset", {self.speciesData.globalOffset[1]/8, self.speciesData.globalOffset[2]/8})
 
 	for partname, filepath in pairs(self.speciesData.partImages) do
 		animator.setPartTag(partname, "partImage", sb.replaceTags(filepath, { gender = self.gender }))

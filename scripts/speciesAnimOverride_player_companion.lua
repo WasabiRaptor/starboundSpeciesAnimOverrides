@@ -21,10 +21,12 @@ function init()
 			if newItemDescriptor ~= nil then
 				if sb.printJson(player.swapSlotItem()) == sb.printJson(itemDescriptor) then
 					player.setSwapSlotItem(newItemDescriptor)
+					return
 				else
 					local consumed = player.consumeItem(itemDescriptor, false, true)
 					if consumed ~= nil then
 						player.giveItem(newItemDescriptor)
+						return
 					end
 				end
 			end

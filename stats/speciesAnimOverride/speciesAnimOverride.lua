@@ -20,8 +20,8 @@ function init()
 end
 
 function initAfterInit()
-	self.species = world.entitySpecies(entity.id())
-	self.gender = world.entityGender(entity.id())
+	self.species = status.statusProperty("overrideSpecies") or world.entitySpecies(entity.id())
+	self.gender = status.statusProperty("overrideGender") or world.entityGender(entity.id())
 	self.speciesData = root.assetJson("/humanoid/"..self.species.."/speciesAnimOverride.config")
 	if self.speciesData.scripts ~= nil then
 		for _, script in ipairs(self.speciesData.scripts) do

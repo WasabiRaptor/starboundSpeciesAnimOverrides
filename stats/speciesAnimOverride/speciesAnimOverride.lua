@@ -20,12 +20,15 @@ function init()
 end
 
 function initAfterInit()
-	self.species = status.statusProperty("overrideSpecies") or world.entitySpecies(entity.id())
-	self.gender = status.statusProperty("overrideGender") or world.entityGender(entity.id())
-	local success, speciesData = pcall(root.assetJson,("/humanoid/"..self.species.."/speciesAnimOverride.config"))
+	self.species = self.overrideData.species or world.entitySpecies(entity.id())
+	self.gender = self.overrideData.gender or world.entityGender(entity.id())
+	local success, speciesData = pcall(root.assetJson, ("/humanoid/"..self.species.."/speciesAnimOverride.config"))
 	if success then
 		self.speciesData = speciesData
-	else return end
+	else
+		self.inited = false
+		return
+	end
 
 	if self.speciesData.scripts ~= nil then
 		for _, script in ipairs(self.speciesData.scripts) do
@@ -47,10 +50,9 @@ end
 
 function update(dt)
 	effect.setParentDirectives("crop;0;0;0;0")
-	local overrideSpecies = status.statusProperty("overrideSpecies")
-	local overrideGender = status.statusProperty("overrideGender")
+	self.overrideData = status.statusProperty("overrideData")
 
-	if (not self.inited) or (overrideGender ~= nil and overrideGender ~= self.gender) or (overrideSpecies ~= nil and overrideSpecies ~= self.species) then
+	if (not self.inited) or (self.overrideData.gender ~= nil and self.overrideData.gender ~= self.gender) or (self.overrideData.species ~= nil and self.overrideData.species ~= self.species) then
 		initAfterInit()
 	else
 		updateAnims(dt)
@@ -99,8 +101,8 @@ function getHandItem(hand, part)
 			if  (not itemDescriptor.parameters or not itemDescriptor.parameters.itemHasOverrideLockScript) then
 				loopedMessage("giveItemScript"..hand, entity.id(), "giveHeldItemOverrideLockScript", {itemDescriptor} )
 			end
-			itemOverrideData = status.statusProperty(hand.."ItemOverrideData") or {}
-			if itemOverrideData.setHoldingItem ~= false then
+			itemself.overrideData = status.statusProperty(hand.."Itemself.overrideData") or {}
+			if itemself.overrideData.setHoldingItem ~= false then
 				local item = root.itemConfig(itemDescriptor)
 				-- this is going to take a lot more effort I don't want to spend right now
 			else
@@ -271,7 +273,7 @@ function checkHumanoidAnim()
 			local found3, found4 = imageString:find(".1", found2, found2+10 )
 			if found3 ~= nil then
 				local directives = imageString:sub(found4+1)
-				self.directives = directives:gsub("?crop;0;0;0;0", "", 1)
+				self.directives = self.overrideData.directives or directives
 				doAnim("emoteState", imageString:sub(found2+1, found3-1))
 			end
 		end

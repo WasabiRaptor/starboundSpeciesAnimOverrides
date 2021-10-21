@@ -1,7 +1,7 @@
 local oldinit = init
 function init()
 	oldinit()
-	message.setHandler("animOverrideGetEquips", function(_,_)
+	message.setHandler("animOverrideGetEquipsAndLounge", function(_,_)
 		return {
 			head = npc.getItemSlot("head"),
 			chest = npc.getItemSlot("chest"),

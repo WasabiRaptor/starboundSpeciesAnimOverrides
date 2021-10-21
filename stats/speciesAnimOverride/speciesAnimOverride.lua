@@ -50,7 +50,7 @@ end
 
 function update(dt)
 	effect.setParentDirectives("crop;0;0;0;0")
-	self.overrideData = status.statusProperty("overrideData")
+	self.overrideData = status.statusProperty("overrideData") or {}
 
 	if (not self.inited) or (self.overrideData.gender ~= nil and self.overrideData.gender ~= self.gender) or (self.overrideData.species ~= nil and self.overrideData.species ~= self.species) then
 		initAfterInit()
@@ -101,8 +101,8 @@ function getHandItem(hand, part)
 			if  (not itemDescriptor.parameters or not itemDescriptor.parameters.itemHasOverrideLockScript) then
 				loopedMessage("giveItemScript"..hand, entity.id(), "giveHeldItemOverrideLockScript", {itemDescriptor} )
 			end
-			itemself.overrideData = status.statusProperty(hand.."Itemself.overrideData") or {}
-			if itemself.overrideData.setHoldingItem ~= false then
+			local itemOverrideData = status.statusProperty(hand.."ItemOverrideData") or {}
+			if itemOverrideData.setHoldingItem ~= false then
 				local item = root.itemConfig(itemDescriptor)
 				-- this is going to take a lot more effort I don't want to spend right now
 			else

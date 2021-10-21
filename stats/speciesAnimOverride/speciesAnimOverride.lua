@@ -22,16 +22,22 @@ end
 function initAfterInit()
 	self.species = status.statusProperty("overrideSpecies") or world.entitySpecies(entity.id())
 	self.gender = status.statusProperty("overrideGender") or world.entityGender(entity.id())
-	self.speciesData = root.assetJson("/humanoid/"..self.species.."/speciesAnimOverride.config")
+	local success, speciesData = pcall(root.assetJson,("/humanoid/"..self.species.."/speciesAnimOverride.config"))
+	if success then
+		self.speciesData = speciesData
+	else return end
+
 	if self.speciesData.scripts ~= nil then
 		for _, script in ipairs(self.speciesData.scripts) do
 			require(script)
 		end
 	end
-	self.bodyconfig = root.assetJson(root.assetJson("/species/"..self.species..".species").humanoidConfig or "/humanoid.config")
+	local success, speciesFile = pcall(root.assetJson,("/species/"..self.species..".species"))
+	self.speciesFile = speciesFile
+	self.bodyconfig = root.assetJson((speciesFile or {}).humanoidConfig or "/humanoid.config")
 	animator.translateTransformationGroup("handoffset", self.bodyconfig.frontHandPosition)
 	animator.translateTransformationGroup("backarmoffset", self.bodyconfig.backArmOffset)
-	animator.translateTransformationGroup("globalOffset", {self.speciesData.globalOffset[1]/8, self.speciesData.globalOffset[2]/8})
+	animator.translateTransformationGroup("globalOffset", {((self.speciesData.globalOffset or {})[1] or 0)/8, ((self.speciesData.globalOffset or {})[2] or 0)/8})
 
 	for partname, filepath in pairs(self.speciesData.partImages) do
 		animator.setPartTag(partname, "partImage", sb.replaceTags(filepath, { gender = self.gender }))
@@ -41,7 +47,10 @@ end
 
 function update(dt)
 	effect.setParentDirectives("crop;0;0;0;0")
-	if not self.inited then
+	local overrideSpecies = status.statusProperty("overrideSpecies")
+	local overrideGender = status.statusProperty("overrideGender")
+
+	if (not self.inited) or (overrideGender ~= nil and overrideGender ~= self.gender) or (overrideSpecies ~= nil and overrideSpecies ~= self.species) then
 		initAfterInit()
 	else
 		updateAnims(dt)

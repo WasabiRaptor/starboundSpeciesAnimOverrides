@@ -561,7 +561,7 @@
 					"tailState": {
 						"none": { "properties": {} },
 
-						"idle": { "properties": { "image": "<partImage>:idle.<frame><customizeDirectives><tailMask><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:idle.<bodyPersonality><customizeDirectives><tailMask><directives>" } },
 
 						"duck": { "properties": { "image": "<partImage>:duck.<frame><customizeDirectives><tailMask><directives>" } },
 						"sit": { "properties": { "image": "<partImage>:sit.<frame><customizeDirectives><tailMask><directives>" } },

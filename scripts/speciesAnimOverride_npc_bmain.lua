@@ -18,6 +18,6 @@ function init()
 	local speciesAnimOverrideData = config.getParameter("speciesAnimOverrideData")
 	if speciesAnimOverrideData ~= nil then
 		status.setStatusProperty("speciesAnimOverrideData", speciesAnimOverrideData)
-		status.setPersistentEffects("speciesAnimOverride", {"speciesAnimOverride"})
+		status.setPersistentEffects("speciesAnimOverride", { speciesAnimOverrideData.customAnimStatus or "speciesAnimOverride"})
 	end
 end

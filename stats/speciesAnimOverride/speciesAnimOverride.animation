@@ -22,7 +22,8 @@
 		/*
 		the timings here should mostly match the ones in humanoid config, if your species has different timing or has
 		parts I did not define here then you should create a duplicate status effect that points to an animation file
-		with the correct timings and parts
+		with the correct timings and parts, or patch the part in to this file, however be wary of conflicts if another
+		species patches the same part in differently, same idea for hand items that use different animations
 		*/
 		"stateTypes": {
 			"bodyState": {
@@ -578,6 +579,90 @@
 					}
 				}
 			},
+
+			"frontlegs_cosmetic": {
+				"properties": {
+					"centered": true,
+					"zLevel": 2,
+					"transformationGroups": ["flip", "legsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+				},
+				"partStates": {
+					"legsState": {
+						"none": { "properties": {} },
+
+						"idle": { "properties": { "image": "<partImage>:idle.<frame><cosmeticDirectives><directives>" } },
+
+						"duck": { "properties": { "image": "<partImage>:duck.<frame><cosmeticDirectives><directives>" } },
+						"sit": { "properties": { "image": "<partImage>:sit.<frame><cosmeticDirectives><directives>" } },
+						"lay": { "properties": { "image": "<partImage>:lay.<frame><cosmeticDirectives><directives>" } },
+
+						"walk": { "properties": { "image": "<partImage>:<direction>.walk.<frame><cosmeticDirectives><directives>" } },
+						"run": { "properties": { "image": "<partImage>:<direction>.run.<frame><cosmeticDirectives><directives>" } },
+
+						"jump": { "properties": { "image": "<partImage>:jump.<frame><cosmeticDirectives><directives>" } },
+						"fall": { "properties": { "image": "<partImage>:fall.<frame><cosmeticDirectives><directives>" } },
+
+						"swim": { "properties": { "image": "<partImage>:swim.<frame><cosmeticDirectives><directives>" } },
+						"swimIdle": { "properties": { "image": "<partImage>:swimIdle.<frame><cosmeticDirectives><directives>" } }
+
+					}
+				}
+			},
+			"backlegs_cosmetic": {
+				"properties": {
+					"centered": true,
+					"zLevel": -2,
+					"transformationGroups": ["flip", "legsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+				},
+				"partStates": {
+					"legsState": {
+						"none": { "properties": {} },
+
+						"idle": { "properties": { "image": "<partImage>:idle.<frame><cosmeticDirectives><directives>" } },
+
+						"duck": { "properties": { "image": "<partImage>:duck.<frame><cosmeticDirectives><directives>" } },
+						"sit": { "properties": { "image": "<partImage>:sit.<frame><cosmeticDirectives><directives>" } },
+						"lay": { "properties": { "image": "<partImage>:lay.<frame><cosmeticDirectives><directives>" } },
+
+						"walk": { "properties": { "image": "<partImage>:<direction>.walk.<frame><cosmeticDirectives><directives>" } },
+						"run": { "properties": { "image": "<partImage>:<direction>.run.<frame><cosmeticDirectives><directives>" } },
+
+						"jump": { "properties": { "image": "<partImage>:jump.<frame><cosmeticDirectives><directives>" } },
+						"fall": { "properties": { "image": "<partImage>:fall.<frame><cosmeticDirectives><directives>" } },
+
+						"swim": { "properties": { "image": "<partImage>:swim.<frame><cosmeticDirectives><directives>" } },
+						"swimIdle": { "properties": { "image": "<partImage>:swimIdle.<frame><cosmeticDirectives><directives>" } }
+					}
+				}
+			},
+			"tail_cosmetic": {
+				"properties": {
+					"centered": true,
+					"zLevel": -1,
+					"transformationGroups": ["flip", "tailbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+				},
+				"partStates": {
+					"tailState": {
+						"none": { "properties": {} },
+
+						"idle": { "properties": { "image": "<partImage>:idle.<bodyPersonality><cosmeticDirectives><directives>" } },
+
+						"duck": { "properties": { "image": "<partImage>:duck.<frame><cosmeticDirectives><directives>" } },
+						"sit": { "properties": { "image": "<partImage>:sit.<frame><cosmeticDirectives><directives>" } },
+						"lay": { "properties": { "image": "<partImage>:lay.<frame><cosmeticDirectives><directives>" } },
+
+						"walk": { "properties": { "image": "<partImage>:<direction>.walk.<frame><cosmeticDirectives><directives>" } },
+						"run": { "properties": { "image": "<partImage>:<direction>.run.<frame><cosmeticDirectives><directives>" } },
+
+						"jump": { "properties": { "image": "<partImage>:jump.<frame><cosmeticDirectives><directives>" } },
+						"fall": { "properties": { "image": "<partImage>:fall.<frame><cosmeticDirectives><directives>" } },
+
+						"swim": { "properties": { "image": "<partImage>:swim.<frame><cosmeticDirectives><directives>" } },
+						"swimIdle": { "properties": { "image": "<partImage>:swimIdle.<frame><cosmeticDirectives><directives>" } }
+					}
+				}
+			},
+
 			"head": {
 				"properties": {
 					"centered": true,

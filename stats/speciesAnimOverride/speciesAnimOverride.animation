@@ -507,7 +507,7 @@
 					"legsState": {
 						"none": { "properties": {} },
 
-						"idle": { "properties": { "image": "<partImage>:idle.<frame><customizeDirectives><frontlegsMask><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:idle.<bodyPersonality><customizeDirectives><frontlegsMask><directives>" } },
 
 						"duck": { "properties": { "image": "<partImage>:duck.<frame><customizeDirectives><frontlegsMask><directives>" } },
 						"sit": { "properties": { "image": "<partImage>:sit.<frame><customizeDirectives><frontlegsMask><directives>" } },
@@ -535,7 +535,7 @@
 					"legsState": {
 						"none": { "properties": {} },
 
-						"idle": { "properties": { "image": "<partImage>:idle.<frame><customizeDirectives><backlegsMask><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:idle.<bodyPersonality><customizeDirectives><backlegsMask><directives>" } },
 
 						"duck": { "properties": { "image": "<partImage>:duck.<frame><customizeDirectives><backlegsMask><directives>" } },
 						"sit": { "properties": { "image": "<partImage>:sit.<frame><customizeDirectives><backlegsMask><directives>" } },
@@ -583,14 +583,14 @@
 			"frontlegs_cosmetic": {
 				"properties": {
 					"centered": true,
-					"zLevel": 2,
+					"zLevel": 2.1,
 					"transformationGroups": ["flip", "legsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"legsState": {
 						"none": { "properties": {} },
 
-						"idle": { "properties": { "image": "<partImage>:idle.<frame><cosmeticDirectives><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:idle.<bodyPersonality><cosmeticDirectives><directives>" } },
 
 						"duck": { "properties": { "image": "<partImage>:duck.<frame><cosmeticDirectives><directives>" } },
 						"sit": { "properties": { "image": "<partImage>:sit.<frame><cosmeticDirectives><directives>" } },
@@ -611,14 +611,14 @@
 			"backlegs_cosmetic": {
 				"properties": {
 					"centered": true,
-					"zLevel": -2,
+					"zLevel": -1.9,
 					"transformationGroups": ["flip", "legsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"legsState": {
 						"none": { "properties": {} },
 
-						"idle": { "properties": { "image": "<partImage>:idle.<frame><cosmeticDirectives><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:idle.<bodyPersonality><cosmeticDirectives><directives>" } },
 
 						"duck": { "properties": { "image": "<partImage>:duck.<frame><cosmeticDirectives><directives>" } },
 						"sit": { "properties": { "image": "<partImage>:sit.<frame><cosmeticDirectives><directives>" } },
@@ -638,7 +638,7 @@
 			"tail_cosmetic": {
 				"properties": {
 					"centered": true,
-					"zLevel": -1,
+					"zLevel": -0.9,
 					"transformationGroups": ["flip", "tailbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {

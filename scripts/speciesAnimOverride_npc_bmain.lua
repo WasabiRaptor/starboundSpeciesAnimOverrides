@@ -14,4 +14,10 @@ function init()
 			lounging = npc.loungingIn()
 		}
 	end)
+
+	local speciesAnimOverrideData = config.getParameter("speciesAnimOverrideData")
+	if speciesAnimOverrideData ~= nil then
+		status.setStatusProperty("speciesAnimOverrideData", speciesAnimOverrideData)
+		status.setPersistentEffects("speciesAnimOverride", {"speciesAnimOverride"})
+	end
 end

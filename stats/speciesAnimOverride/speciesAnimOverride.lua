@@ -50,7 +50,7 @@ end
 
 function update(dt)
 	effect.setParentDirectives("crop;0;0;0;0")
-	self.overrideData = status.statusProperty("overrideData") or {}
+	self.overrideData = status.statusProperty("speciesAnimOverrideData") or {}
 
 	if (not self.inited) or (self.overrideData.gender ~= nil and self.overrideData.gender ~= self.gender) or (self.overrideData.species ~= nil and self.overrideData.species ~= self.species) then
 		initAfterInit()

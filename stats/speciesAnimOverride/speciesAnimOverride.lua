@@ -55,13 +55,17 @@ function update(dt)
 	if (not self.inited) or (self.overrideData.gender ~= nil and self.overrideData.gender ~= self.gender) or (self.overrideData.species ~= nil and self.overrideData.species ~= self.species) then
 		initAfterInit()
 	else
-		updateAnims(dt)
-		animator.setFlipped(mcontroller.facingDirection() == -1)
-		animator.setGlobalTag("direction", mcontroller.facingDirection() * mcontroller.movingDirection() )
-		getCosmeticItems()
-		getHandItems()
-		checkHumanoidAnim()
+		doUpdate(dt)
 	end
+end
+
+function doUpdate(dt)
+	updateAnims(dt)
+	animator.setFlipped(mcontroller.facingDirection() == -1)
+	animator.setGlobalTag("direction", mcontroller.facingDirection() * mcontroller.movingDirection() )
+	getCosmeticItems()
+	getHandItems()
+	checkHumanoidAnim()
 end
 
 function uninit()
@@ -186,15 +190,28 @@ function setCosmetic.legs(cosmetic)
 	if cosmetic ~= nil then
 		local item = root.itemConfig(cosmetic)
 		local mask = fixFilepath(item.config.mask, item)
+		local tailMask = fixFilepath(item.config.tailMask, item)
 
-		animator.setPartTag("body_cosmetic", "cosmeticDirectives", getCosmeticDirectives(item) )
+		local cosmeticDirectives = getCosmeticDirectives(item)
+
+		animator.setPartTag("body_cosmetic", "cosmeticDirectives", cosmeticDirectives )
 		animator.setPartTag("body_cosmetic", "partImage", fixFilepath(item.config[self.gender.."Frames"], item) )
+
+		animator.setPartTag("tail_cosmetic", "cosmeticDirectives", cosmeticDirectives )
+		animator.setPartTag("tail_cosmetic", "partImage", fixFilepath(item.config[self.gender.."TailFrames"], item) )
+
 		if mask ~= nil then
 			animator.setGlobalTag( "bodyMask", "?addmask="..mask )
 		end
+		if tailMask ~= nil then
+			animator.setGlobalTag( "tailMask", "?addmask="..tailMask )
+		end
 	else
 		animator.setPartTag("body_cosmetic", "partImage", "" )
+		animator.setPartTag("tail_cosmetic", "partImage", "" )
+
 		animator.setGlobalTag( "bodyMask", "" )
+		animator.setGlobalTag( "tailMask", "" )
 	end
 end
 

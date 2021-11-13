@@ -318,37 +318,49 @@ function checkHumanoidAnim()
 	end
 
 	if mcontroller.onGround() then
-		if mcontroller.walking() then
-			doAnims(self.speciesData.animations.walk)
-			return
-		end
-		if mcontroller.running() then
-			doAnims(self.speciesData.animations.run)
-			return
-		end
-		if mcontroller.crouching() then
-			doAnims(self.speciesData.animations.duck)
-			return
-		end
-		doAnims(self.speciesData.animations.idle)
-		return
+		if mcontroller.walking() then movement.walking() return end
+		if mcontroller.running() then movement.running() return end
+		if mcontroller.crouching() then movement.crouching() return end
+		movement.idle() return
 	end
-	if mcontroller.liquidMovement() then
-		doAnims(self.speciesData.animations.swim)
-		return
-	end
-	if mcontroller.jumping() then
-		doAnims(self.speciesData.animations.jump)
-		return
-	end
-	if mcontroller.falling() then
-		doAnims(self.speciesData.animations.fall)
-		return
-	end
-	if mcontroller.flying() then
-		doAnims(self.speciesData.animations.fly)
-		return
-	end
+	if mcontroller.liquidMovement() then movement.liquidMovement() return end
+	if mcontroller.jumping() then movement.jumping() return end
+	if mcontroller.falling() then movement.falling() return end
+	if mcontroller.flying() then movement.fly() return end
+end
+
+movement = {}
+
+function movement.idle()
+	doAnims(self.speciesData.animations.idle)
+end
+
+function movement.walking()
+	doAnims(self.speciesData.animations.walk)
+end
+
+function movement.running()
+	doAnims(self.speciesData.animations.run)
+end
+
+function movement.crouching()
+	doAnims(self.speciesData.animations.duck)
+end
+
+function movement.liquidMovement()
+	doAnims(self.speciesData.animations.swim)
+end
+
+function movement.jumping()
+	doAnims(self.speciesData.animations.jump)
+end
+
+function movement.falling()
+	doAnims(self.speciesData.animations.fall)
+end
+
+function movement.flying()
+	doAnims(self.speciesData.animations.fly)
 end
 
 function doAnims( anims, force )
@@ -361,10 +373,13 @@ function doAnims( anims, force )
 			setAnimTag( anim )
 		elseif state == "priority" then
 			changePriorityLength( anim )
+		elseif state == "hitbox" then
 		else
 			doAnim( state.."State", anim, force)
 		end
 	end
+
+	setHitbox( (anims or {}).hitbox or self.speciesData.animations.idle.hitbox )
 end
 
 function doAnim( state, anim, force)
@@ -394,6 +409,10 @@ function queueAnimEndFunction(state, func, newPriority)
 		self.animStateData[state].animationState.priority = newPriority
 	end
 	table.insert(self.animStateData[state].animationState.queue, func)
+end
+
+function setHitbox( hitbox )
+	mcontroller.controlParameters({ collisionPoly = hitbox })
 end
 
 function setAnimTag(anim)

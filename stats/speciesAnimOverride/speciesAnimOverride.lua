@@ -200,10 +200,10 @@ function setCosmetic.legs(cosmetic)
 		animator.setPartTag("tail_cosmetic", "cosmeticDirectives", cosmeticDirectives )
 		animator.setPartTag("tail_cosmetic", "partImage", fixFilepath(item.config[self.gender.."TailFrames"], item) )
 
-		if mask ~= nil then
+		if mask ~= nil and mask ~= "" then
 			animator.setGlobalTag( "bodyMask", "?addmask="..mask )
 		end
-		if tailMask ~= nil then
+		if tailMask ~= nil and mask ~= "" then
 			animator.setGlobalTag( "tailMask", "?addmask="..tailMask )
 		end
 	else
@@ -233,6 +233,8 @@ function fixFilepath(string, item)
 		else
 			return item.directory..string
 		end
+	else
+		return ""
 	end
 end
 

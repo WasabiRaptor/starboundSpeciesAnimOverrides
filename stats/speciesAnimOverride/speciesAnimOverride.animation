@@ -307,7 +307,7 @@
 						"sit": { "properties": { "image": "<partImage>:sit.<frame><customizeDirectives><frontarmsMask><directives>" } },
 						"lay": { "properties": { "image": "<partImage>:lay.<frame><customizeDirectives><frontarmsMask><directives>" } },
 
-						"walk": { "properties": { "image": "<partImage>:<direction>.walk.<frame><<customizeDirectives>frontarmsMask><directives>" } },
+						"walk": { "properties": { "image": "<partImage>:<direction>.walk.<frame><customizeDirectives>frontarmsMask><directives>" } },
 						"run": { "properties": { "image": "<partImage>:<direction>.run.<frame><customizeDirectives><frontarmsMask><directives>" } },
 
 						"jump": { "properties": { "image": "<partImage>:jump.<frame><customizeDirectives><frontarmsMask><directives>" } },

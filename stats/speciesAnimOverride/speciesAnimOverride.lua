@@ -325,7 +325,9 @@ function checkHumanoidAnim()
 
 	animator.resetTransformationGroup("sitrotation")
 	if self.loungingIn ~= nil then
-		doAnims(self.speciesData.animations[world.getObjectParameter(self.loungingIn, "sitOrientation") or "sit"])
+		local sitOrLay = world.getObjectParameter(self.loungingIn, "sitOrientation") or "sit"
+		animator.setGlobalTag("state", sitOrLay)
+		doAnims(self.speciesData.animations[sitOrLay])
 		animator.rotateTransformationGroup("sitrotation", (world.getObjectParameter(self.loungingIn, "sitAngle") or 0) * math.pi/180)
 		return
 	end
@@ -345,34 +347,42 @@ end
 movement = {}
 
 function movement.idle()
+	animator.setGlobalTag("state", "stand")
 	doAnims(self.speciesData.animations.idle)
 end
 
 function movement.walking()
+	animator.setGlobalTag("state", "stand")
 	doAnims(self.speciesData.animations.walk)
 end
 
 function movement.running()
+	animator.setGlobalTag("state", "stand")
 	doAnims(self.speciesData.animations.run)
 end
 
 function movement.crouching()
+	animator.setGlobalTag("state", "crouch")
 	doAnims(self.speciesData.animations.duck)
 end
 
 function movement.liquidMovement()
+	animator.setGlobalTag("state", "stand")
 	doAnims(self.speciesData.animations.swim)
 end
 
 function movement.jumping()
+	animator.setGlobalTag("state", "jump")
 	doAnims(self.speciesData.animations.jump)
 end
 
 function movement.falling()
+	animator.setGlobalTag("state", "fall")
 	doAnims(self.speciesData.animations.fall)
 end
 
 function movement.flying()
+	animator.setGlobalTag("state", "stand")
 	doAnims(self.speciesData.animations.fly)
 end
 

@@ -18,6 +18,10 @@ function init()
 		self.animFunctionQueue[statename] = {}
 	end
 
+	if config.getParameter("overrideData") then
+		status.setStatusProperty("speciesAnimOverrideData", config.getParameter("overrideData"))
+	end
+
 end
 
 function initAfterInit()
@@ -67,6 +71,7 @@ function doUpdate(dt)
 	getCosmeticItems()
 	getHandItems()
 	checkHumanoidAnim()
+	mcontroller.controlParameters({ collisionPoly = self.hitbox })
 end
 
 function uninit()
@@ -402,7 +407,7 @@ function doAnims( anims, force )
 		end
 	end
 
-	setHitbox( (anims or {}).hitbox or self.speciesData.animations.idle.hitbox )
+	self.hitbox = ( (anims or {}).hitbox or self.speciesData.animations.idle.hitbox )
 end
 
 function doAnim( state, anim, force)
@@ -431,10 +436,6 @@ function queueAnimEndFunction(state, func, newPriority)
 		self.animStateData[state].animationState.priority = newPriority
 	end
 	table.insert(self.animFunctionQueue[state], func)
-end
-
-function setHitbox( hitbox )
-	mcontroller.controlParameters({ collisionPoly = hitbox })
 end
 
 function setAnimTag(anim)

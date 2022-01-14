@@ -15,6 +15,8 @@ function init()
 		}
 	end)
 
+	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
+
 	message.setHandler("giveHeldItemOverrideLockScript", function(_,_, itemDescriptor)
 		giveHeldItemOverrideLockScript(itemDescriptor)
 	end)

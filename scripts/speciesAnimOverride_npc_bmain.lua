@@ -15,6 +15,8 @@ function init()
 		}
 	end)
 
+	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
+
 	local speciesAnimOverrideData = config.getParameter("speciesAnimOverrideData")
 	if speciesAnimOverrideData ~= nil then
 		status.setStatusProperty("speciesAnimOverrideData", speciesAnimOverrideData)

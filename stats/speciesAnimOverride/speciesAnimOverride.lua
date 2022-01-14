@@ -72,6 +72,8 @@ function doUpdate(dt)
 	getHandItems()
 	checkHumanoidAnim()
 	mcontroller.controlParameters({ collisionPoly = self.hitbox })
+	animator.resetTransformationGroup("globalRotation")
+	animator.rotateTransformationGroup("globalRotation", mcontroller.rotation() * mcontroller.facingDirection())
 end
 
 function uninit()
@@ -333,7 +335,6 @@ function checkHumanoidAnim()
 		local sitOrLay = world.getObjectParameter(self.loungingIn, "sitOrientation") or "sit"
 		animator.setGlobalTag("state", sitOrLay)
 		doAnims(self.speciesData.animations[sitOrLay])
-		animator.rotateTransformationGroup("sitrotation", (world.getObjectParameter(self.loungingIn, "sitAngle") or 0) * math.pi/180)
 		return
 	end
 

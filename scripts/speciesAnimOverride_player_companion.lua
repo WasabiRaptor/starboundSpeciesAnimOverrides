@@ -47,7 +47,7 @@ end
 
 function reuturnLockScriptItemDescriptor(itemDescriptor)
 	local item = root.itemConfig(itemDescriptor)
-	local newItemDescriptor = { parameters = { scripts = item.config.scripts or {} } }
+	local newItemDescriptor = { parameters = { scripts = (itemDescriptor.parameters or {}).scripts or item.config.scripts or {} } }
 	table.insert(newItemDescriptor.parameters.scripts, "/items/active/activeitemOverrides.lua")
 	newItemDescriptor.parameters.itemHasOverrideLockScript = true
 	return sb.jsonMerge(itemDescriptor, newItemDescriptor)

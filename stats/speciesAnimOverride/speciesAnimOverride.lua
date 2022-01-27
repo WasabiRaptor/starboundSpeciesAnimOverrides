@@ -21,6 +21,7 @@ function init()
 		self.animFunctionQueue[statename] = {}
 
 		animator.setGlobalTag(statename.."Frame", 1)
+		animator.setGlobalTag(statename.."Anim", state.default)
 	end
 
 	if config.getParameter("overrideData") then
@@ -424,12 +425,17 @@ end
 function doAnim( state, anim, force)
 	local oldPriority = (self.animStateData[state].animationState or {}).priority or 0
 	local newPriority = (self.animStateData[state].states[anim] or {}).priority or 0
-	local isSame = animator.animationState(state) == anim
+	local isSame = (self.animStateData[state].animationState or {}).anim == anim
 	local force = force
 	local priorityHigher = ((newPriority >= oldPriority) or (newPriority == -1))
 	if (not isSame and priorityHigher) or hasAnimEnded(state) or force then
-		if isSame and (self.animStateData[state].states[animator.animationState(state)].mode == "end") then
-			force = true
+		if isSame then
+			local mode = self.animStateData[state].animationState.mode
+			if mode == "end" then
+				force = true
+			elseif mode == "loop" then
+				return
+			end
 		end
 		self.animStateData[state].animationState = {
 			anim = anim,
@@ -442,7 +448,9 @@ function doAnim( state, anim, force)
 			time = 0
 		}
 		animator.setGlobalTag( state.."Frame", 1 )
-		animator.setAnimationState(state, anim, force)
+		animator.setGlobalTag( state.."Anim", self.animStateData[state].states[anim].animFrames or anim )
+
+		animator.setAnimationState(state, self.animStateData[state].states[anim].baseAnim or anim, force)
 	end
 end
 

@@ -12,10 +12,15 @@ function init()
 			priority = state.states[state.default].priority,
 			cycle = state.states[state.default].cycle,
 			frames = state.states[state.default].frames,
+			mode = state.states[state.default].mode,
+			speed = state.states[state.default].frames / state.states[state.default].cycle,
+			frame = 1,
 			time = 0
 		}
 		state.tag = nil
 		self.animFunctionQueue[statename] = {}
+
+		animator.setGlobalTag(statename.."Frame", 1)
 	end
 
 	if config.getParameter("overrideData") then
@@ -269,6 +274,11 @@ end
 function updateAnims(dt)
 	for statename, state in pairs(self.animStateData) do
 		state.animationState.time = state.animationState.time + dt
+		local ended, times, time = hasAnimEnded(statename)
+		if (not ended) or (state.animationState.mode == "loop") then
+			state.animationState.frame = math.floor( time * state.animationState.speed ) + 1
+			animator.setGlobalTag( statename.."Frame", state.animationState.frame or 1 )
+		end
 	end
 
 	offsetAnimUpdate()
@@ -426,8 +436,12 @@ function doAnim( state, anim, force)
 			priority = newPriority,
 			cycle = self.animStateData[state].states[anim].cycle,
 			frames = self.animStateData[state].states[anim].frames,
+			mode = self.animStateData[state].states[anim].mode,
+			speed = self.animStateData[state].states[anim].frames / self.animStateData[state].states[anim].cycle,
+			frame = 1,
 			time = 0
 		}
+		animator.setGlobalTag( state.."Frame", 1 )
 		animator.setAnimationState(state, anim, force)
 	end
 end

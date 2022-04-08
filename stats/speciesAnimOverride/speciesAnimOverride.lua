@@ -137,6 +137,7 @@ function setEmptyHand(hand, part)
 end
 
 setCosmetic = {}
+currentCosmeticName = {}
 
 function getCosmeticItems()
 	loopedMessage("getEquipsAndLounging", entity.id(), "animOverrideGetEquipsAndLounge", {}, function(data)
@@ -150,6 +151,9 @@ end
 
 function setCosmetic.head(cosmetic)
 	if cosmetic ~= nil then
+		if currentCosmeticName.head == cosmetic.name then return end
+		currentCosmeticName.head = cosmetic.name
+
 		local item = root.itemConfig(cosmetic)
 		local mask = fixFilepath(item.config.mask, item)
 
@@ -159,6 +163,7 @@ function setCosmetic.head(cosmetic)
 			animator.setGlobalTag( "headMask", "?addmask="..mask )
 		end
 	else
+		currentCosmeticName.head = nil
 		animator.setPartTag("head_cosmetic", "partImage", "" )
 		animator.setGlobalTag( "headMask", "" )
 	end
@@ -166,6 +171,9 @@ end
 
 function setCosmetic.chest(cosmetic)
 	if cosmetic ~= nil then
+		if currentCosmeticName.chest == cosmetic.name then return end
+		currentCosmeticName.chest = cosmetic.name
+
 		local item = root.itemConfig(cosmetic)
 		local images = item.config[self.gender.."Frames"]
 
@@ -199,6 +207,7 @@ function setCosmetic.chest(cosmetic)
 		end
 
 	else
+		currentCosmeticName.chest = nil
 		animator.setPartTag("chest_cosmetic", "partImage", "" )
 		animator.setPartTag("backarms_cosmetic", "partImage", "" )
 		animator.setPartTag("frontarms_cosmetic", "partImage", "" )
@@ -212,6 +221,9 @@ end
 
 function setCosmetic.legs(cosmetic)
 	if cosmetic ~= nil then
+		if currentCosmeticName.legs == cosmetic.name then return end
+		currentCosmeticName.legs = cosmetic.name
+
 		local item = root.itemConfig(cosmetic)
 		local mask = fixFilepath(item.config.mask, item)
 		local tailMask = fixFilepath(item.config.tailMask, item)
@@ -231,6 +243,7 @@ function setCosmetic.legs(cosmetic)
 			animator.setGlobalTag( "tailMask", "?addmask="..tailMask )
 		end
 	else
+		currentCosmeticName.legs = nil
 		animator.setPartTag("body_cosmetic", "partImage", "" )
 		animator.setPartTag("tail_cosmetic", "partImage", "" )
 
@@ -241,11 +254,15 @@ end
 
 function setCosmetic.back(cosmetic)
 	if cosmetic ~= nil then
+		if currentCosmeticName.back == cosmetic.name then return end
+		currentCosmeticName.back = cosmetic.name
+
 		local item = root.itemConfig(cosmetic)
 
 		animator.setPartTag("back_cosmetic", "cosmeticDirectives", getCosmeticDirectives(item) )
 		animator.setPartTag("back_cosmetic", "partImage", fixFilepath(item.config[self.gender.."Frames"], item) )
 	else
+		currentCosmeticName.back = nil
 		animator.setPartTag("back_cosmetic", "partImage", "" )
 	end
 end
@@ -311,33 +328,49 @@ function endAnim(state, statename)
 	end
 end
 
+personality = {}
 function checkHumanoidAnim()
 	local portrait = world.entityPortrait(entity.id(), "full")
+	local gotEmote
 	for _, part in ipairs(portrait) do
 		local imageString = part.image
 		-- check for doing an emote animation
-		local found1, found2 = imageString:find("/emote.png:")
-		if found1 ~= nil then
-			local found3, found4 = imageString:find(".1", found2, found2+10 )
-			if found3 ~= nil then
-				local directives = imageString:sub(found4+1)
-				self.directives = self.overrideData.directives or directives
-				doAnim("emoteState", imageString:sub(found2+1, found3-1))
+		if not gotEmote then
+			local found1, found2 = imageString:find("/emote.png:")
+			if found1 ~= nil then
+				local found3, found4 = imageString:find(".1", found2, found2+10 )
+				if found3 ~= nil then
+					doAnim("emoteState", imageString:sub(found2+1, found3-1))
+					gotEmote = true
+					if self.directives == "" then
+						local directives = imageString:sub(found4+1)
+						self.directives = self.overrideData.directives or directives
+					end
+				end
 			end
 		end
 
 		--get personality values
-		found1, found2 = imageString:find("body.png:idle.")
-		if found1 ~= nil then
-			animator.setGlobalTag( "bodyPersonality", imageString:sub(found2+1, found2+1) )
+		if not personality.body then
+			found1, found2 = imageString:find("body.png:idle.")
+			if found1 ~= nil then
+				personality.body = imageString:sub(found2+1, found2+1)
+				animator.setGlobalTag( "bodyPersonality", personality.body )
+			end
 		end
-		found1, found2 = imageString:find("backarm.png:idle.")
-		if found1 ~= nil then
-			animator.setGlobalTag( "backarmPersonality", imageString:sub(found2+1, found2+1) )
+		if not personality.backarm then
+			found1, found2 = imageString:find("backarm.png:idle.")
+			if found1 ~= nil then
+				personality.backarm = imageString:sub(found2+1, found2+1)
+				animator.setGlobalTag( "backarmPersonality", personality.backarm )
+			end
 		end
-		found1, found2 = imageString:find("frontarm.png:idle.")
-		if found1 ~= nil then
-			animator.setGlobalTag( "frontarmPersonality", imageString:sub(found2+1, found2+1) )
+		if not personality.frontarm then
+			found1, found2 = imageString:find("frontarm.png:idle.")
+			if found1 ~= nil then
+				personality.frontarm = imageString:sub(found2+1, found2+1)
+				animator.setGlobalTag( "frontarmPersonality", personality.frontarm )
+			end
 		end
 	end
 

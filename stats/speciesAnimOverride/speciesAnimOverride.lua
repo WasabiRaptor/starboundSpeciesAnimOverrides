@@ -6,6 +6,9 @@ function init()
 	self.animStateData = root.assetJson("/stats/speciesAnimOverride/"..config.getParameter("animationConfig")).animatedParts.stateTypes
 	self.directives = ""
 	self.animFunctionQueue = {}
+	self.parts = {}
+	self.globalTagDefaults = root.assetJson("/stats/speciesAnimOverride/"..config.getParameter("animationConfig")).globalTagDefaults or {}
+
 	for statename, state in pairs(self.animStateData) do
 		state.animationState = {
 			anim = state.default,
@@ -53,8 +56,21 @@ function initAfterInit()
 	animator.translateTransformationGroup("backarmoffset", self.bodyconfig.backArmOffset)
 	animator.translateTransformationGroup("globalOffset", {((self.speciesData.globalOffset or {})[1] or 0)/8, ((self.speciesData.globalOffset or {})[2] or 0)/8})
 
-	for partname, filepath in pairs(self.speciesData.partImages) do
-		animator.setPartTag(partname, "partImage", sb.replaceTags(filepath, { gender = self.gender }))
+	self.globalTagDefaults = sb.jsonMerge(self.globalTagDefaults, self.speciesData.globalTagDefaults or {})
+	for tagname, string in pairs(self.speciesData.globalTagDefaults or {}) do
+		local part = sb.replaceTags(string, { gender = self.gender, species = self.species })
+		animator.setGlobalTag(tagname, part)
+	end
+	for partname, filepath in pairs(self.speciesData.partImages or {}) do
+		local part = sb.replaceTags(filepath, { gender = self.gender, species = self.species })
+		animator.setPartTag(partname, "partImage", part)
+		self.parts[partname] = part
+	end
+	for partname, data in pairs(self.speciesData.partTagDefaults or {}) do
+		for tagname, string in pairs(data) do
+			local part = sb.replaceTags(string, { gender = self.gender, species = self.species })
+			animator.setPartTag(partname, tagname, part)
+		end
 	end
 	self.inited = true
 end
@@ -156,18 +172,32 @@ function setCosmetic.head(cosmetic)
 
 		local item = root.itemConfig(cosmetic)
 		local mask = fixFilepath(item.config.mask, item)
+		local image = fixFilepath(item.config[self.gender.."Frames"], item)
+		local directives = getCosmeticDirectives(item)
 
-		animator.setPartTag("head_cosmetic", "cosmeticDirectives", getCosmeticDirectives(item) )
-		animator.setPartTag("head_cosmetic", "partImage", fixFilepath(item.config[self.gender.."Frames"], item) )
+		animator.setPartTag("head_cosmetic", "cosmeticDirectives", directives )
+		animator.setPartTag("head_cosmetic", "partImage", image )
 		if mask ~= nil and mask ~= "" then
-			animator.setGlobalTag( "headMask", "?addmask="..mask )
+			animator.setGlobalTag( "headMask", mask )
+		else
+			animator.setGlobalTag( "headMask", self.globalTagDefaults.headMask )
 		end
+
+		setCosmetic.head_addon(cosmetic, item, directives)
 	else
 		currentCosmeticName.head = nil
 		animator.setPartTag("head_cosmetic", "partImage", "" )
-		animator.setGlobalTag( "headMask", "" )
+		animator.setGlobalTag( "headMask", self.globalTagDefaults.headMask )
+
+		setCosmetic.head_clear(cosmetic)
 	end
 end
+
+function setCosmetic.head_addon(cosmetic, item, directives)
+end
+function setCosmetic.head_clear(cosmetic)
+end
+
 
 function setCosmetic.chest(cosmetic)
 	if cosmetic ~= nil then
@@ -185,6 +215,8 @@ function setCosmetic.chest(cosmetic)
 		local frontMask = fixFilepath(images.frontMask, item)
 		local backMask = fixFilepath(images.backMask, item)
 
+		local chestMask = fixFilepath(images.bodyMask, item)
+
 		local directives = getCosmeticDirectives(item)
 
 		animator.setPartTag("chest_cosmetic", "cosmeticDirectives", directives )
@@ -200,12 +232,22 @@ function setCosmetic.chest(cosmetic)
 		animator.setPartTag("frontarms_rotation_cosmetic", "partImage", frontSleeve )
 
 		if frontMask ~= nil and frontMask ~= "" then
-			animator.setGlobalTag( "frontarmsMask", "?addmask="..frontMask )
+			animator.setGlobalTag( "frontarmsMask", frontMask )
+		else
+			animator.setGlobalTag( "frontarmsMask", self.globalTagDefaults.frontarmsMask )
 		end
 		if backMask ~= nil and backMask ~= "" then
-			animator.setGlobalTag( "backarmsMask", "?addmask="..backMask )
+			animator.setGlobalTag( "backarmsMask", backMask )
+		else
+			animator.setGlobalTag( "backarmsMask", self.globalTagDefaults.backarmsMask )
+		end
+		if chestMask ~= nil and chestMask ~= "" then
+			animator.setGlobalTag( "chestMask", chestMask )
+		else
+			animator.setGlobalTag( "chestMask", self.globalTagDefaults.chestMask )
 		end
 
+		setCosmetic.chest_addon(cosmetic, item, images, directives)
 	else
 		currentCosmeticName.chest = nil
 		animator.setPartTag("chest_cosmetic", "partImage", "" )
@@ -214,9 +256,16 @@ function setCosmetic.chest(cosmetic)
 		animator.setPartTag("backarms_rotation_cosmetic", "partImage", "" )
 		animator.setPartTag("frontarms_rotation_cosmetic", "partImage", "" )
 
-		animator.setGlobalTag( "frontarmsMask", "" )
-		animator.setGlobalTag( "backarmsMask", "" )
+		animator.setGlobalTag( "frontarmsMask", self.globalTagDefaults.frontarmsMask )
+		animator.setGlobalTag( "backarmsMask", self.globalTagDefaults.backarmsMask )
+		animator.setGlobalTag( "chestMask", self.globalTagDefaults.chestMask )
+
+		setCosmetic.chest_clear(cosmetic)
 	end
+end
+function setCosmetic.chest_addon(cosmetic, item, images, directives)
+end
+function setCosmetic.chest_clear(cosmetic)
 end
 
 function setCosmetic.legs(cosmetic)
@@ -225,31 +274,46 @@ function setCosmetic.legs(cosmetic)
 		currentCosmeticName.legs = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
+		local body = fixFilepath(item.config[self.gender.."Frames"], item)
+		local tail = fixFilepath(item.config[self.gender.."TailFrames"], item)
+
 		local mask = fixFilepath(item.config.mask, item)
 		local tailMask = fixFilepath(item.config.tailMask, item)
 
-		local cosmeticDirectives = getCosmeticDirectives(item)
+		local directives = getCosmeticDirectives(item)
 
-		animator.setPartTag("body_cosmetic", "cosmeticDirectives", cosmeticDirectives )
-		animator.setPartTag("body_cosmetic", "partImage", fixFilepath(item.config[self.gender.."Frames"], item) )
+		animator.setPartTag("body_cosmetic", "cosmeticDirectives", directives )
+		animator.setPartTag("body_cosmetic", "partImage", body )
 
-		animator.setPartTag("tail_cosmetic", "cosmeticDirectives", cosmeticDirectives )
-		animator.setPartTag("tail_cosmetic", "partImage", fixFilepath(item.config[self.gender.."TailFrames"], item) )
+		animator.setPartTag("tail_cosmetic", "cosmeticDirectives", directives )
+		animator.setPartTag("tail_cosmetic", "partImage", tail )
 
 		if mask ~= nil and mask ~= "" then
-			animator.setGlobalTag( "bodyMask", "?addmask="..mask )
+			animator.setGlobalTag( "bodyMask", mask )
+		else
+			animator.setGlobalTag( "bodyMask", self.globalTagDefaults.bodyMask )
 		end
 		if tailMask ~= nil and mask ~= "" then
-			animator.setGlobalTag( "tailMask", "?addmask="..tailMask )
+			animator.setGlobalTag( "tailMask", tailMask )
+		else
+			animator.setGlobalTag( "tailMask", self.globalTagDefaults.tailMask )
 		end
+
+		setCosmetic.legs_addon(cosmetic, item, directives)
 	else
 		currentCosmeticName.legs = nil
 		animator.setPartTag("body_cosmetic", "partImage", "" )
 		animator.setPartTag("tail_cosmetic", "partImage", "" )
 
-		animator.setGlobalTag( "bodyMask", "" )
-		animator.setGlobalTag( "tailMask", "" )
+		animator.setGlobalTag( "bodyMask", self.globalTagDefaults.bodyMask )
+		animator.setGlobalTag( "tailMask", self.globalTagDefaults.tailMask )
+
+		setCosmetic.legs_clear(cosmetic)
 	end
+end
+function setCosmetic.legs_addon(cosmetic, item, directives)
+end
+function setCosmetic.legs_clear(cosmetic)
 end
 
 function setCosmetic.back(cosmetic)
@@ -258,13 +322,22 @@ function setCosmetic.back(cosmetic)
 		currentCosmeticName.back = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
+		local directives = getCosmeticDirectives(item)
 
-		animator.setPartTag("back_cosmetic", "cosmeticDirectives", getCosmeticDirectives(item) )
+		animator.setPartTag("back_cosmetic", "cosmeticDirectives", directives )
 		animator.setPartTag("back_cosmetic", "partImage", fixFilepath(item.config[self.gender.."Frames"], item) )
+
+		setCosmetic.back_addon(cosmetic, item, directives)
 	else
 		currentCosmeticName.back = nil
 		animator.setPartTag("back_cosmetic", "partImage", "" )
+
+		setCosmetic.back_clear(cosmetic)
 	end
+end
+function setCosmetic.back_addon(cosmetic, item, directives)
+end
+function setCosmetic.back_clear(cosmetic)
 end
 
 function fixFilepath(string, item)

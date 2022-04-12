@@ -15,11 +15,8 @@ function init()
 		}
 	end)
 
-	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
-
-	local speciesAnimOverrideData = config.getParameter("speciesAnimOverrideData")
-	if speciesAnimOverrideData ~= nil then
-		status.setStatusProperty("speciesAnimOverrideData", speciesAnimOverrideData)
+	local speciesAnimOverrideData = status.statusProperty("speciesAnimOverrideData")
+	if type(speciesAnimOverrideData) == "table" then
 		status.setPersistentEffects("speciesAnimOverride", { speciesAnimOverrideData.customAnimStatus or "speciesAnimOverride"})
 	end
 end

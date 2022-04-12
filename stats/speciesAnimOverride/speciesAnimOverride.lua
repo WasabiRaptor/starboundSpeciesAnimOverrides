@@ -56,9 +56,10 @@ function initAfterInit()
 	animator.translateTransformationGroup("backarmoffset", self.bodyconfig.backArmOffset)
 	animator.translateTransformationGroup("globalOffset", {((self.speciesData.globalOffset or {})[1] or 0)/8, ((self.speciesData.globalOffset or {})[2] or 0)/8})
 
-	self.globalTagDefaults = sb.jsonMerge(self.globalTagDefaults, self.speciesData.globalTagDefaults or {})
 	for tagname, string in pairs(self.speciesData.globalTagDefaults or {}) do
 		local part = sb.replaceTags(string, { gender = self.gender, species = self.species })
+		sb.logInfo(tagname.." "..part)
+		self.globalTagDefaults[tagname] = part
 		animator.setGlobalTag(tagname, part)
 	end
 	for partname, filepath in pairs(self.speciesData.partImages or {}) do
@@ -470,42 +471,34 @@ end
 movement = {}
 
 function movement.idle()
-	animator.setGlobalTag("state", "stand")
 	doAnims(self.speciesData.animations.idle)
 end
 
 function movement.walking()
-	animator.setGlobalTag("state", "stand")
 	doAnims(self.speciesData.animations.walk)
 end
 
 function movement.running()
-	animator.setGlobalTag("state", "stand")
 	doAnims(self.speciesData.animations.run)
 end
 
 function movement.crouching()
-	animator.setGlobalTag("state", "crouch")
 	doAnims(self.speciesData.animations.duck)
 end
 
 function movement.liquidMovement()
-	animator.setGlobalTag("state", "stand")
 	doAnims(self.speciesData.animations.swim)
 end
 
 function movement.jumping()
-	animator.setGlobalTag("state", "jump")
 	doAnims(self.speciesData.animations.jump)
 end
 
 function movement.falling()
-	animator.setGlobalTag("state", "fall")
 	doAnims(self.speciesData.animations.fall)
 end
 
 function movement.flying()
-	animator.setGlobalTag("state", "stand")
 	doAnims(self.speciesData.animations.fly)
 end
 
@@ -520,6 +513,8 @@ function doAnims( anims, force )
 		elseif state == "priority" then
 			changePriorityLength( anim )
 		elseif state == "hitbox" then
+		elseif state == "state" then
+			animator.setGlobalTag("state", anim)
 		else
 			doAnim( state.."State", anim, force)
 		end

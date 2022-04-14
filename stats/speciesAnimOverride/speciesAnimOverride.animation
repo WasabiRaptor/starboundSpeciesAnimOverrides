@@ -219,7 +219,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 0.2,
-					"transformationGroups": ["flip", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["flip", "chestbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"bodyState": {
@@ -238,7 +238,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -0.1,
-					"transformationGroups": ["flip", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["flip", "chestbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"bodyState": {
@@ -275,7 +275,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 3,
-					"transformationGroups": ["flip", "frontarmsrotation", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["flip", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"frontarmsRotationState": {
@@ -308,7 +308,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -3,
-					"transformationGroups": ["flip", "backarmsrotation", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["flip", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"backarmsRotationState": {
@@ -342,7 +342,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 3.1,
-					"transformationGroups": ["flip", "frontarmsrotation", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["flip", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"frontarmsRotationState": {
@@ -375,7 +375,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2.9,
-					"transformationGroups": ["flip", "backarmsrotation", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["flip", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"backarmsRotationState": {
@@ -625,6 +625,15 @@
 			"interpolated": false
 		},
 		"armsbob": {
+			"interpolated": false
+		},
+		"rotationarmsbob": {
+			"interpolated": false
+		},
+		"chestbob": {
+			"interpolated": false
+		},
+		"bellybob": {
 			"interpolated": false
 		},
 		"frontarmsrotation": {

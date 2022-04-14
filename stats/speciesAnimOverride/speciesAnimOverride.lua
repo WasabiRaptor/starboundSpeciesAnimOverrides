@@ -40,8 +40,7 @@ function initAfterInit()
 	if success then
 		self.speciesData = speciesData
 	else
-		self.inited = false
-		return
+		self.speciesData = root.assetJson("/humanoid/speciesAnimOverride.config")
 	end
 
 	if self.speciesData.scripts ~= nil then
@@ -58,7 +57,6 @@ function initAfterInit()
 
 	for tagname, string in pairs(self.speciesData.globalTagDefaults or {}) do
 		local part = sb.replaceTags(string, { gender = self.gender, species = self.species })
-		sb.logInfo(tagname.." "..part)
 		self.globalTagDefaults[tagname] = part
 		animator.setGlobalTag(tagname, part)
 	end
@@ -176,20 +174,13 @@ function setCosmetic.head(cosmetic)
 		local image = fixFilepath(item.config[self.gender.."Frames"], item)
 		local directives = getCosmeticDirectives(item)
 
-		animator.setPartTag("head_cosmetic", "cosmeticDirectives", directives )
-		animator.setPartTag("head_cosmetic", "partImage", image )
-		if mask ~= nil and mask ~= "" then
-			animator.setGlobalTag( "headMask", mask )
-		else
-			animator.setGlobalTag( "headMask", self.globalTagDefaults.headMask )
-		end
+		animator.setPartTag("head_cosmetic", "cosmeticDirectives", directives or "" )
+		animator.setPartTag("head_cosmetic", "partImage", image or "" )
+		animator.setGlobalTag( "headMask", mask or self.globalTagDefaults.headMask or "" )
 
 		setCosmetic.head_addon(cosmetic, item, directives)
 	else
 		currentCosmeticName.head = nil
-		animator.setPartTag("head_cosmetic", "partImage", "" )
-		animator.setGlobalTag( "headMask", self.globalTagDefaults.headMask )
-
 		setCosmetic.head_clear(cosmetic)
 	end
 end
@@ -197,6 +188,8 @@ end
 function setCosmetic.head_addon(cosmetic, item, directives)
 end
 function setCosmetic.head_clear(cosmetic)
+	animator.setPartTag("head_cosmetic", "partImage", "" )
+	animator.setGlobalTag( "headMask", self.globalTagDefaults.headMask or "" )
 end
 
 
@@ -206,6 +199,9 @@ function setCosmetic.chest(cosmetic)
 		currentCosmeticName.chest = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
+		local bodyType = item.bodyType or "humanoid"
+		if bodyType ~= self.speciesData.bodyType then return setCosmetic.chest_clear(cosmetic) end
+
 		local images = item.config[self.gender.."Frames"]
 
 		local chest = fixFilepath(images.body, item)
@@ -220,53 +216,40 @@ function setCosmetic.chest(cosmetic)
 
 		local directives = getCosmeticDirectives(item)
 
-		animator.setPartTag("chest_cosmetic", "cosmeticDirectives", directives )
-		animator.setPartTag("backarms_cosmetic", "cosmeticDirectives", directives )
-		animator.setPartTag("frontarms_cosmetic", "cosmeticDirectives", directives )
-		animator.setPartTag("backarms_rotation_cosmetic", "cosmeticDirectives", directives )
-		animator.setPartTag("frontarms_rotation_cosmetic", "cosmeticDirectives", directives )
+		animator.setPartTag("chest_cosmetic", "cosmeticDirectives", directives or "" )
+		animator.setPartTag("backarms_cosmetic", "cosmeticDirectives", directives or "" )
+		animator.setPartTag("frontarms_cosmetic", "cosmeticDirectives", directives or "" )
+		animator.setPartTag("backarms_rotation_cosmetic", "cosmeticDirectives", directives or "" )
+		animator.setPartTag("frontarms_rotation_cosmetic", "cosmeticDirectives", directives or "" )
 
-		animator.setPartTag("chest_cosmetic", "partImage", chest )
-		animator.setPartTag("backarms_cosmetic", "partImage", backSleeve )
-		animator.setPartTag("frontarms_cosmetic", "partImage", frontSleeve )
-		animator.setPartTag("backarms_rotation_cosmetic", "partImage", backSleeve )
-		animator.setPartTag("frontarms_rotation_cosmetic", "partImage", frontSleeve )
+		animator.setPartTag("chest_cosmetic", "partImage", chest or "" )
+		animator.setPartTag("backarms_cosmetic", "partImage", backSleeve or "" )
+		animator.setPartTag("frontarms_cosmetic", "partImage", frontSleeve or "" )
+		animator.setPartTag("backarms_rotation_cosmetic", "partImage", backSleeve or "" )
+		animator.setPartTag("frontarms_rotation_cosmetic", "partImage", frontSleeve or "" )
 
-		if frontMask ~= nil and frontMask ~= "" then
-			animator.setGlobalTag( "frontarmsMask", frontMask )
-		else
-			animator.setGlobalTag( "frontarmsMask", self.globalTagDefaults.frontarmsMask )
-		end
-		if backMask ~= nil and backMask ~= "" then
-			animator.setGlobalTag( "backarmsMask", backMask )
-		else
-			animator.setGlobalTag( "backarmsMask", self.globalTagDefaults.backarmsMask )
-		end
-		if chestMask ~= nil and chestMask ~= "" then
-			animator.setGlobalTag( "chestMask", chestMask )
-		else
-			animator.setGlobalTag( "chestMask", self.globalTagDefaults.chestMask )
-		end
+		animator.setGlobalTag( "frontarmsMask", frontMask or self.globalTagDefaults.frontarmsMask or "" )
+		animator.setGlobalTag( "backarmsMask", backMask or self.globalTagDefaults.backarmsMask or "" )
+		animator.setGlobalTag( "chestMask", chestMask or self.globalTagDefaults.chestMask or "" )
 
 		setCosmetic.chest_addon(cosmetic, item, images, directives)
 	else
 		currentCosmeticName.chest = nil
-		animator.setPartTag("chest_cosmetic", "partImage", "" )
-		animator.setPartTag("backarms_cosmetic", "partImage", "" )
-		animator.setPartTag("frontarms_cosmetic", "partImage", "" )
-		animator.setPartTag("backarms_rotation_cosmetic", "partImage", "" )
-		animator.setPartTag("frontarms_rotation_cosmetic", "partImage", "" )
-
-		animator.setGlobalTag( "frontarmsMask", self.globalTagDefaults.frontarmsMask )
-		animator.setGlobalTag( "backarmsMask", self.globalTagDefaults.backarmsMask )
-		animator.setGlobalTag( "chestMask", self.globalTagDefaults.chestMask )
-
 		setCosmetic.chest_clear(cosmetic)
 	end
 end
 function setCosmetic.chest_addon(cosmetic, item, images, directives)
 end
 function setCosmetic.chest_clear(cosmetic)
+	animator.setPartTag("chest_cosmetic", "partImage", "" )
+	animator.setPartTag("backarms_cosmetic", "partImage", "" )
+	animator.setPartTag("frontarms_cosmetic", "partImage", "" )
+	animator.setPartTag("backarms_rotation_cosmetic", "partImage", "" )
+	animator.setPartTag("frontarms_rotation_cosmetic", "partImage", "" )
+
+	animator.setGlobalTag( "frontarmsMask", self.globalTagDefaults.frontarmsMask or "" )
+	animator.setGlobalTag( "backarmsMask", self.globalTagDefaults.backarmsMask or "" )
+	animator.setGlobalTag( "chestMask", self.globalTagDefaults.chestMask or "" )
 end
 
 function setCosmetic.legs(cosmetic)
@@ -275,46 +258,46 @@ function setCosmetic.legs(cosmetic)
 		currentCosmeticName.legs = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
+		local bodyType = item.bodyType or "humanoid"
+		if bodyType ~= self.speciesData.bodyType then return setCosmetic.legs_clear(cosmetic) end
+
 		local body = fixFilepath(item.config[self.gender.."Frames"], item)
 		local tail = fixFilepath(item.config[self.gender.."TailFrames"], item)
+
+		local frontlegs = fixFilepath(item.config[self.gender.."frontlegsFrames"], item)
 
 		local mask = fixFilepath(item.config.mask, item)
 		local tailMask = fixFilepath(item.config.tailMask, item)
 
 		local directives = getCosmeticDirectives(item)
 
-		animator.setPartTag("body_cosmetic", "cosmeticDirectives", directives )
-		animator.setPartTag("body_cosmetic", "partImage", body )
+		animator.setPartTag("body_cosmetic", "cosmeticDirectives", directives or "" )
+		animator.setPartTag("body_cosmetic", "partImage", body or "" )
 
-		animator.setPartTag("tail_cosmetic", "cosmeticDirectives", directives )
-		animator.setPartTag("tail_cosmetic", "partImage", tail )
+		animator.setPartTag("frontlegs_cosmetic", "cosmeticDirectives", directives or "" )
+		animator.setPartTag("frontlegs_cosmetic", "partImage", frontlegs or body or "" )
 
-		if mask ~= nil and mask ~= "" then
-			animator.setGlobalTag( "bodyMask", mask )
-		else
-			animator.setGlobalTag( "bodyMask", self.globalTagDefaults.bodyMask )
-		end
-		if tailMask ~= nil and mask ~= "" then
-			animator.setGlobalTag( "tailMask", tailMask )
-		else
-			animator.setGlobalTag( "tailMask", self.globalTagDefaults.tailMask )
-		end
+		animator.setPartTag("tail_cosmetic", "cosmeticDirectives", directives or "" )
+		animator.setPartTag("tail_cosmetic", "partImage", tail or "" )
+
+		animator.setGlobalTag( "bodyMask", mask or self.globalTagDefaults.bodyMask or "" )
+		animator.setGlobalTag( "tailMask", tailMask or self.globalTagDefaults.tailMask or "" )
 
 		setCosmetic.legs_addon(cosmetic, item, directives)
 	else
 		currentCosmeticName.legs = nil
-		animator.setPartTag("body_cosmetic", "partImage", "" )
-		animator.setPartTag("tail_cosmetic", "partImage", "" )
-
-		animator.setGlobalTag( "bodyMask", self.globalTagDefaults.bodyMask )
-		animator.setGlobalTag( "tailMask", self.globalTagDefaults.tailMask )
-
 		setCosmetic.legs_clear(cosmetic)
 	end
 end
 function setCosmetic.legs_addon(cosmetic, item, directives)
 end
 function setCosmetic.legs_clear(cosmetic)
+	animator.setPartTag("body_cosmetic", "partImage", "" )
+	animator.setPartTag("tail_cosmetic", "partImage", "" )
+	animator.setPartTag("frontlegs_cosmetic", "partImage", "" )
+
+	animator.setGlobalTag( "bodyMask", self.globalTagDefaults.bodyMask or "" )
+	animator.setGlobalTag( "tailMask", self.globalTagDefaults.tailMask or "" )
 end
 
 function setCosmetic.back(cosmetic)
@@ -323,22 +306,24 @@ function setCosmetic.back(cosmetic)
 		currentCosmeticName.back = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
+		local bodyType = item.bodyType or "humanoid"
+		if bodyType ~= self.speciesData.bodyType then return setCosmetic.back_clear(cosmetic) end
+
 		local directives = getCosmeticDirectives(item)
 
-		animator.setPartTag("back_cosmetic", "cosmeticDirectives", directives )
-		animator.setPartTag("back_cosmetic", "partImage", fixFilepath(item.config[self.gender.."Frames"], item) )
+		animator.setPartTag("back_cosmetic", "cosmeticDirectives", directives or "" )
+		animator.setPartTag("back_cosmetic", "partImage", fixFilepath(item.config[self.gender.."Frames"], item) or "" )
 
 		setCosmetic.back_addon(cosmetic, item, directives)
 	else
 		currentCosmeticName.back = nil
-		animator.setPartTag("back_cosmetic", "partImage", "" )
-
 		setCosmetic.back_clear(cosmetic)
 	end
 end
 function setCosmetic.back_addon(cosmetic, item, directives)
 end
 function setCosmetic.back_clear(cosmetic)
+	animator.setPartTag("back_cosmetic", "partImage", "" )
 end
 
 function fixFilepath(string, item)
@@ -349,7 +334,7 @@ function fixFilepath(string, item)
 			return item.directory..string
 		end
 	else
-		return ""
+		return
 	end
 end
 
@@ -377,7 +362,7 @@ function updateAnims(dt)
 	rotationAnimUpdate()
 	--armRotationUpdate()
 
-	animator.setGlobalTag( "directives", self.directives..getDirectives() )
+	animator.setGlobalTag( "directives", getDirectives() )
 
 	for statename, state in pairs(self.animStateData) do
 		if state.animationState.time >= state.animationState.cycle then
@@ -418,7 +403,12 @@ function checkHumanoidAnim()
 					gotEmote = true
 					if self.directives == "" then
 						local directives = imageString:sub(found4+1)
+						if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
+							directives = directives.."?multiply=FFFFFFfb"
+						end
+						sb.logInfo(directives)
 						self.directives = self.overrideData.directives or directives
+						animator.setGlobalTag("customizeDirectives", self.directives)
 					end
 				end
 			end
@@ -431,19 +421,35 @@ function checkHumanoidAnim()
 				personality.body = imageString:sub(found2+1, found2+1)
 				animator.setGlobalTag( "bodyPersonality", personality.body )
 			end
-		end
-		if not personality.backarm then
-			found1, found2 = imageString:find("backarm.png:idle.")
-			if found1 ~= nil then
-				personality.backarm = imageString:sub(found2+1, found2+1)
-				animator.setGlobalTag( "backarmPersonality", personality.backarm )
+			for i, data in ipairs( ((self.speciesData.personalityOffsets or {}).bodyOffsets or {})[personality.body] or {} ) do
+				table.insert(self.speciesData.animations.idle.offset.parts, data)
 			end
 		end
-		if not personality.frontarm then
-			found1, found2 = imageString:find("frontarm.png:idle.")
+		if not personality.arm then
+			found1, found2 = imageString:find("backarm.png:idle.")
 			if found1 ~= nil then
-				personality.frontarm = imageString:sub(found2+1, found2+1)
-				animator.setGlobalTag( "frontarmPersonality", personality.frontarm )
+				personality.arm = imageString:sub(found2+1, found2+1)
+				animator.setGlobalTag( "backarmPersonality", personality.arm )
+				animator.setGlobalTag( "frontarmPersonality", personality.arm )
+			end
+		end
+
+		if not personality.offsets and (personality.body ~= nil) and (personality.arm ~= nil) then
+			local bodyIdle = "idle."..personality.body
+			local armIdle = "idle."..personality.arm
+			for i, data in ipairs(self.bodyconfig.personalities) do
+				if data[1] == bodyIdle and data[2] == armIdle then
+					table.insert(self.speciesData.animations.idle.offset.parts, {
+						groups = (self.speciesData.personalityOffsets or {}).bodyGroups,
+						x = {data[3][1]},
+						y = {data[3][2]}
+					})
+					table.insert(self.speciesData.animations.idle.offset.parts, {
+						groups = (self.speciesData.personalityOffsets or {}).armGroups,
+						x = {data[4][1]},
+						y = {data[4][2]}
+					})
+				end
 			end
 		end
 	end
@@ -586,7 +592,7 @@ end
 
 function offsetAnim( data )
 	if data == self.offsets.data then
-		if not self.offsets.enabled then self.offsets.enabled = true end
+		if not self.offsets.enabled and self.offsets.continue then self.offsets.enabled = true end
 		return
 	else
 		for i, part in ipairs(self.offsets.parts) do
@@ -614,8 +620,10 @@ function offsetAnim( data )
 			continue = true
 		end
 	end
+	self.offsets.continue = true
 	offsetAnimUpdate()
 	if not continue then
+		self.offsets.continue = false
 		self.offsets.enabled = false
 	end
 end

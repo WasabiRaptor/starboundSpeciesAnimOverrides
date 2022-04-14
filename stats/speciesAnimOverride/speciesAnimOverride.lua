@@ -437,6 +437,9 @@ function checkHumanoidAnim()
 		if not personality.offsets and (personality.body ~= nil) and (personality.arm ~= nil) then
 			local bodyIdle = "idle."..personality.body
 			local armIdle = "idle."..personality.arm
+
+			personality.offsets = true
+
 			for i, data in ipairs(self.bodyconfig.personalities) do
 				if data[1] == bodyIdle and data[2] == armIdle then
 					table.insert(self.speciesData.animations.idle.offset.parts, {

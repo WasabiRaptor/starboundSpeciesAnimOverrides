@@ -675,12 +675,10 @@ function offsetAnimUpdate()
 	local state = self.offsets.timing.."State"
 	local ended, times, time = hasAnimEnded(state)
 	if ended and not self.offsets.loop then self.offsets.enabled = false end
-	local speed = self.animStateData[state].animationState.frames / self.animStateData[state].animationState.cycle
-	local frame = math.floor(time * speed) + 1
 
 	for _,r in ipairs(self.offsets.parts) do
-		local x = r.x[ frame ] or r.x[#r.x] or 0
-		local y = r.y[ frame ] or r.y[#r.y] or 0
+		local x = r.x[ self.animStateData[state].animationState.frame ] or r.x[#r.x] or 0
+		local y = r.y[ self.animStateData[state].animationState.frame ] or r.y[#r.y] or 0
 		for i = 1, #r.groups do
 			animator.resetTransformationGroup( r.groups[i] )
 			animator.translateTransformationGroup( r.groups[i], { x / 8, y / 8 } )
@@ -693,8 +691,8 @@ function rotationAnimUpdate()
 	local state = self.rotating.timing.."State"
 	local ended, times, time = hasAnimEnded(state)
 	if ended and not self.rotating.loop then self.rotating.enabled = false end
-	local speed = self.animStateData[state].animationState.frames / self.animStateData[state].animationState.cycle
-	local frame = math.floor(time * speed)
+	local speed = self.animStateData[state].animationState.speed
+	local frame = self.animStateData[state].animationState.frame
 	local index = frame + 1
 	local nextFrame = frame + 1
 	local nextIndex = index + 1

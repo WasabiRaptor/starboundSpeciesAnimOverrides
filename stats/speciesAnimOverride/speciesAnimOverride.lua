@@ -4,7 +4,6 @@ function init()
 	self.offsets = {enabled = false, parts = {}}
 	self.rotating = {enabled = false, parts = {}}
 	self.animStateData = root.assetJson("/stats/speciesAnimOverride/"..config.getParameter("animationConfig")).animatedParts.stateTypes
-	self.directives = ""
 	self.animFunctionQueue = {}
 	self.parts = {}
 	self.globalTagDefaults = root.assetJson("/stats/speciesAnimOverride/"..config.getParameter("animationConfig")).globalTagDefaults or {}
@@ -36,6 +35,7 @@ end
 function initAfterInit()
 	self.species = self.overrideData.species or world.entitySpecies(entity.id())
 	self.gender = self.overrideData.gender or world.entityGender(entity.id())
+	self.identity = self.overrideData.identity or {}
 	local success, speciesData = pcall(root.assetJson, ("/humanoid/"..self.species.."/speciesAnimOverride.config"))
 	if success then
 		self.speciesData = speciesData
@@ -56,22 +56,156 @@ function initAfterInit()
 	animator.translateTransformationGroup("globalOffset", {((self.speciesData.globalOffset or {})[1] or 0)/8, ((self.speciesData.globalOffset or {})[2] or 0)/8})
 
 	for tagname, string in pairs(self.speciesData.globalTagDefaults or {}) do
-		local part = sb.replaceTags(string, { gender = self.gender, species = self.species })
+		local part = replaceSpeciesGenderTags(string)
 		self.globalTagDefaults[tagname] = part
 		animator.setGlobalTag(tagname, part)
 	end
-	for partname, filepath in pairs(self.speciesData.partImages or {}) do
-		local part = sb.replaceTags(filepath, { gender = self.gender, species = self.species })
+	for partname, string in pairs(self.speciesData.partImages or {}) do
+		local part = replaceSpeciesGenderTags(string)
 		animator.setPartTag(partname, "partImage", part)
 		self.parts[partname] = part
 	end
 	for partname, data in pairs(self.speciesData.partTagDefaults or {}) do
 		for tagname, string in pairs(data) do
-			local part = sb.replaceTags(string, { gender = self.gender, species = self.species })
+			local part = replaceSpeciesGenderTags(string)
 			animator.setPartTag(partname, tagname, part)
 		end
 	end
+
+	local portrait = world.entityPortrait(entity.id(), "full")
+	local gotEmote
+	for _, part in ipairs(portrait) do
+		local imageString = part.image
+		-- check for doing an emote animation
+		if not gotEmote then
+			local found1, found2 = imageString:find("/emote.png:")
+			if found1 ~= nil then
+				local found3, found4 = imageString:find(".1", found2, found2+10 )
+				if found3 ~= nil then
+					gotEmote = true
+					if not self.directives then
+						local directives = imageString:sub(found4+1)
+						if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
+							directives = directives.."?multiply=FFFFFFfb"
+						end
+						sb.logInfo(directives)
+						self.directives = self.overrideData.directives or directives
+						animator.setGlobalTag("customizeDirectives", self.directives)
+					end
+				end
+			end
+		end
+
+		--get personality values
+		if not self.identity.body then
+			found1, found2 = imageString:find("body.png:idle.")
+			if found1 ~= nil then
+				self.identity.body = imageString:sub(found2+1, found2+1)
+			end
+		end
+		if not self.identity.arm then
+			found1, found2 = imageString:find("backarm.png:idle.")
+			if found1 ~= nil then
+				self.identity.arm = imageString:sub(found2+1, found2+1)
+			end
+		end
+
+		if not self.identity.hairGroup and type(self.speciesFile) == "table" then
+			for i, data in ipairs(self.speciesFile.genders or {}) do
+				if data.name == self.gender then
+					self.identity.hairGroup = data.hairGroup or "hair"
+				end
+			end
+		end
+		if not self.identity.hairType then
+			found1, found2 = imageString:find("/"..(self.identity.hairGroup or "hair").."/")
+			if found1 ~= nil then
+				found3, found4 = imageString:find(".png")
+				self.identity.hairType = imageString:sub(found2+1, found3-1)
+			end
+		end
+
+		if not self.identity.facialHairGroup and type(self.speciesFile) == "table" then
+			for i, data in ipairs(self.speciesFile.genders or {}) do
+				if data.name == self.gender then
+					self.identity.facialHairGroup = data.facialHairGroup or "facialHair"
+				end
+			end
+		end
+		if not self.identity.facialHairType then
+			found1, found2 = imageString:find("/"..(self.identity.facialHairGroup or "facialHair").."/")
+			if found1 ~= nil then
+				found3, found4 = imageString:find(".png")
+				self.identity.facialHairType = imageString:sub(found2+1, found3-1)
+			end
+		end
+
+		if not self.identity.facialMaskGroup and type(self.speciesFile) == "table" then
+			for i, data in ipairs(self.speciesFile.genders or {}) do
+				if data.name == self.gender then
+					self.identity.facialMaskGroup = data.facialMaskGroup or "facialMask"
+				end
+			end
+		end
+		if not self.identity.facialMaskType then
+			found1, found2 = imageString:find("/"..(self.identity.facialMaskGroup or "facialMask").."/")
+			if found1 ~= nil then
+				found3, found4 = imageString:find(".png")
+				self.identity.facialMaskType = imageString:sub(found2+1, found3-1)
+			end
+		end
+
+
+		if not self.identity.offsets and (self.identity.body ~= nil) and (self.identity.arm ~= nil) then
+			local bodyIdle = "idle."..self.identity.body
+			local armIdle = "idle."..self.identity.arm
+
+			self.identity.offsets = true
+
+			for i, data in ipairs(self.bodyconfig.personalities) do
+				if data[1] == bodyIdle and data[2] == armIdle then
+					table.insert(self.speciesData.animations.idle.offset.parts, {
+						groups = (self.speciesData.personalityOffsets or {}).bodyGroups,
+						x = {data[3][1]},
+						y = {data[3][2]}
+					})
+					table.insert(self.speciesData.animations.idle.offset.parts, {
+						groups = (self.speciesData.personalityOffsets or {}).armGroups,
+						x = {data[4][1]},
+						y = {data[4][2]}
+					})
+				end
+			end
+		end
+	end
+	animator.setGlobalTag( "bodyPersonality", self.identity.body )
+	for i, data in ipairs( ((self.speciesData.personalityOffsets or {}).bodyOffsets or {})[self.identity.body] or {} ) do
+		table.insert(self.speciesData.animations.idle.offset.parts, data)
+	end
+
+	animator.setGlobalTag( "backarmPersonality", self.identity.arm )
+	animator.setGlobalTag( "frontarmPersonality", self.identity.arm )
+
+	if self.identity.hairType ~= nil then
+		local hairPath = "/humanoid/"..self.species.."/"..self.identity.hairGroup.."/"..self.identity.hairType..".png"
+		animator.setPartTag( "hair", "partImage", hairPath )
+		animator.setPartTag( "hair_fg", "partImage", hairPath )
+	end
+	if self.identity.facialHairType ~= nil then
+		local hairPath = "/humanoid/"..self.species.."/"..self.identity.facialHairGroup.."/"..self.identity.facialHairType..".png"
+		animator.setPartTag( "facialHair", "partImage", hairPath )
+	end
+	if self.identity.facialMaskType ~= nil then
+		local hairPath = "/humanoid/"..self.species.."/"..self.identity.facialMaskGroup.."/"..self.identity.facialMaskType..".png"
+		animator.setPartTag( "facialMask", "partImage", hairPath )
+	end
+
+
 	self.inited = true
+end
+
+function replaceSpeciesGenderTags(string)
+	return sb.replaceTags(string, { gender = self.gender, species = self.species })
 end
 
 function update(dt)
@@ -387,7 +521,6 @@ function endAnim(state, statename)
 	end
 end
 
-personality = {}
 function checkHumanoidAnim()
 	local portrait = world.entityPortrait(entity.id(), "full")
 	local gotEmote
@@ -401,57 +534,6 @@ function checkHumanoidAnim()
 				if found3 ~= nil then
 					doAnim("emoteState", imageString:sub(found2+1, found3-1))
 					gotEmote = true
-					if self.directives == "" then
-						local directives = imageString:sub(found4+1)
-						if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
-							directives = directives.."?multiply=FFFFFFfb"
-						end
-						sb.logInfo(directives)
-						self.directives = self.overrideData.directives or directives
-						animator.setGlobalTag("customizeDirectives", self.directives)
-					end
-				end
-			end
-		end
-
-		--get personality values
-		if not personality.body then
-			found1, found2 = imageString:find("body.png:idle.")
-			if found1 ~= nil then
-				personality.body = imageString:sub(found2+1, found2+1)
-				animator.setGlobalTag( "bodyPersonality", personality.body )
-			end
-			for i, data in ipairs( ((self.speciesData.personalityOffsets or {}).bodyOffsets or {})[personality.body] or {} ) do
-				table.insert(self.speciesData.animations.idle.offset.parts, data)
-			end
-		end
-		if not personality.arm then
-			found1, found2 = imageString:find("backarm.png:idle.")
-			if found1 ~= nil then
-				personality.arm = imageString:sub(found2+1, found2+1)
-				animator.setGlobalTag( "backarmPersonality", personality.arm )
-				animator.setGlobalTag( "frontarmPersonality", personality.arm )
-			end
-		end
-
-		if not personality.offsets and (personality.body ~= nil) and (personality.arm ~= nil) then
-			local bodyIdle = "idle."..personality.body
-			local armIdle = "idle."..personality.arm
-
-			personality.offsets = true
-
-			for i, data in ipairs(self.bodyconfig.personalities) do
-				if data[1] == bodyIdle and data[2] == armIdle then
-					table.insert(self.speciesData.animations.idle.offset.parts, {
-						groups = (self.speciesData.personalityOffsets or {}).bodyGroups,
-						x = {data[3][1]},
-						y = {data[3][2]}
-					})
-					table.insert(self.speciesData.animations.idle.offset.parts, {
-						groups = (self.speciesData.personalityOffsets or {}).armGroups,
-						x = {data[4][1]},
-						y = {data[4][2]}
-					})
 				end
 			end
 		end

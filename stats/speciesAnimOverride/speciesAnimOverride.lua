@@ -1,6 +1,8 @@
 function init()
 	self.loopedMessages = {}
 	self.equipment = {}
+	self.timerList = {}
+	self.rpcList = {}
 	self.offsets = {enabled = false, parts = {}}
 	self.rotating = {enabled = false, parts = {}}
 	self.animStateData = root.assetJson("/stats/speciesAnimOverride/"..config.getParameter("animationConfig")).animatedParts.stateTypes
@@ -88,7 +90,6 @@ function initAfterInit()
 						if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
 							directives = directives.."?multiply=FFFFFFfb"
 						end
-						sb.logInfo(directives)
 						self.directives = self.overrideData.directives or directives
 						animator.setGlobalTag("customizeDirectives", self.directives)
 					end
@@ -248,6 +249,88 @@ function loopedMessage(name, eid, message, args, callback, failCallback)
 			self.loopedMessages[name].failCallback()
 		end
 		self.loopedMessages[name] = nil
+	end
+end
+
+function checkRPCsFinished(dt)
+	for i, list in pairs(self.rpcList) do
+		list.dt = list.dt + dt -- I think this is good to have, incase the time passed since the RPC was put into play is important
+		if list.rpc:finished() then
+			if list.rpc:succeeded() and list.callback ~= nil then
+				list.callback(list.rpc:result(), list.dt)
+			elseif list.failCallback ~= nil then
+				list.failCallback(list.dt)
+			end
+			table.remove(self.rpcList, i)
+		end
+	end
+end
+
+function addRPC(rpc, callback, failCallback)
+	if callback ~= nil or failCallback ~= nil  then
+		table.insert(self.rpcList, {rpc = rpc, callback = callback, failCallback = failCallback, dt = 0})
+	end
+end
+
+function randomTimer(name, min, max, callback)
+	if name == nil or self.timerList[name] == nil then
+		local timer = {
+			targetTime = (math.random(min * 100, max * 100))/100,
+			currTime = 0,
+			callback = callback
+		}
+		if name ~= nil then
+			self.timerList[name] = timer
+		else
+			table.insert(self.timerList, timer)
+		end
+		return true
+	end
+end
+
+function timer(name, time, callback)
+	if name == nil or self.timerList[name] == nil then
+		local timer = {
+			targetTime = time,
+			currTime = 0,
+			callback = callback
+		}
+		if name ~= nil then
+			self.timerList[name] = timer
+		else
+			table.insert(self.timerList, timer)
+		end
+		return true
+	end
+end
+
+function forceTimer(name, time, callback)
+		local timer = {
+			targetTime = time,
+			currTime = 0,
+			callback = callback
+		}
+		if name ~= nil then
+			self.timerList[name] = timer
+		else
+			table.insert(self.timerList, timer)
+		end
+		return true
+end
+
+function checkTimers(dt)
+	for name, timer in pairs(self.timerList) do
+		timer.currTime = timer.currTime + dt
+		if timer.currTime >= timer.targetTime then
+			if timer.callback ~= nil then
+				timer.callback()
+			end
+			if type(name) == "number" then
+				table.remove(self.timerList, name)
+			else
+				self.timerList[name] = nil
+			end
+		end
 	end
 end
 

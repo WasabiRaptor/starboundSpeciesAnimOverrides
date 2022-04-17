@@ -222,6 +222,9 @@ end
 
 function doUpdate(dt)
 	updateAnims(dt)
+	checkRPCsFinished(dt)
+	checkTimers(dt)
+
 	animator.setFlipped(mcontroller.facingDirection() == -1)
 	animator.setGlobalTag("direction", mcontroller.facingDirection() * mcontroller.movingDirection() )
 	getCosmeticItems()

@@ -200,7 +200,7 @@
 			"body_cosmetic": {
 				"properties": {
 					"centered": true,
-					"zLevel": 0.1,
+					"zLevel": 0.15,
 					"transformationGroups": ["flip", "bodybob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {

@@ -53,8 +53,8 @@ function initAfterInit()
 	local success, speciesFile = pcall(root.assetJson,("/species/"..self.species..".species"))
 	self.speciesFile = speciesFile
 	self.bodyconfig = root.assetJson((speciesFile or {}).humanoidConfig or "/humanoid.config")
-	animator.translateTransformationGroup("handoffset", self.bodyconfig.frontHandPosition)
-	animator.translateTransformationGroup("backarmoffset", self.bodyconfig.backArmOffset)
+	animator.translateTransformationGroup("handoffset", {self.bodyconfig.frontHandPosition[1]/8,self.bodyconfig.frontHandPosition[2]/8})
+	animator.translateTransformationGroup("backarmoffset", {self.bodyconfig.backArmOffset[1]/8,self.bodyconfig.backArmOffset[2]/8})
 	animator.translateTransformationGroup("globalOffset", {((self.speciesData.globalOffset or {})[1] or 0)/8, ((self.speciesData.globalOffset or {})[2] or 0)/8})
 
 	for tagname, string in pairs(self.speciesData.globalTagDefaults or {}) do
@@ -350,7 +350,7 @@ local armsToArm = {
 	backarms = "backArm"
 }
 function getHandItem(hand, part)
-	if true then return true end -- I am just, tired of trying to do this, none of it works really
+	--if true then return true end -- I am just, tired of trying to do this, none of it works really
 
 	local itemDescriptor = world.entityHandItemDescriptor(entity.id(), hand)
 	local continue = true
@@ -375,6 +375,8 @@ function getHandItem(hand, part)
 				else
 					animator.setAnimationState(part.."ItemRotationState", "item")
 				end
+				animator.setGlobalTag( part.."RotationVisible", "" )
+				animator.setGlobalTag( part.."Visible", "?crop;0;0;0;0" )
 
 				local itemImage = item.config.inventoryIcon
 				animator.setPartTag(part.."_item", "partImage", itemImage or "" )
@@ -387,17 +389,21 @@ function getHandItem(hand, part)
 				setEmptyHand(hand, part)
 			end
 		elseif itemType == "beamminingtool" then
-			local aim = status.setStatusProperty("speciesAnimOverrideAim")
+			local aim = status.statusProperty("speciesAnimOverrideAim")
 			if not aim then return end
 			local target = globalToLocal(aim)
-			local center = self.bodyconfig[armsToArm[part].."RotationCenter"]
+			local center = {self.bodyconfig[armsToArm[part].."RotationCenter"][1]/8, self.bodyconfig[armsToArm[part].."RotationCenter"][2]/8}
 			local angle = math.atan((target[2] - center[2]), (target[1] - center[1]))
 
 			local itemImage = item.config.image
 			animator.setPartTag(part.."_item", "partImage", itemImage or "" )
 
+			animator.setGlobalTag( part.."RotationVisible", "" )
+			animator.setGlobalTag( part.."Visible", "?crop;0;0;0;0" )
+			animator.setAnimationState(part.."ItemRotationState", "item")
+
 			animator.resetTransformationGroup( part.."rotation" )
-			animator.rotateTransformationGroup( part.."rotation", (angle * math.pi/180), {self.bodyconfig[armsToArm[part].."RotationCenter"][1]/8, self.bodyconfig[armsToArm[part].."RotationCenter"][2]/8} )
+			animator.rotateTransformationGroup( part.."rotation", (angle * math.pi/180), center )
 
 		elseif itemType == "object" or itemType == "material" then
 		else

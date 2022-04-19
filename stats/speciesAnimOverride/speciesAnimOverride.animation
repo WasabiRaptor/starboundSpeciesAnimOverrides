@@ -413,7 +413,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.9,
-					"transformationGroups": ["flip", "handoffset", "frontarmsrotation", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["flip", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"frontarmsItemRotationState": {
@@ -429,10 +429,10 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2.8,
-					"transformationGroups": ["flip", "handoffset", "backarmoffset", "backarmsrotation", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["flip", "handoffset", "backarmoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
-					"frontarmsItemRotationState": {
+					"backarmsItemRotationState": {
 						"none": { "properties": {} },
 
 						"item": { "properties": { "image": "<partImage><itemDirectives><directives>" } },

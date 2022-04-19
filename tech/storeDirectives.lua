@@ -1,5 +1,6 @@
 local oldinit = init
 local olduninit = uninit
+local oldupdate = update
 
 local oldSetParentDirectives
 local oldSetParentHidden
@@ -17,9 +18,13 @@ function init()
 	oldSetParentHidden = tech.setParentHidden
 	tech.setParentHidden = tech_setParentHidden
 
-	status.setStatusProperty("speciesAnimOverrideAim", tech.aimPosition())
 
 	if oldinit ~= nil then oldinit() end
+end
+
+function update(args)
+	status.setStatusProperty("speciesAnimOverrideAim", tech.aimPosition())
+	if oldupdate ~= nil then oldupdate(args) end
 end
 
 function tech_setParentDirectives(string)

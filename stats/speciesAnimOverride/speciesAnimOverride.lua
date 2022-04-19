@@ -226,7 +226,8 @@ function doUpdate(dt)
 	checkTimers(dt)
 
 	animator.setFlipped(mcontroller.facingDirection() == -1)
-	animator.setGlobalTag("direction", mcontroller.facingDirection() * mcontroller.movingDirection() )
+	self.direction = mcontroller.facingDirection() * mcontroller.movingDirection()
+	animator.setGlobalTag("direction", self.direction )
 	getCosmeticItems()
 	getHandItems()
 	checkHumanoidAnim()
@@ -339,9 +340,11 @@ end
 
 function getHandItems()
 	if mcontroller.facingDirection() < 0 then
-		if getHandItem("primary", "frontarms") then getHandItem("alt", "backarms") end
+		local continue = getHandItem("primary", "frontarms", {})
+		getHandItem("alt", "backarms", continue or {})
 	else
-		if getHandItem("primary", "backarms") then getHandItem("alt", "frontarms") end
+		local continue = getHandItem("primary", "backarms", {})
+		getHandItem("alt", "frontarms", continue or {})
 	end
 end
 
@@ -349,70 +352,77 @@ local armsToArm = {
 	frontarms = "frontArm",
 	backarms = "backArm"
 }
-function getHandItem(hand, part)
+local beamMinerImage = "/items/tools/miningtools/beamaxe.png"
+function getHandItem(hand, part, continue)
 	--if true then return true end -- I am just, tired of trying to do this, none of it works really
 
 	local itemDescriptor = world.entityHandItemDescriptor(entity.id(), hand)
-	local continue = true
 
 	if itemDescriptor ~= nil then
 		local item = root.itemConfig(itemDescriptor)
 		local itemType = root.itemType(itemDescriptor.name)
 		if itemType == "activeitem" then
-			if  (not itemDescriptor.parameters or not itemDescriptor.parameters.itemHasOverrideLockScript) then
+			if (not itemDescriptor.parameters or not itemDescriptor.parameters.itemHasOverrideLockScript) then
 				loopedMessage("giveItemScript"..hand, entity.id(), "giveHeldItemOverrideLockScript", {itemDescriptor} )
-				setEmptyHand(hand, part)
+				setEmptyHand(part)
 				return
 			end
 			local itemOverrideData = status.statusProperty(hand.."ItemOverrideData") or {}
 			sb.logInfo("about to do item stuff")
 
-			if itemType == "activeitem" and itemOverrideData.setHoldingItem ~= false then
-				continue = not item.config.twoHanded
+			if itemOverrideData.setHoldingItem ~= false then
 
+				local outside
 				if itemOverrideData.setOutsideOfHand then
-					animator.setAnimationState(part.."ItemRotationState", "item_outside")
-				else
-					animator.setAnimationState(part.."ItemRotationState", "item")
+					outside = "_outside"
 				end
-				animator.setGlobalTag( part.."RotationVisible", "" )
-				animator.setGlobalTag( part.."Visible", "?crop;0;0;0;0" )
+				rotationArmVisible(part, outside)
 
 				local itemImage = item.config.inventoryIcon
 				animator.setPartTag(part.."_item", "partImage", itemImage or "" )
 
 				if type(itemOverrideData.setArmAngle) == "number" then
+					local angle = (itemOverrideData.setArmAngle * math.pi/180)
+
 					animator.resetTransformationGroup( part.."rotation" )
-					animator.rotateTransformationGroup( part.."rotation", (itemOverrideData.setArmAngle * math.pi/180), {self.bodyconfig[armsToArm[part].."RotationCenter"][1]/8, self.bodyconfig[armsToArm[part].."RotationCenter"][2]/8} )
+					animator.rotateTransformationGroup( part.."rotation", angle, {self.bodyconfig[armsToArm[part].."RotationCenter"][1]/8, self.bodyconfig[armsToArm[part].."RotationCenter"][2]/8} )
+
+					if itemOverrideData.setTwoHandedGrip then
+						return { secondArmAngle = angle }
+					end
 				end
 			else
-				setEmptyHand(hand, part)
+				setEmptyHand(part)
 			end
 		elseif itemType == "beamminingtool" then
 			local aim = status.statusProperty("speciesAnimOverrideAim")
 			if not aim then return end
-			local target = globalToLocal(aim)
-			local center = {self.bodyconfig[armsToArm[part].."RotationCenter"][1]/8, self.bodyconfig[armsToArm[part].."RotationCenter"][2]/8}
-			local angle = math.atan((target[2] - center[2]), (target[1] - center[1]))
-
+			rotateAimArm(aim, part)
 			local itemImage = item.config.image
+			beamMinerImage = itemImage
 			animator.setPartTag(part.."_item", "partImage", itemImage or "" )
-
-			animator.setGlobalTag( part.."RotationVisible", "" )
-			animator.setGlobalTag( part.."Visible", "?crop;0;0;0;0" )
-			animator.setAnimationState(part.."ItemRotationState", "item")
-
-			animator.resetTransformationGroup( part.."rotation" )
-			animator.rotateTransformationGroup( part.."rotation", (angle * math.pi/180), center )
-
+			rotationArmVisible(part)
+			return
 		elseif itemType == "object" or itemType == "material" then
+			local aim = status.statusProperty("speciesAnimOverrideAim")
+			if not aim then return end
+			rotateAimArm(aim, part)
+			local itemImage = beamMinerImage
+			animator.setPartTag(part.."_item", "partImage", itemImage or "" )
+			rotationArmVisible(part)
+			return
 		else
 			sb.logInfo(itemType)
 		end
 	else
-		setEmptyHand(hand, part)
+		if continue.secondArmAngle then
+			rotationArmVisible(part)
+			animator.resetTransformationGroup( part.."rotation" )
+			animator.rotateTransformationGroup( part.."rotation", continue.secondArmAngle, {self.bodyconfig[armsToArm[part].."RotationCenter"][1]/8, self.bodyconfig[armsToArm[part].."RotationCenter"][2]/8} )
+		else
+			setEmptyHand(part)
+		end
 	end
-	return continue
 end
 
 function localToGlobal( position )
@@ -428,8 +438,24 @@ function globalToLocal( position )
 	return pos
 end
 
-function setEmptyHand(hand, part)
+function rotateAimArm(aim, part)
+	local target = globalToLocal(aim)
+	local center = {self.bodyconfig[armsToArm[part].."RotationCenter"][1]/8, self.bodyconfig[armsToArm[part].."RotationCenter"][2]/8}
+	local angle = math.atan((target[2] - center[2]), (target[1] - center[1]))
+	animator.resetTransformationGroup( part.."rotation" )
+	animator.rotateTransformationGroup( part.."rotation", angle, center )
+end
+
+function rotationArmVisible(part, outside)
+	animator.setGlobalTag( part.."RotationVisible", "" )
+	animator.setGlobalTag( part.."Visible", "?crop;0;0;0;0" )
+	animator.setAnimationState(part.."ItemRotationState", "item"..(outside or ""))
+	animator.setAnimationState(part.."RotationState", "rotation")
+end
+
+function setEmptyHand(part)
 	animator.setAnimationState(part.."ItemRotationState", "none")
+	animator.setAnimationState(part.."RotationState", "none")
 	animator.setPartTag(part.."_item", "partImage", "" )
 	animator.setGlobalTag( part.."RotationVisible", "?crop;0;0;0;0" )
 	animator.setGlobalTag( part.."Visible", "" )
@@ -637,7 +663,9 @@ function updateAnims(dt)
 		state.animationState.time = state.animationState.time + dt
 		local ended, times, time = hasAnimEnded(statename)
 		if (not ended) or (state.animationState.mode == "loop") then
-			state.animationState.frame = math.floor( time * state.animationState.speed ) + 1
+			local frame = math.floor( time * state.animationState.speed )
+			state.animationState.frame = frame + 1
+			state.animationState.reverseFrame = math.abs(frame - state.animationState.frames)
 			animator.setGlobalTag( statename.."Frame", state.animationState.frame or 1 )
 		end
 	end
@@ -840,6 +868,7 @@ function offsetAnim( data )
 	self.offsets = {
 		enabled = data ~= nil,
 		data = data,
+		reversible = data.reversible,
 		parts = {},
 		loop = data.loop or false,
 		timing = data.timing or "body"
@@ -910,10 +939,14 @@ function offsetAnimUpdate()
 	local state = self.offsets.timing.."State"
 	local ended, times, time = hasAnimEnded(state)
 	if ended and not self.offsets.loop then self.offsets.enabled = false end
+	local frame = self.animStateData[state].animationState.frame
+	if self.offsets.reversible and self.direction == -1 then
+		frame = self.animStateData[state].animationState.reverseFrame
+	end
 
 	for _,r in ipairs(self.offsets.parts) do
-		local x = r.x[ self.animStateData[state].animationState.frame ] or r.x[#r.x] or 0
-		local y = r.y[ self.animStateData[state].animationState.frame ] or r.y[#r.y] or 0
+		local x = r.x[ frame ] or r.x[#r.x] or 0
+		local y = r.y[ frame ] or r.y[#r.y] or 0
 		for i = 1, #r.groups do
 			animator.resetTransformationGroup( r.groups[i] )
 			animator.translateTransformationGroup( r.groups[i], { x / 8, y / 8 } )

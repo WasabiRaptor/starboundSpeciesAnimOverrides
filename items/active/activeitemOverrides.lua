@@ -64,6 +64,10 @@ local function saveDataDoOld(funcName, data)
 	old[funcName](data)
 end
 
+function overrideFuncs.setInventoryIcon(data)
+	saveDataDoOld("setInventoryIcon", data)
+end
+
 function overrideFuncs.setHoldingItem(data)
 	saveDataDoOld("setHoldingItem", data)
 end

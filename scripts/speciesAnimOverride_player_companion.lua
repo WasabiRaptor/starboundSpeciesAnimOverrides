@@ -22,9 +22,18 @@ function init()
 	end)
 end
 
+local essentialItems = {"beamaxe", "wiretool", "painttool", "inspectiontool"}
+
 function giveHeldItemOverrideLockScript(itemDescriptor)
-	if root.itemType(itemDescriptor.name) == "activeitem" and not blacklistedOverrideItem(itemDescriptor.name) then
-		local newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor)
+	local itemType = root.itemType(itemDescriptor.name)
+	if (itemType == "activeitem" or itemType == "beamminingtool")
+	and not blacklistedOverrideItem(itemDescriptor.name) then
+		local newItemDescriptor
+		if itemType == "activeitem" then
+			newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua" )
+		elseif itemType == "beamminingtool" then -- I don't think you can even add scripts to these type of tools with parameters like this anyway
+			newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/toolItemOverrides.lua")
+		end
 		if newItemDescriptor ~= nil then
 			if sb.printJson(player.swapSlotItem()) == sb.printJson(itemDescriptor) then
 				player.setSwapSlotItem(newItemDescriptor)
@@ -34,6 +43,16 @@ function giveHeldItemOverrideLockScript(itemDescriptor)
 				if consumed ~= nil then
 					player.giveItem(newItemDescriptor)
 					return
+				else
+					for i, item in ipairs(essentialItems) do
+						local essentialItem = player.essentialItem(item)
+						if essentialItem then
+							if (essentialItem.name == itemDescriptor.name) then
+								player.giveEssentialItem(item, newItemDescriptor)
+								return
+							end
+						end
+					end
 				end
 			end
 		end
@@ -45,10 +64,10 @@ function blacklistedOverrideItem(itemName)
 	return blacklist[itemName]
 end
 
-function reuturnLockScriptItemDescriptor(itemDescriptor)
+function reuturnLockScriptItemDescriptor(itemDescriptor, script)
 	local item = root.itemConfig(itemDescriptor)
 	local newItemDescriptor = { parameters = { scripts = (itemDescriptor.parameters or {}).scripts or item.config.scripts or {} } }
-	table.insert(newItemDescriptor.parameters.scripts, "/items/active/activeitemOverrides.lua")
+	table.insert(newItemDescriptor.parameters.scripts, script)
 	newItemDescriptor.parameters.itemHasOverrideLockScript = true
 	return sb.jsonMerge(itemDescriptor, newItemDescriptor)
 end

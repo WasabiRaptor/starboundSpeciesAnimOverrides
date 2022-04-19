@@ -9,6 +9,10 @@
 		"bodyPersonality" : "1",
 		"backarmPersonality" : "1",
 		"frontarmPersonality" : "1",
+		"frontarmsRotationVisible" : "?crop;0;0;0;0",
+		"backarmsRotationVisible" : "?crop;0;0;0;0",
+		"frontarmsVisible" : "",
+		"backarmsVisible" : "",
 		"bodyMask" : "/humanoid/animOverrideMasks/malebody.png",
 		"chestMask" : "/humanoid/animOverrideMasks/malebody.png",
 		"headMask" : "/humanoid/animOverrideMasks/malehead.png",
@@ -80,12 +84,30 @@
 					"rotation": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
 				}
 			},
+			"frontarmsItemRotationState": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
 			"backarmsRotationState": {
 				"default": "none",
 				"states": {
 					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
 
 					"rotation": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"backarmsItemRotationState": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
 				}
 			},
 			"legsState": {
@@ -262,11 +284,11 @@
 				},
 				"partStates": {
 					"armsState": {
-						"idle": { "properties": { "image": "<partImage>:<armsStateAnim>.<backarmPersonality><customizeDirectives>?addmask=<frontarmsMask>:<armsStateAnim>.<backarmPersonality>;0;0<bodyDirectives><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:<armsStateAnim>.<backarmPersonality><frontarmsVisible><customizeDirectives>?addmask=<frontarmsMask>:<armsStateAnim>.<backarmPersonality>;0;0<bodyDirectives><directives>" } },
 
-						"duck": { "properties": { "image": "<partImage>:<armsStateAnim>.<armsStateFrame><customizeDirectives>?addmask=<frontarmsMask>:<armsStateAnim>.<armsStateFrame>;0;0<bodyDirectives><directives>" } },
+						"duck": { "properties": { "image": "<partImage>:<armsStateAnim>.<armsStateFrame><frontarmsVisible><customizeDirectives>?addmask=<frontarmsMask>:<armsStateAnim>.<armsStateFrame>;0;0<bodyDirectives><directives>" } },
 
-						"walk": { "properties": { "image": "<partImage>:<direction>.<armsStateAnim>.<armsStateFrame><customizeDirectives>?addmask=<frontarmsMask>:<direction>.<armsStateAnim>.<armsStateFrame>;0;0<bodyDirectives><directives>" } },
+						"walk": { "properties": { "image": "<partImage>:<direction>.<armsStateAnim>.<armsStateFrame><frontarmsVisible><customizeDirectives>?addmask=<frontarmsMask>:<direction>.<armsStateAnim>.<armsStateFrame>;0;0<bodyDirectives><directives>" } },
 
 						"none": { "properties": {} }
 					}
@@ -282,7 +304,7 @@
 					"frontarmsRotationState": {
 						"none": { "properties": {} },
 
-						"rotation": { "properties": { "image": "<partImage>:rotation<customizeDirectives>?addmask=<frontarmsMask>:rotation;0;0<bodyDirectives><directives>" } }
+						"rotation": { "properties": { "image": "<partImage>:rotation<frontarmsRotationVisible><customizeDirectives>?addmask=<frontarmsMask>:rotation;0;0<bodyDirectives><directives>" } }
 
 					}
 				}
@@ -295,11 +317,11 @@
 				},
 				"partStates": {
 					"armsState": {
-						"idle": { "properties": { "image": "<partImage>:<armsStateAnim>.<backarmPersonality><customizeDirectives>?addmask=<backarmsMask>:<armsStateAnim>.<backarmPersonality>;0;0<bodyDirectives><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:<armsStateAnim>.<backarmPersonality><backarmsVisible><customizeDirectives>?addmask=<backarmsMask>:<armsStateAnim>.<backarmPersonality>;0;0<bodyDirectives><directives>" } },
 
-						"duck": { "properties": { "image": "<partImage>:<armsStateAnim>.<armsStateFrame><customizeDirectives>?addmask=<backarmsMask>:<armsStateAnim>.<armsStateFrame>;0;0<bodyDirectives><directives>" } },
+						"duck": { "properties": { "image": "<partImage>:<armsStateAnim>.<armsStateFrame><backarmsVisible><customizeDirectives>?addmask=<backarmsMask>:<armsStateAnim>.<armsStateFrame>;0;0<bodyDirectives><directives>" } },
 
-						"walk": { "properties": { "image": "<partImage>:<direction>.<armsStateAnim>.<armsStateFrame><customizeDirectives>?addmask=<backarmsMask>:<direction>.<armsStateAnim>.<armsStateFrame>;0;0<bodyDirectives><directives>" } },
+						"walk": { "properties": { "image": "<partImage>:<direction>.<armsStateAnim>.<armsStateFrame><backarmsVisible><customizeDirectives>?addmask=<backarmsMask>:<direction>.<armsStateAnim>.<armsStateFrame>;0;0<bodyDirectives><directives>" } },
 
 						"none": { "properties": {} }
 					}
@@ -315,7 +337,7 @@
 					"backarmsRotationState": {
 						"none": { "properties": {} },
 
-						"rotation": { "properties": { "image": "<partImage>:rotation<customizeDirectives>?addmask=<backarmsMask>:rotation;0;0<bodyDirectives><directives>" } }
+						"rotation": { "properties": { "image": "<partImage>:rotation<backarmsRotationVisible><customizeDirectives>?addmask=<backarmsMask>:rotation;0;0<bodyDirectives><directives>" } }
 
 					}
 				}
@@ -331,11 +353,11 @@
 					"armsState": {
 						"none": { "properties": {} },
 
-						"idle": { "properties": { "image": "<partImage>:<armsStateAnim>.<backarmPersonality><cosmeticDirectives><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:<armsStateAnim>.<backarmPersonality><frontarmsVisible><cosmeticDirectives><directives>" } },
 
-						"duck": { "properties": { "image": "<partImage>:<armsStateAnim>.<armsStateFrame><cosmeticDirectives><directives>" } },
+						"duck": { "properties": { "image": "<partImage>:<armsStateAnim>.<armsStateFrame><frontarmsVisible><cosmeticDirectives><directives>" } },
 
-						"walk": { "properties": { "image": "<partImage>:<direction>.<armsStateAnim>.<armsStateFrame><cosmeticDirectives><directives>" } }
+						"walk": { "properties": { "image": "<partImage>:<direction>.<armsStateAnim>.<armsStateFrame><frontarmsVisible><cosmeticDirectives><directives>" } }
 					}
 				}
 			},
@@ -349,7 +371,7 @@
 					"frontarmsRotationState": {
 						"none": { "properties": {} },
 
-						"rotation": { "properties": { "image": "<partImage>:rotation<cosmeticDirectives><directives>" } }
+						"rotation": { "properties": { "image": "<partImage>:rotation<frontarmsRotationVisible><cosmeticDirectives><directives>" } }
 
 					}
 				}
@@ -364,11 +386,11 @@
 					"armsState": {
 						"none": { "properties": {} },
 
-						"idle": { "properties": { "image": "<partImage>:<armsStateAnim>.<backarmPersonality><cosmeticDirectives><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:<armsStateAnim>.<backarmPersonality><backarmsVisible><cosmeticDirectives><directives>" } },
 
-						"duck": { "properties": { "image": "<partImage>:<armsStateAnim>.<armsStateFrame><cosmeticDirectives><directives>" } },
+						"duck": { "properties": { "image": "<partImage>:<armsStateAnim>.<armsStateFrame><backarmsVisible><cosmeticDirectives><directives>" } },
 
-						"walk": { "properties": { "image": "<partImage>:<direction>.<armsStateAnim>.<armsStateFrame><cosmeticDirectives><directives>" } }
+						"walk": { "properties": { "image": "<partImage>:<direction>.<armsStateAnim>.<armsStateFrame><backarmsVisible><cosmeticDirectives><directives>" } }
 					}
 				}
 			},
@@ -382,7 +404,7 @@
 					"backarmsRotationState": {
 						"none": { "properties": {} },
 
-						"rotation": { "properties": { "image": "<partImage>:rotation<cosmeticDirectives><directives>" } }
+						"rotation": { "properties": { "image": "<partImage>:rotation<backarmsRotationVisible><cosmeticDirectives><directives>" } }
 
 					}
 				}
@@ -394,7 +416,7 @@
 					"transformationGroups": ["flip", "handoffset", "frontarmsrotation", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
-					"frontarmsRotationState": {
+					"frontarmsItemRotationState": {
 						"none": { "properties": {} },
 
 						"item": { "properties": { "image": "<partImage><itemDirectives><directives>" } },
@@ -410,7 +432,7 @@
 					"transformationGroups": ["flip", "handoffset", "backarmoffset", "backarmsrotation", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
-					"frontarmsRotationState": {
+					"frontarmsItemRotationState": {
 						"none": { "properties": {} },
 
 						"item": { "properties": { "image": "<partImage><itemDirectives><directives>" } },

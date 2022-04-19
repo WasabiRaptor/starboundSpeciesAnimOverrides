@@ -17,6 +17,8 @@ function init()
 	oldSetParentHidden = tech.setParentHidden
 	tech.setParentHidden = tech_setParentHidden
 
+	status.setStatusProperty("speciesAnimOverrideAim", tech.aimPosition())
+
 	if oldinit ~= nil then oldinit() end
 end
 

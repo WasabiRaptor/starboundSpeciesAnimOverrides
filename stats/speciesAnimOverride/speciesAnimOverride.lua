@@ -361,15 +361,14 @@ function getHandItem(hand, part, continue)
 	if itemDescriptor ~= nil then
 		local item = root.itemConfig(itemDescriptor)
 		local itemType = root.itemType(itemDescriptor.name)
+		if ( itemType == "activeitem" or itemType == "beamminingtool" )
+		and (not itemDescriptor.parameters or not itemDescriptor.parameters.itemHasOverrideLockScript) then
+			loopedMessage("giveItemScript"..hand, entity.id(), "giveHeldItemOverrideLockScript", {itemDescriptor} )
+			setEmptyHand(part)
+			return
+		end
 		if itemType == "activeitem" then
-			if (not itemDescriptor.parameters or not itemDescriptor.parameters.itemHasOverrideLockScript) then
-				loopedMessage("giveItemScript"..hand, entity.id(), "giveHeldItemOverrideLockScript", {itemDescriptor} )
-				setEmptyHand(part)
-				return
-			end
 			local itemOverrideData = status.statusProperty(hand.."ItemOverrideData") or {}
-			sb.logInfo("about to do item stuff")
-
 			if itemOverrideData.setHoldingItem ~= false then
 
 				local outside
@@ -381,16 +380,14 @@ function getHandItem(hand, part, continue)
 				local itemImage = item.config.inventoryIcon
 				animator.setPartTag(part.."_item", "partImage", itemImage or "" )
 
-				if type(itemOverrideData.setArmAngle) == "number" then
-					local angle = (itemOverrideData.setArmAngle * math.pi/180)
-					local offset = self.bodyconfig[armsToArm[part].."Offset"] or {0,0}
-					local center = {(self.bodyconfig[armsToArm[part].."RotationCenter"][1]+offset[1])/8, (self.bodyconfig[armsToArm[part].."RotationCenter"][2]+offset[2])/8}
-					animator.resetTransformationGroup( part.."rotation" )
-					animator.rotateTransformationGroup( part.."rotation", angle, center )
+				local angle = (itemOverrideData.setArmAngle or 0 * math.pi / 180)
+				local offset = self.bodyconfig[armsToArm[part] .. "Offset"] or { 0, 0 }
+				local center = { (self.bodyconfig[armsToArm[part] .. "RotationCenter"][1] + offset[1]) / 8, (self.bodyconfig[armsToArm[part] .. "RotationCenter"][2] + offset[2]) / 8 }
+				animator.resetTransformationGroup(part .. "rotation")
+				animator.rotateTransformationGroup(part .. "rotation", angle, center)
 
-					if itemOverrideData.setTwoHandedGrip then
-						return { secondArmAngle = angle }
-					end
+				if itemOverrideData.setTwoHandedGrip then
+					return { secondArmAngle = angle }
 				end
 			else
 				setEmptyHand(part)
@@ -401,6 +398,14 @@ function getHandItem(hand, part, continue)
 			rotateAimArm(aim, part)
 			local itemImage = item.config.image
 			beamMinerImage = itemImage
+			animator.setPartTag(part.."_item", "partImage", itemImage or "" )
+			rotationArmVisible(part)
+			return
+		elseif itemType == "wiretool" or itemType == "paintingbeamtool" or itemType == "inspectiontool" then
+			local aim = status.statusProperty("speciesAnimOverrideAim")
+			if not aim then return end
+			rotateAimArm(aim, part)
+			local itemImage = item.config.image
 			animator.setPartTag(part.."_item", "partImage", itemImage or "" )
 			rotationArmVisible(part)
 			return

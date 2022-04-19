@@ -377,15 +377,11 @@ function getHandItem(hand, part, continue)
 				end
 				rotationArmVisible(part, outside)
 
-				local itemImage = item.config.inventoryIcon
+				local itemImage = fixFilepath(item.config.inventoryIcon, item)
 				animator.setPartTag(part.."_item", "partImage", itemImage or "" )
 
 				local angle = (itemOverrideData.setArmAngle or 0 * math.pi / 180)
-				local offset = self.bodyconfig[armsToArm[part] .. "Offset"] or { 0, 0 }
-				local center = { (self.bodyconfig[armsToArm[part] .. "RotationCenter"][1] + offset[1]) / 8, (self.bodyconfig[armsToArm[part] .. "RotationCenter"][2] + offset[2]) / 8 }
-				animator.resetTransformationGroup(part .. "rotation")
-				animator.rotateTransformationGroup(part .. "rotation", angle, center)
-
+				rotateArmAngle(part, angle)
 				if itemOverrideData.setTwoHandedGrip then
 					return { secondArmAngle = angle }
 				end
@@ -395,17 +391,17 @@ function getHandItem(hand, part, continue)
 		elseif itemType == "beamminingtool" then
 			local aim = status.statusProperty("speciesAnimOverrideAim")
 			if not aim then return end
-			rotateAimArm(aim, part)
-			local itemImage = item.config.image
+			local angle = rotateAimArm(aim, part)
+			rotationArmVisible(part)
+			local itemImage = fixFilepath(item.config.image, item)
 			beamMinerImage = itemImage
 			animator.setPartTag(part.."_item", "partImage", itemImage or "" )
-			rotationArmVisible(part)
-			return
+			return { secondArmAngle = angle }
 		elseif itemType == "wiretool" or itemType == "paintingbeamtool" or itemType == "inspectiontool" then
 			local aim = status.statusProperty("speciesAnimOverrideAim")
 			if not aim then return end
 			rotateAimArm(aim, part)
-			local itemImage = item.config.image
+			local itemImage = fixFilepath(item.config.image, item)
 			animator.setPartTag(part.."_item", "partImage", itemImage or "" )
 			rotationArmVisible(part)
 			return
@@ -423,8 +419,8 @@ function getHandItem(hand, part, continue)
 	else
 		if continue.secondArmAngle then
 			rotationArmVisible(part)
-			animator.resetTransformationGroup( part.."rotation" )
-			animator.rotateTransformationGroup( part.."rotation", continue.secondArmAngle, {self.bodyconfig[armsToArm[part].."RotationCenter"][1]/8, self.bodyconfig[armsToArm[part].."RotationCenter"][2]/8} )
+			rotateArmAngle(part, continue.secondArmAngle)
+			animator.setPartTag(part.."_item", "partImage", "" )
 		else
 			setEmptyHand(part)
 		end
@@ -451,6 +447,15 @@ function rotateAimArm(aim, part)
 	local angle = math.atan((target[2] - center[2]), (target[1] - center[1]))
 	animator.resetTransformationGroup( part.."rotation" )
 	animator.rotateTransformationGroup( part.."rotation", angle, center )
+	return angle
+end
+
+function rotateArmAngle(part, angle)
+	local offset = self.bodyconfig[armsToArm[part] .. "Offset"] or { 0, 0 }
+	local center = { (self.bodyconfig[armsToArm[part] .. "RotationCenter"][1] + offset[1]) / 8, (self.bodyconfig[armsToArm[part] .. "RotationCenter"][2] + offset[2]) / 8 }
+	animator.resetTransformationGroup( part.."rotation" )
+	animator.rotateTransformationGroup( part.."rotation", angle, center )
+	return angle
 end
 
 function rotationArmVisible(part, outside)
@@ -645,7 +650,7 @@ end
 
 function fixFilepath(string, item)
 	if string ~= nil then
-		if string[1] == "/" then
+		if string:find("^/") then
 			return string
 		else
 			return item.directory..string

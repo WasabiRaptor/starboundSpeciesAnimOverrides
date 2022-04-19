@@ -383,9 +383,10 @@ function getHandItem(hand, part, continue)
 
 				if type(itemOverrideData.setArmAngle) == "number" then
 					local angle = (itemOverrideData.setArmAngle * math.pi/180)
-
+					local offset = self.bodyconfig[armsToArm[part].."Offset"] or {0,0}
+					local center = {(self.bodyconfig[armsToArm[part].."RotationCenter"][1]+offset[1])/8, (self.bodyconfig[armsToArm[part].."RotationCenter"][2]+offset[2])/8}
 					animator.resetTransformationGroup( part.."rotation" )
-					animator.rotateTransformationGroup( part.."rotation", angle, {self.bodyconfig[armsToArm[part].."RotationCenter"][1]/8, self.bodyconfig[armsToArm[part].."RotationCenter"][2]/8} )
+					animator.rotateTransformationGroup( part.."rotation", angle, center )
 
 					if itemOverrideData.setTwoHandedGrip then
 						return { secondArmAngle = angle }
@@ -440,7 +441,8 @@ end
 
 function rotateAimArm(aim, part)
 	local target = globalToLocal(aim)
-	local center = {self.bodyconfig[armsToArm[part].."RotationCenter"][1]/8, self.bodyconfig[armsToArm[part].."RotationCenter"][2]/8}
+	local offset = self.bodyconfig[armsToArm[part].."Offset"] or {0,0}
+	local center = {(self.bodyconfig[armsToArm[part].."RotationCenter"][1]+offset[1])/8, (self.bodyconfig[armsToArm[part].."RotationCenter"][2]+offset[2])/8}
 	local angle = math.atan((target[2] - center[2]), (target[1] - center[1]))
 	animator.resetTransformationGroup( part.."rotation" )
 	animator.rotateTransformationGroup( part.."rotation", angle, center )

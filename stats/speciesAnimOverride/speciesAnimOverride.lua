@@ -375,15 +375,22 @@ function getHandItem(hand, part, continue)
 				if itemOverrideData.setOutsideOfHand then
 					outside = "_outside"
 				end
+				local angle = (itemOverrideData.setArmAngle or 0 * math.pi / 180)
 				rotationArmVisible(part, outside)
+				rotateArmAngle(part, angle)
 
 				local itemImage = fixFilepath(item.config.inventoryIcon, item)
-				animator.setPartTag(part.."_item", "partImage", itemImage or "" )
 
-				local angle = (itemOverrideData.setArmAngle or 0 * math.pi / 180)
-				rotateArmAngle(part, angle)
 				if itemOverrideData.setTwoHandedGrip then
-					return { secondArmAngle = angle }
+					if part == "backarms" then
+						animator.setPartTag(part.."_item", "partImage", "" )
+						return { secondArmAngle = angle, secondArmImage = itemImage }
+					else
+						animator.setPartTag(part.."_item", "partImage", itemImage or "" )
+						return { secondArmAngle = angle }
+					end
+				else
+					animator.setPartTag(part.."_item", "partImage", itemImage or "" )
 				end
 			else
 				setEmptyHand(part)
@@ -395,16 +402,27 @@ function getHandItem(hand, part, continue)
 			rotationArmVisible(part)
 			local itemImage = fixFilepath(item.config.image, item)
 			beamMinerImage = itemImage
-			animator.setPartTag(part.."_item", "partImage", itemImage or "" )
-			return { secondArmAngle = angle }
+			if part == "backarms" then
+				animator.setPartTag(part.."_item", "partImage", "" )
+				return { secondArmAngle = angle, secondArmImage = itemImage }
+			else
+				animator.setPartTag(part.."_item", "partImage", itemImage or "" )
+				return { secondArmAngle = angle }
+			end
 		elseif itemType == "wiretool" or itemType == "paintingbeamtool" or itemType == "inspectiontool" then
 			local aim = status.statusProperty("speciesAnimOverrideAim")
 			if not aim then return end
-			rotateAimArm(aim, part)
+			local angle = rotateAimArm(aim, part)
 			local itemImage = fixFilepath(item.config.image, item)
 			animator.setPartTag(part.."_item", "partImage", itemImage or "" )
 			rotationArmVisible(part)
-			return
+			if part == "backarms" then
+				animator.setPartTag(part.."_item", "partImage", "" )
+				return { secondArmAngle = angle, secondArmImage = itemImage }
+			else
+				animator.setPartTag(part.."_item", "partImage", itemImage or "" )
+				return { secondArmAngle = angle }
+			end
 		elseif itemType == "object" or itemType == "material" then
 			local aim = status.statusProperty("speciesAnimOverrideAim")
 			if not aim then return end
@@ -420,7 +438,7 @@ function getHandItem(hand, part, continue)
 		if continue.secondArmAngle then
 			rotationArmVisible(part)
 			rotateArmAngle(part, continue.secondArmAngle)
-			animator.setPartTag(part.."_item", "partImage", "" )
+			animator.setPartTag(part.."_item", "partImage", continue.secondArmImage or "" )
 		else
 			setEmptyHand(part)
 		end

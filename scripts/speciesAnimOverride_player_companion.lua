@@ -20,6 +20,21 @@ function init()
 	message.setHandler("giveHeldItemOverrideLockScript", function(_,_, itemDescriptor)
 		giveHeldItemOverrideLockScript(itemDescriptor)
 	end)
+
+	message.setHandler("giveAnimOverrideAimTech", function(_,_)
+		local headTech = player.equippedTech("head")
+		if not headTech then
+			player.makeTechAvailable("storeDirectivesEmpty")
+			player.enableTech("storeDirectivesEmpty")
+			player.equipTech("storeDirectivesEmpty")
+		elseif headTech ~= "storeDirectivesEmpty" then
+			player.makeTechUnavailable("storeDirectivesEmpty")
+		end
+	end)
+	message.setHandler("removeAnimOverrideAimTech", function(_,_)
+		player.makeTechUnavailable("storeDirectivesEmpty")
+	end)
+
 end
 
 local essentialItems = {"beamaxe", "wiretool", "painttool", "inspectiontool"}
@@ -31,7 +46,7 @@ function giveHeldItemOverrideLockScript(itemDescriptor)
 		local newItemDescriptor
 		if itemType == "activeitem" then
 			newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua" )
-		elseif itemType == "beamminingtool" then -- I don't think you can even add scripts to these type of tools with parameters like this anyway
+		elseif itemType == "beamminingtool" then
 			newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/toolItemOverrides.lua")
 		end
 		if newItemDescriptor ~= nil then

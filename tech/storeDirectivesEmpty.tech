@@ -1,0 +1,13 @@
+{
+	"name" : "storeDirectivesEmpty",
+	"type" : "head",
+
+	"scripts" : ["/tech/storeDirectives.lua"],
+
+	"description" : "",
+	"shortDescription" : "",
+	"rarity" : "Common",
+	"icon" : "",
+
+	"chipCost" : 8
+}

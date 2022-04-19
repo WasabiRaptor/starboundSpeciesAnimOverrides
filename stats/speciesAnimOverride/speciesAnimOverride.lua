@@ -35,6 +35,8 @@ function init()
 end
 
 function initAfterInit()
+	world.sendEntityMessage(entity.id(), "giveAnimOverrideAimTech" )
+
 	self.species = self.overrideData.species or world.entitySpecies(entity.id())
 	self.gender = self.overrideData.gender or world.entityGender(entity.id())
 	self.identity = self.overrideData.identity or {}
@@ -74,88 +76,90 @@ function initAfterInit()
 		end
 	end
 
+	if not self.identity.hairGroup and type(self.speciesFile) == "table" then
+		for i, data in ipairs(self.speciesFile.genders or {}) do
+			if data.name == self.gender then
+				sb.logInfo(tostring(data.hairGroup))
+				self.identity.hairGroup = data.hairGroup or "hair"
+			end
+		end
+	end
+	if not self.identity.facialHairGroup and type(self.speciesFile) == "table" then
+		for i, data in ipairs(self.speciesFile.genders or {}) do
+			if data.name == self.gender then
+				self.identity.facialHairGroup = data.facialHairGroup or "facialHair"
+			end
+		end
+	end
+	if not self.identity.facialMaskGroup and type(self.speciesFile) == "table" then
+		for i, data in ipairs(self.speciesFile.genders or {}) do
+			if data.name == self.gender then
+				self.identity.facialMaskGroup = data.facialMaskGroup or "facialMask"
+			end
+		end
+	end
+
 	local portrait = world.entityPortrait(entity.id(), "full")
-	local gotEmote
 	for _, part in ipairs(portrait) do
 		local imageString = part.image
 		-- check for doing an emote animation
-		if not gotEmote then
-			local found1, found2 = imageString:find("/emote.png:")
-			if found1 ~= nil then
-				local found3, found4 = imageString:find(".1", found2, found2+10 )
-				if found3 ~= nil then
-					gotEmote = true
-					if not self.directives then
-						local directives = imageString:sub(found4+1)
-						if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
-							directives = directives.."?multiply=FFFFFFfb"
-						end
-						self.directives = self.overrideData.directives or directives
-						animator.setGlobalTag("customizeDirectives", self.directives)
-					end
-				end
-			end
-		end
+		sb.logInfo(imageString)
 
 		--get personality values
 		if not self.identity.body then
-			found1, found2 = imageString:find("body.png:idle.")
+			local found1, found2 = imageString:find("body.png:idle.")
 			if found1 ~= nil then
 				self.identity.body = imageString:sub(found2+1, found2+1)
+
+				local directives = imageString:sub(found2+2)
+				if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
+					directives = directives.."?multiply=FFFFFFfb"
+				end
+				self.directives = self.overrideData.directives or directives
+				animator.setGlobalTag("customizeDirectives", self.directives)
 			end
 		end
 		if not self.identity.arm then
-			found1, found2 = imageString:find("backarm.png:idle.")
+			local found1, found2 = imageString:find("backarm.png:idle.")
 			if found1 ~= nil then
 				self.identity.arm = imageString:sub(found2+1, found2+1)
 			end
 		end
 
-		if not self.identity.hairGroup and type(self.speciesFile) == "table" then
-			for i, data in ipairs(self.speciesFile.genders or {}) do
-				if data.name == self.gender then
-					self.identity.hairGroup = data.hairGroup or "hair"
-				end
-			end
-		end
 		if not self.identity.hairType then
-			found1, found2 = imageString:find("/"..(self.identity.hairGroup or "hair").."/")
+			local found1, found2 = imageString:find("/"..(self.identity.hairGroup or "hair").."/")
 			if found1 ~= nil then
-				found3, found4 = imageString:find(".png")
+				local found3, found4 = imageString:find(".png:normal")
 				self.identity.hairType = imageString:sub(found2+1, found3-1)
+
+				local found5, found6 = imageString:find("?addmask=")
+				local hairDirectives = imageString:sub(found4+1, (found5 or 0)-1) -- this is really elegant haha
+
+				if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
+					hairDirectives = hairDirectives.."?multiply=FFFFFFfb"
+				end
+				self.hairDirectives = self.overrideData.hairDirectives or hairDirectives
+				animator.setPartTag("hair", "customizeDirectives", self.hairDirectives)
+				animator.setPartTag("hair_fg", "customizeDirectives", self.hairDirectives)
+				animator.setPartTag("facialHair", "customizeDirectives", self.hairDirectives)
 			end
 		end
 
-		if not self.identity.facialHairGroup and type(self.speciesFile) == "table" then
-			for i, data in ipairs(self.speciesFile.genders or {}) do
-				if data.name == self.gender then
-					self.identity.facialHairGroup = data.facialHairGroup or "facialHair"
-				end
-			end
-		end
 		if not self.identity.facialHairType then
-			found1, found2 = imageString:find("/"..(self.identity.facialHairGroup or "facialHair").."/")
+			local found1, found2 = imageString:find("/"..(self.identity.facialHairGroup or "facialHair").."/")
 			if found1 ~= nil then
 				found3, found4 = imageString:find(".png")
 				self.identity.facialHairType = imageString:sub(found2+1, found3-1)
 			end
 		end
 
-		if not self.identity.facialMaskGroup and type(self.speciesFile) == "table" then
-			for i, data in ipairs(self.speciesFile.genders or {}) do
-				if data.name == self.gender then
-					self.identity.facialMaskGroup = data.facialMaskGroup or "facialMask"
-				end
-			end
-		end
 		if not self.identity.facialMaskType then
-			found1, found2 = imageString:find("/"..(self.identity.facialMaskGroup or "facialMask").."/")
+			local found1, found2 = imageString:find("/"..(self.identity.facialMaskGroup or "facialMask").."/")
 			if found1 ~= nil then
 				found3, found4 = imageString:find(".png")
 				self.identity.facialMaskType = imageString:sub(found2+1, found3-1)
 			end
 		end
-
 
 		if not self.identity.offsets and (self.identity.body ~= nil) and (self.identity.arm ~= nil) then
 			local bodyIdle = "idle."..self.identity.body
@@ -213,6 +217,10 @@ function update(dt)
 	effect.setParentDirectives("crop;0;0;0;0")
 	self.overrideData = status.statusProperty("speciesAnimOverrideData") or {}
 
+	animator.setFlipped(mcontroller.facingDirection() == -1)
+	self.direction = mcontroller.facingDirection() * mcontroller.movingDirection()
+	animator.setGlobalTag("direction", self.direction )
+
 	if (not self.inited) or (self.overrideData.gender ~= nil and self.overrideData.gender ~= self.gender) or (self.overrideData.species ~= nil and self.overrideData.species ~= self.species) then
 		initAfterInit()
 	else
@@ -225,9 +233,6 @@ function doUpdate(dt)
 	checkRPCsFinished(dt)
 	checkTimers(dt)
 
-	animator.setFlipped(mcontroller.facingDirection() == -1)
-	self.direction = mcontroller.facingDirection() * mcontroller.movingDirection()
-	animator.setGlobalTag("direction", self.direction )
 	getCosmeticItems()
 	getHandItems()
 	checkHumanoidAnim()
@@ -237,6 +242,7 @@ function doUpdate(dt)
 end
 
 function uninit()
+	world.sendEntityMessage(entity.id(), "removeAnimOverrideAimTech" )
 end
 
 function loopedMessage(name, eid, message, args, callback, failCallback)
@@ -432,7 +438,7 @@ function getHandItem(hand, part, continue)
 			rotationArmVisible(part)
 			return
 		else
-			sb.logInfo(itemType)
+			setEmptyHand(part)
 		end
 	else
 		if continue.secondArmAngle then

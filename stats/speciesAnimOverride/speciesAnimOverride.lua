@@ -55,6 +55,9 @@ function initAfterInit()
 	local success, speciesFile = pcall(root.assetJson,("/species/"..self.species..".species"))
 	self.speciesFile = speciesFile
 	self.bodyconfig = root.assetJson((speciesFile or {}).humanoidConfig or "/humanoid.config")
+	animator.resetTransformationGroup("handoffset")
+	animator.resetTransformationGroup("backarmoffset")
+	animator.resetTransformationGroup("globalOffset")
 	animator.translateTransformationGroup("handoffset", {self.bodyconfig.frontHandPosition[1]/8,self.bodyconfig.frontHandPosition[2]/8})
 	animator.translateTransformationGroup("backarmoffset", {self.bodyconfig.backArmOffset[1]/8,self.bodyconfig.backArmOffset[2]/8})
 	animator.translateTransformationGroup("globalOffset", {((self.speciesData.globalOffset or {})[1] or 0)/8, ((self.speciesData.globalOffset or {})[2] or 0)/8})
@@ -673,7 +676,7 @@ function setCosmetic.back_clear(cosmetic)
 end
 
 function fixFilepath(string, item)
-	if string ~= nil then
+	if type(string) == "string" then
 		if string:find("^/") then
 			return string
 		else

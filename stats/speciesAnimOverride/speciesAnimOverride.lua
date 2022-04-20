@@ -769,7 +769,7 @@ function checkHumanoidAnim()
 	if mcontroller.liquidMovement() then movement.liquidMovement() return end
 	if mcontroller.jumping() then movement.jumping() return end
 	if mcontroller.falling() then movement.falling() return end
-	if mcontroller.flying() then movement.fly() return end
+	if mcontroller.flying() then movement.flying() return end
 end
 
 movement = {}

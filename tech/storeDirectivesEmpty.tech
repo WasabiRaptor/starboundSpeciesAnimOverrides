@@ -7,7 +7,7 @@
 	"description" : "",
 	"shortDescription" : "",
 	"rarity" : "Common",
-	"icon" : "",
+	"icon" : "/empty_image.png",
 
 	"chipCost" : 8
 }

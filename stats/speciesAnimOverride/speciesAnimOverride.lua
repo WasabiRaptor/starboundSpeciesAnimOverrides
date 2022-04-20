@@ -82,7 +82,6 @@ function initAfterInit()
 	if not self.identity.hairGroup and type(self.speciesFile) == "table" then
 		for i, data in ipairs(self.speciesFile.genders or {}) do
 			if data.name == self.gender then
-				sb.logInfo(tostring(data.hairGroup))
 				self.identity.hairGroup = data.hairGroup or "hair"
 			end
 		end
@@ -105,9 +104,6 @@ function initAfterInit()
 	local portrait = world.entityPortrait(entity.id(), "full")
 	for _, part in ipairs(portrait) do
 		local imageString = part.image
-		-- check for doing an emote animation
-		sb.logInfo(imageString)
-
 		--get personality values
 		if not self.identity.body then
 			local found1, found2 = imageString:find("body.png:idle.")

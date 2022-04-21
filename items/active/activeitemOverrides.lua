@@ -74,6 +74,19 @@ function saveDataDoOld(funcName, ...)
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	old[funcName](...)
 end
+function interceptFunction(func)
+	activeItemOverrideFuncs[func] = function(...)
+		saveDataDoOld(func, ...)
+	end
+end
+interceptFunction("setInventoryIcon")
+interceptFunction("setHoldingItem")
+interceptFunction("setBackArmFrame")
+interceptFunction("setFrontArmFrame")
+interceptFunction("setTwoHandedGrip")
+interceptFunction("setOutsideOfHand")
+interceptFunction("setArmAngle")
+
 function transformQueue(funcName, ...)
 	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
 	if #itemData.transformQueue < 30 then
@@ -82,54 +95,16 @@ function transformQueue(funcName, ...)
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	old[funcName](...)
 end
-
-function activeItemOverrideFuncs.setInventoryIcon(...)
-	saveDataDoOld("setInventoryIcon", ...)
+function interceptTransform(func)
+	animatorOverrideFuncs[func] = function(...)
+		transformQueue(func, ...)
+	end
 end
-
-function activeItemOverrideFuncs.setHoldingItem(...)
-	saveDataDoOld("setHoldingItem", ...)
-end
-
-function activeItemOverrideFuncs.setBackArmFrame(...)
-	saveDataDoOld("setBackArmFrame", ...)
-end
-
-function activeItemOverrideFuncs.setFrontArmFrame(...)
-	saveDataDoOld("setFrontArmFrame", ...)
-end
-
-function activeItemOverrideFuncs.setTwoHandedGrip(...)
-	saveDataDoOld("setTwoHandedGrip", ...)
-end
-
-function activeItemOverrideFuncs.setOutsideOfHand(...)
-	saveDataDoOld("setOutsideOfHand", ...)
-end
-
-function activeItemOverrideFuncs.setArmAngle(...)
-	saveDataDoOld("setArmAngle", ...)
-end
-
-function animatorOverrideFuncs.rotateTransformationGroup(...)
-	transformQueue("rotateTransformationGroup", ...)
-end
-
-function animatorOverrideFuncs.scaleTransformationGroup(...)
-	transformQueue("scaleTransformationGroup", ...)
-end
-
-function animatorOverrideFuncs.transformTransformationGroup(...)
-	transformQueue("transformTransformationGroup", ...)
-end
-
-function animatorOverrideFuncs.translateTransformationGroup(...)
-	transformQueue("translateTransformationGroup", ...)
-end
-
-function animatorOverrideFuncs.resetTransformationGroup(...)
-	transformQueue("resetTransformationGroup", ...)
-end
+interceptTransform("rotateTransformationGroup")
+interceptTransform("scaleTransformationGroup")
+interceptTransform("transformTransformationGroup")
+interceptTransform("translateTransformationGroup")
+interceptTransform("resetTransformationGroup")
 
 --[[
 function animatorOverrideFuncs.setAnimationState(...)
@@ -146,7 +121,8 @@ end
 
 function animatorOverrideFuncs.setPartTag(part, tagname, tagvalue)
 	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
-	itemData.setPartTag[part] = {tagname = tagname, tagvalue = tagvalue}
+	itemData.setPartTag[part] = itemData.setPartTag[part] or {}
+	itemData.setPartTag[part][tagname] = tagvalue
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	old.setPartTag(part, tagname, tagvalue)
 end

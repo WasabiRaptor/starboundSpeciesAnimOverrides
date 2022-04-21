@@ -740,7 +740,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.89,
-					"transformationGroups": ["flip", "blade_frontarms_offset", "swoosh_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"transformationGroups": ["flip", "swoosh_frontarms_offset", "swoosh_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
 				}
 			},
@@ -748,7 +748,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2.81,
-					"transformationGroups": ["flip", "blade_backarms_offset", "swoosh_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"transformationGroups": ["flip", "swoosh_backarms_offset", "swoosh_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
 			},

@@ -537,6 +537,7 @@ function clearAnimatedActiveItemTags(hand, part)
 	for partname, data in pairs(itemImages[hand].parts or {}) do
 		animator.setPartTag( partname.."_"..part, "partImage", "")
 	end
+	itemImages[hand] = { parts = {} }
 end
 
 function doHandItemTransform(hand, part, func, transformGroup, ...)

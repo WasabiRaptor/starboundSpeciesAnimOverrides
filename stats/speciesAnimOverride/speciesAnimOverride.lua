@@ -469,13 +469,16 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 		for itemPart, data in pairs(animation.animatedParts.parts or {}) do
 			local image = (data.properties or {}).image
 			if type(image) == "string" then
-				local tags = {}
+				local tags = {
+					partImage = (item.config.animationParts or {})[itemPart]
+				}
 				for tagname, tag in pairs(data.properties) do
 					local tagType = type(tag)
 					if (tagType == "string" or tagType == "number") and (tagname ~= "zLevel" and tagname ~= "image") then
 						tags[tagname] = tostring(tag)
 					end
 				end
+
 				itemImages[hand].parts[itemPart] = {
 					tags = tags,
 					image = image,
@@ -526,8 +529,6 @@ function setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
 			animator.setPartTag( partname.."_"..part, "fullbright", "")
 		end
 		local tagtable = sb.jsonMerge( itemImages[hand].tags or {}, sb.jsonMerge( itemOverrideData.setGlobalTag or {}, sb.jsonMerge( data.tags or {}, itemOverrideData.setPartTag[partname] or {} )))
-		sb.logInfo(sb.printJson(tagtable))
-		sb.logInfo(data.image or "")
 		animator.setPartTag( partname.."_"..part, "partImage", fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item))
 	end
 end

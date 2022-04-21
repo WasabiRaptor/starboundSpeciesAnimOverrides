@@ -497,27 +497,10 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 end
 
 function setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
-	sb.logInfo(sb.printJson(itemOverrideData))
-	for i, args in ipairs(itemOverrideData.resetTransformationGroup) do
-		doHandItemTransform(hand, part, "resetTransformationGroup", table.unpack(args))
+	for i, args in ipairs(itemOverrideData.transformQueue) do
+		doHandItemTransform(hand, part, table.unpack(args))
 	end
-	itemOverrideData.resetTransformationGroup = {}
-	for i, args in ipairs(itemOverrideData.rotateTransformationGroup) do
-		doHandItemTransform(hand, part, "rotateTransformationGroup", table.unpack(args))
-	end
-	itemOverrideData.rotateTransformationGroup = {}
-	for i, args in ipairs(itemOverrideData.scaleTransformationGroup) do
-		doHandItemTransform(hand, part, "scaleTransformationGroup", table.unpack(args))
-	end
-	itemOverrideData.scaleTransformationGroup = {}
-	for i, args in ipairs(itemOverrideData.translateTransformationGroup) do
-		doHandItemTransform(hand, part, "translateTransformationGroup", table.unpack(args))
-	end
-	itemOverrideData.translateTransformationGroup = {}
-	for i, args in ipairs(itemOverrideData.transformTransformationGroup) do
-		doHandItemTransform(hand, part, "transformTransformationGroup", table.unpack(args))
-	end
-	itemOverrideData.transformTransformationGroup = {}
+	itemOverrideData.transformQueue = {{}}
 	status.setStatusProperty(hand.."ItemOverrideData", itemOverrideData)
 
 	for partname, data in pairs(itemImages[hand].parts or {}) do
@@ -548,7 +531,7 @@ function clearAnimatedActiveItemTags(hand, part)
 end
 
 function doHandItemTransform(hand, part, func, transformGroup, ...)
-	local group = transformGroup.."_"..part
+	local group = (transformGroup or "").."_"..part
 	sb.logInfo(group)
 	if animator.hasTransformationGroup(group) then
 		animator[func](group, ...)

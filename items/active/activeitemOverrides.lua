@@ -10,7 +10,9 @@ local old = {
 local activeItemOverrideFuncs = {}
 local animatorOverrideFuncs = {}
 local ItemOverrideData = {
-
+	transformQueue = {{}},
+	setGlobalTag = {},
+	setPartTag = {}
 }
 
 function init()
@@ -24,7 +26,6 @@ function init()
 	end
 	for funcName, func in pairs(animatorOverrideFuncs) do
 		old[funcName] = animator[funcName]
-		ItemOverrideData[funcName] = {}
 		animator[funcName] = func
 	end
 
@@ -73,9 +74,9 @@ function saveDataDoOld(funcName, ...)
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	old[funcName](...)
 end
-function animatorSaveDataDoOld(funcName, ...)
+function transformQueue(funcName, ...)
 	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
-	table.insert(itemData[funcName], {...})
+	table.insert(itemData.transformQueue, {funcName, ...})
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	old[funcName](...)
 end
@@ -109,28 +110,30 @@ function activeItemOverrideFuncs.setArmAngle(...)
 end
 
 function animatorOverrideFuncs.rotateTransformationGroup(...)
-	animatorSaveDataDoOld("rotateTransformationGroup", ...)
+	transformQueue("rotateTransformationGroup", ...)
 end
 
 function animatorOverrideFuncs.scaleTransformationGroup(...)
-	animatorSaveDataDoOld("scaleTransformationGroup", ...)
+	transformQueue("scaleTransformationGroup", ...)
 end
 
 function animatorOverrideFuncs.transformTransformationGroup(...)
-	animatorSaveDataDoOld("transformTransformationGroup", ...)
+	transformQueue("transformTransformationGroup", ...)
 end
 
 function animatorOverrideFuncs.translateTransformationGroup(...)
-	animatorSaveDataDoOld("translateTransformationGroup", ...)
+	transformQueue("translateTransformationGroup", ...)
 end
 
 function animatorOverrideFuncs.resetTransformationGroup(...)
-	animatorSaveDataDoOld("resetTransformationGroup", ...)
+	transformQueue("resetTransformationGroup", ...)
 end
 
+--[[
 function animatorOverrideFuncs.setAnimationState(...)
 	animatorSaveDataDoOld("setAnimationState", ...)
 end
+]]
 
 function animatorOverrideFuncs.setGlobalTag(tagname, tagvalue)
 	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}

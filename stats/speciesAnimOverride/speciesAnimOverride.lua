@@ -478,8 +478,10 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 						tags[tagname] = tostring(tag)
 					end
 				end
+				local remapPart = root.assetJson("/stats/speciesAnimOverride/itemPartNameMap.config")
 
 				itemImages[hand].parts[itemPart] = {
+					remapPart = remapPart[itemPart],
 					tags = tags,
 					image = image,
 					fullbright = data.properties.fullbright,
@@ -495,6 +497,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 end
 
 function setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
+	sb.logInfo(sb.printJson(itemOverrideData))
 	for i, args in ipairs(itemOverrideData.resetTransformationGroup) do
 		doHandItemTransform(hand, part, "resetTransformationGroup", table.unpack(args))
 	end
@@ -518,6 +521,7 @@ function setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
 	status.setStatusProperty(hand.."ItemOverrideData", itemOverrideData)
 
 	for partname, data in pairs(itemImages[hand].parts or {}) do
+		local partname = data.remapPart or partname
 		local offsetGroup = partname.."_"..part.."_offset"
 		if animator.hasTransformationGroup(offsetGroup) then
 			local offset = self.bodyconfig[armsToArm[part].."Offset"] or {0,0}
@@ -545,6 +549,7 @@ end
 
 function doHandItemTransform(hand, part, func, transformGroup, ...)
 	local group = transformGroup.."_"..part
+	sb.logInfo(group)
 	if animator.hasTransformationGroup(group) then
 		animator[func](group, ...)
 	end

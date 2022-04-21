@@ -508,11 +508,11 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			local currentState = stateData.states[stateData.current]
 			if not currentState or not currentState.cycle or not currentState.frames then
 				stateData.frame = 1
-			elseif stateData.time <= currentState.cycle then
-				stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames)
+			elseif stateData.time < currentState.cycle then
+				stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames) + 1
 			else
 				if currentState.mode == "loop" then
-					stateData.frame = stateData.frame % currentState.frames
+					stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames) % currentState.frames + 1
 				elseif currentState.mode == "end" then
 					stateData.frame = currentState.frames
 				elseif currentState.mode == "transition" then

@@ -76,7 +76,9 @@ function saveDataDoOld(funcName, ...)
 end
 function transformQueue(funcName, ...)
 	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
-	table.insert(itemData.transformQueue, {funcName, ...})
+	if #itemData.transformQueue < 30 then
+		table.insert(itemData.transformQueue, {funcName, ...})
+	end
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	old[funcName](...)
 end

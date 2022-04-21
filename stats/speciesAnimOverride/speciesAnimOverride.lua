@@ -382,10 +382,16 @@ function getHandItem(hand, part, continue)
 				rotateArmAngle(part, angle)
 
 				if item.config.animation then
-					animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
 					if itemOverrideData.setTwoHandedGrip then
-						return { secondArmAngle = angle }
+						if part == "backarms" then
+							clearAnimatedActiveItemTags(hand, part)
+							return { secondArmAngle = angle, secondArmAnimatedItem = hand, itemOverrideData = itemOverrideData, itemDescriptor = itemDescriptor, item = item }
+						else
+							animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
+							return { secondArmAngle = angle }
+						end
 					else
+						animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
 						return
 					end
 				else
@@ -450,6 +456,9 @@ function getHandItem(hand, part, continue)
 			rotationArmVisible(part)
 			rotateArmAngle(part, continue.secondArmAngle)
 			animator.setPartTag(part.."_item", "partImage", continue.secondArmImage or "" )
+			if continue.secondArmAnimatedItem then
+				animatedActiveItem(continue.item, continue.itemDescriptor, continue.itemOverrideData, continue.secondArmAnimatedItem, part, continue)
+			end
 		else
 			setEmptyHand(hand, part)
 		end
@@ -519,7 +528,7 @@ function setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
 			animator.setPartTag( partname.."_"..part, "fullbright", "")
 		end
 		local tagtable = sb.jsonMerge( itemImages[hand].tags or {}, sb.jsonMerge( itemOverrideData.setGlobalTag or {}, sb.jsonMerge( data.tags or {}, itemOverrideData.setPartTag[partname] or {} )))
-		animator.setPartTag( partname.."_"..part, "partImage", fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item))
+		animator.setPartTag( partname.."_"..part, "partImage", fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item) or "")
 	end
 end
 

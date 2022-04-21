@@ -461,7 +461,7 @@ end
 local itemImages = { primary = { parts = {} }, alt = { parts = {} } }
 function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
 	if itemImages[hand].name ~= itemDescriptor.name then
-		local animation = sb.jsonMerge( (root.assetJson(fixFilepath(item.config.animation)) or {}), (item.config.animationCustom or {}))
+		local animation = sb.jsonMerge( (root.assetJson(fixFilepath(item.config.animation, item)) or {}), (item.config.animationCustom or {}))
 
 		itemImages[hand].name = itemDescriptor.name
 		itemImages[hand].tags = animation.globalTagDefaults
@@ -473,7 +473,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 				for tagname, tag in pairs(data.properties) do
 					local tagType = type(tag)
 					if (tagType == "string" or tagType == "number") and (tagname ~= "zLevel" and tagname ~= "image") then
-						tags[tagname] = tag
+						tags[tagname] = tostring(tag)
 					end
 				end
 				itemImages[hand].parts[itemPart] = {
@@ -525,7 +525,10 @@ function setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
 		else
 			animator.setPartTag( partname.."_"..part, "fullbright", "")
 		end
-		animator.setPartTag( partname.."_"..part, "partImage", fixFilepath(sb.replaceTags( data.image or "", sb.jsonMerge( itemImages[hand].tags or {}, sb.jsonMerge( itemOverrideData.setGlobalTag or {}, sb.jsonMerge( data.tags or {}, itemOverrideData.setPartTag[partname] or {} )))), item))
+		local tagtable = sb.jsonMerge( itemImages[hand].tags or {}, sb.jsonMerge( itemOverrideData.setGlobalTag or {}, sb.jsonMerge( data.tags or {}, itemOverrideData.setPartTag[partname] or {} )))
+		sb.logInfo(sb.printJson(tagtable))
+		sb.logInfo(data.image or "")
+		animator.setPartTag( partname.."_"..part, "partImage", fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item))
 	end
 end
 

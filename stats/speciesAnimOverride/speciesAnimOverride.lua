@@ -488,7 +488,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 				states = data.states,
 				updated = 0,
 				time = 0,
-				frame = 0,
+				frame = 1,
 			}
 		end
 
@@ -507,7 +507,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			stateData.time = stateData.time + script.updateDt()
 			local currentState = stateData.states[stateData.current]
 			if not currentState or not currentState.cycle or not currentState.frames then
-				stateData.frame = 0
+				stateData.frame = 1
 			elseif stateData.time <= currentState.cycle then
 				stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames)
 			else
@@ -532,7 +532,6 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 
 	if refreshImages then
 		for itemPart, data in pairs(itemImages[hand].animation.animatedParts.parts or {}) do
-			usedparts[itemPart] = true
 			local properties = data.properties
 			local partStates = {}
 			for stateType, states in pairs(data.partStates or {}) do
@@ -553,6 +552,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 					end
 				end
 				local remapPart = root.assetJson("/stats/speciesAnimOverride/itemPartNameMap.config")
+				usedparts[ remapPart[itemPart] or itemPart ] = true
 
 				itemImages[hand].parts[itemPart] = {
 					remapPart = remapPart[itemPart],
@@ -589,7 +589,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			animator.setPartTag( partname.."_"..part, "fullbright", "")
 		end
 		local tagtable = sb.jsonMerge( itemImages[hand].tags or {}, sb.jsonMerge( itemOverrideData.setGlobalTag or {}, sb.jsonMerge( data.tags or {}, itemOverrideData.setPartTag[partname] or {} )))
-		for i, stateType in ipairs(data.partStates) do
+		for i, stateType in ipairs(data.partStates or {}) do
 			tagtable.frame = itemImages[hand].partStates[stateType].frame
 		end
 		animator.setPartTag( partname.."_"..part, "partImage", fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item) or "")

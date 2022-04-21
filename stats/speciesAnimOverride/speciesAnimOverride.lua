@@ -532,7 +532,6 @@ end
 
 function doHandItemTransform(hand, part, func, transformGroup, ...)
 	local group = (transformGroup or "").."_"..part
-	sb.logInfo(group)
 	if animator.hasTransformationGroup(group) then
 		animator[func](group, ...)
 	end
@@ -762,7 +761,8 @@ end
 
 function fixFilepath(string, item)
 	if type(string) == "string" then
-		if string:find("^/") then
+		if string == "" then return
+		elseif string:find("^/") then
 			return string
 		else
 			return item.directory..string

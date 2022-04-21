@@ -109,7 +109,7 @@ interceptTransform("resetTransformationGroup")
 
 function animatorOverrideFuncs.setAnimationState(statetype, state, startNew)
 	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
-	itemData.setAnimationState[statetype] = {state, startNew, world.time()} -- time to differentiate repeat calls
+	itemData.setAnimationState[statetype] = {state, startNew or false, world.time()} -- time to differentiate repeat calls
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	old.setAnimationState(statetype, state, startNew)
 end

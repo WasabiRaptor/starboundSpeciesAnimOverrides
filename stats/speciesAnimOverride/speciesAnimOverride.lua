@@ -506,21 +506,24 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			end
 			stateData.time = stateData.time + script.updateDt()
 			local currentState = stateData.states[stateData.current]
-			if not currentState or not currentState.cycle then
+			if not currentState or not currentState.cycle or not currentState.frames then
 				stateData.frame = 0
 			elseif stateData.time <= currentState.cycle then
-				stateData.frame = stateData.time / currentState.cycle * currentState.frames
+				stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames)
 			else
-				local mode = stateData.states[stateData.current].mode
-				if mode == "loop" then
+				if currentState.mode == "loop" then
 					stateData.frame = stateData.frame % currentState.frames
-				elseif mode == "end" then
+				elseif currentState.mode == "end" then
 					stateData.frame = currentState.frames
-				elseif mode == "transition" then
+				elseif currentState.mode == "transition" then
 					stateData.current = currentState.transition
 					stateData.time = stateData.time - currentState.cycle
 					currentState = stateData.states[stateData.current]
-					stateData.frame = stateData.time / currentState.cycle * currentState.frames
+					if not currentState or not currentState.cycle or not currentState.frames then
+						stateData.frame = 0
+					else
+						stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames)
+					end
 					refreshImages = true
 				end
 			end

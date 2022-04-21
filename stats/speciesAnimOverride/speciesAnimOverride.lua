@@ -520,14 +520,13 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 					stateData.time = stateData.time - currentState.cycle
 					currentState = stateData.states[stateData.current]
 					if not currentState or not currentState.cycle or not currentState.frames then
-						stateData.frame = 0
+						stateData.frame = 1
 					else
-						stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames)
+						stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames) + 1
 					end
 					refreshImages = true
 				end
 			end
-
 		end
 	end
 
@@ -567,10 +566,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			end
 		end
 	end
-	setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
-end
 
-function setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
 	for i, args in ipairs(itemOverrideData.transformQueue) do
 		doHandItemTransform(hand, part, table.unpack(args))
 	end
@@ -604,7 +600,6 @@ function clearAnimatedActiveItemTags(hand, part)
 	for partname, used in pairs(usedparts) do
 		animator.setPartTag( partname.."_"..part, "partImage", "")
 	end
-	itemImages[hand] = { parts = {} }
 end
 
 function doHandItemTransform(hand, part, func, transformGroup, ...)
@@ -659,6 +654,7 @@ function setEmptyHand(hand, part)
 	animator.setGlobalTag( part.."RotationVisible", "?crop;0;0;0;0" )
 	animator.setGlobalTag( part.."Visible", "" )
 	clearAnimatedActiveItemTags(hand, part)
+	itemImages[hand] = { parts = {} }
 end
 
 setCosmetic = {}

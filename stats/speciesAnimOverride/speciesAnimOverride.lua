@@ -369,13 +369,12 @@ function getHandItem(hand, part, continue)
 		if ( itemType == "activeitem" or itemType == "beamminingtool" )
 		and (not itemDescriptor.parameters or not itemDescriptor.parameters.itemHasOverrideLockScript) then
 			loopedMessage("giveItemScript"..hand, entity.id(), "giveHeldItemOverrideLockScript", {itemDescriptor} )
-			setEmptyHand(part)
+			setEmptyHand(hand, part)
 			return
 		end
 		if itemType == "activeitem" then
 			local itemOverrideData = status.statusProperty(hand.."ItemOverrideData") or {}
 			if itemOverrideData.setHoldingItem ~= false then
-
 				local outside
 				if itemOverrideData.setOutsideOfHand then
 					outside = "_outside"
@@ -384,21 +383,30 @@ function getHandItem(hand, part, continue)
 				rotationArmVisible(part, outside)
 				rotateArmAngle(part, angle)
 
-				local itemImage = fixFilepath(item.config.inventoryIcon, item)
-
-				if itemOverrideData.setTwoHandedGrip then
-					if part == "backarms" then
-						animator.setPartTag(part.."_item", "partImage", "" )
-						return { secondArmAngle = angle, secondArmImage = itemImage }
-					else
-						animator.setPartTag(part.."_item", "partImage", itemImage or "" )
+				if item.config.animation then
+					animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
+					if itemOverrideData.setTwoHandedGrip then
 						return { secondArmAngle = angle }
+					else
+						return
 					end
 				else
-					animator.setPartTag(part.."_item", "partImage", itemImage or "" )
+					local itemImage = fixFilepath(item.config.inventoryIcon, item)
+
+					if itemOverrideData.setTwoHandedGrip then
+						if part == "backarms" then
+							animator.setPartTag(part .. "_item", "partImage", "")
+							return { secondArmAngle = angle, secondArmImage = itemImage }
+						else
+							animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+							return { secondArmAngle = angle }
+						end
+					else
+						animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+					end
 				end
 			else
-				setEmptyHand(part)
+				setEmptyHand(hand, part)
 			end
 		elseif itemType == "beamminingtool" then
 			local aim = status.statusProperty("speciesAnimOverrideAim")
@@ -437,7 +445,7 @@ function getHandItem(hand, part, continue)
 			rotationArmVisible(part)
 			return
 		else
-			setEmptyHand(part)
+			setEmptyHand(hand, part)
 		end
 	else
 		if continue.secondArmAngle then
@@ -445,8 +453,92 @@ function getHandItem(hand, part, continue)
 			rotateArmAngle(part, continue.secondArmAngle)
 			animator.setPartTag(part.."_item", "partImage", continue.secondArmImage or "" )
 		else
-			setEmptyHand(part)
+			setEmptyHand(hand, part)
 		end
+	end
+end
+
+local itemImages = { primary = { parts = {} }, alt = { parts = {} } }
+function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
+	if itemImages[hand].name ~= itemDescriptor.name then
+		local animation = sb.jsonMerge( (root.assetJson(fixFilepath(item.config.animation)) or {}), (item.config.animationCustom or {}))
+
+		itemImages[hand].name = itemDescriptor.name
+		itemImages[hand].tags = animation.globalTagDefaults
+
+		for itemPart, data in pairs(animation.animatedParts.parts or {}) do
+			local image = (data.properties or {}).image
+			if type(image) == "string" then
+				local tags = {}
+				for tagname, tag in pairs(data.properties) do
+					local tagType = type(tag)
+					if (tagType == "string" or tagType == "number") and (tagname ~= "zLevel" and tagname ~= "image") then
+						tags[tagname] = tag
+					end
+				end
+				itemImages[hand].parts[itemPart] = {
+					tags = tags,
+					image = image,
+					fullbright = data.properties.fullbright,
+					offset = data.properties.offset,
+					rotationCenter = data.properties.rotationCenter
+				}
+			end
+		end
+		setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
+	else
+		setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
+	end
+end
+
+function setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
+	for i, args in ipairs(itemOverrideData.resetTransformationGroup) do
+		doHandItemTransform(hand, part, "resetTransformationGroup", table.unpack(args))
+	end
+	itemOverrideData.resetTransformationGroup = {}
+	for i, args in ipairs(itemOverrideData.rotateTransformationGroup) do
+		doHandItemTransform(hand, part, "rotateTransformationGroup", table.unpack(args))
+	end
+	itemOverrideData.rotateTransformationGroup = {}
+	for i, args in ipairs(itemOverrideData.scaleTransformationGroup) do
+		doHandItemTransform(hand, part, "scaleTransformationGroup", table.unpack(args))
+	end
+	itemOverrideData.scaleTransformationGroup = {}
+	for i, args in ipairs(itemOverrideData.translateTransformationGroup) do
+		doHandItemTransform(hand, part, "translateTransformationGroup", table.unpack(args))
+	end
+	itemOverrideData.translateTransformationGroup = {}
+	for i, args in ipairs(itemOverrideData.transformTransformationGroup) do
+		doHandItemTransform(hand, part, "transformTransformationGroup", table.unpack(args))
+	end
+	itemOverrideData.transformTransformationGroup = {}
+	status.setStatusProperty(hand.."ItemOverrideData", itemOverrideData)
+
+	for partname, data in pairs(itemImages[hand].parts or {}) do
+		local offsetGroup = partname.."_"..part.."_offset"
+		if animator.hasTransformationGroup(offsetGroup) then
+			animator.resetTransformationGroup(offsetGroup)
+			animator.translateTransformationGroup(offsetGroup, data.offset or {0,0})
+		end
+		if data.fullbright then
+			animator.setPartTag( partname.."_"..part, "fullbright", "?multiply=FFFFFFfb")
+		else
+			animator.setPartTag( partname.."_"..part, "fullbright", "")
+		end
+		animator.setPartTag( partname.."_"..part, "partImage", fixFilepath(sb.replaceTags( data.image or "", sb.jsonMerge( itemImages[hand].tags or {}, sb.jsonMerge( itemOverrideData.setGlobalTag or {}, sb.jsonMerge( data.tags or {}, itemOverrideData.setPartTag[partname] or {} )))), item))
+	end
+end
+
+function clearAnimatedActiveItemTags(hand, part)
+	for partname, data in pairs(itemImages[hand].parts or {}) do
+		animator.setPartTag( partname.."_"..part, "partImage", "")
+	end
+end
+
+function doHandItemTransform(hand, part, func, transformGroup, ...)
+	local group = transformGroup.."_"..part
+	if animator.hasTransformationGroup(group) then
+		animator[func](group, ...)
 	end
 end
 
@@ -488,12 +580,13 @@ function rotationArmVisible(part, outside)
 	animator.setAnimationState(part.."RotationState", "rotation")
 end
 
-function setEmptyHand(part)
+function setEmptyHand(hand, part)
 	animator.setAnimationState(part.."ItemRotationState", "none")
 	animator.setAnimationState(part.."RotationState", "none")
 	animator.setPartTag(part.."_item", "partImage", "" )
 	animator.setGlobalTag( part.."RotationVisible", "?crop;0;0;0;0" )
 	animator.setGlobalTag( part.."Visible", "" )
+	clearAnimatedActiveItemTags(hand, part)
 end
 
 setCosmetic = {}
@@ -702,6 +795,8 @@ function updateAnims(dt)
 			state.animationState.frame = frame + 1
 			state.animationState.reverseFrame = math.abs(frame - state.animationState.frames)
 			animator.setGlobalTag( statename.."Frame", state.animationState.frame or 1 )
+		elseif ended and state.animationState.mode == "transition" then
+			doAnim(statename, state.animationState.transition)
 		end
 	end
 
@@ -828,6 +923,15 @@ function doAnims( anims, force )
 end
 
 function doAnim( state, anim, force)
+	if not self.animStateData[state] then
+		sb.logError("Attempt to call invalid Anim State: "..tostring(state))
+		return
+	end
+	if not self.animStateData[state].states[anim] then
+		sb.logError("Attempt to call invalid Anim State: "..tostring(state).."."..tostring(anim))
+		return
+	end
+
 	local oldPriority = (self.animStateData[state].animationState or {}).priority or 0
 	local newPriority = (self.animStateData[state].states[anim] or {}).priority or 0
 	local isSame = (self.animStateData[state].animationState or {}).anim == anim
@@ -849,6 +953,7 @@ function doAnim( state, anim, force)
 			frames = self.animStateData[state].states[anim].frames,
 			mode = self.animStateData[state].states[anim].mode,
 			speed = self.animStateData[state].states[anim].frames / self.animStateData[state].states[anim].cycle,
+			transition = self.animStateData[state].states[anim].transition,
 			frame = 1,
 			time = 0
 		}

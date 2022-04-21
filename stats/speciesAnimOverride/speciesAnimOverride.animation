@@ -11,6 +11,7 @@
 		"frontarmPersonality" : "1",
 		"frontarmsRotationVisible" : "?crop;0;0;0;0",
 		"backarmsRotationVisible" : "?crop;0;0;0;0",
+		"fullbright" : "",
 		"frontarmsVisible" : "",
 		"backarmsVisible" : "",
 		"bodyMask" : "/humanoid/animOverrideMasks/malebody.png",
@@ -237,7 +238,6 @@
 					}
 				}
 			},
-
 			"chest_cosmetic": {
 				"properties": {
 					"centered": true,
@@ -256,7 +256,6 @@
 					}
 				}
 			},
-
 			"back_cosmetic": {
 				"properties": {
 					"centered": true,
@@ -275,7 +274,6 @@
 					}
 				}
 			},
-
 			"frontarms": {
 				"properties": {
 					"centered": true,
@@ -342,7 +340,6 @@
 					}
 				}
 			},
-
 			"frontarms_cosmetic": {
 				"properties": {
 					"centered": true,
@@ -441,8 +438,6 @@
 					}
 				}
 			},
-
-
 			"frontlegs": {
 				"properties": {
 					"centered": true,
@@ -479,7 +474,6 @@
 					}
 				}
 			},
-
 			"backlegs": {
 				"properties": {
 					"centered": true,
@@ -516,7 +510,6 @@
 					}
 				}
 			},
-
 			"tail": {
 				"properties": {
 					"centered": true,
@@ -555,7 +548,6 @@
 					}
 				}
 			},
-
 			"head": {
 				"properties": {
 					"centered": true,
@@ -678,6 +670,39 @@
 						"none": { "properties": {} }
 					}
 				}
+			},
+
+			"blade_frontarms" : {
+				"properties": {
+					"centered": true,
+					"zLevel": 2.90,
+					"transformationGroups": ["flip", "blade_frontarms_offset", "weapon_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"image" : "<partImage><fullbright><frontarmsVisible><>"
+				}
+			},
+			"handle_frontarms" : {
+				"properties": {
+					"centered": true,
+					"zLevel": 2.91,
+					"transformationGroups": ["flip", "handle_frontarms_offset", "weapon_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"image" : "<partImage><fullbright><frontarmsVisible>"
+				}
+			},
+			"blade_backarms" : {
+				"properties": {
+					"centered": true,
+					"zLevel": -2.80,
+					"transformationGroups": ["flip", "blade_backarms_offset", "weapon_backarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"image" : "<partImage><fullbright><backarmsVisible>"
+				}
+			},
+			"handle_backarms" : {
+				"properties": {
+					"centered": true,
+					"zLevel": -2.79,
+					"transformationGroups": ["flip", "handle_backarms_offset", "weapon_backarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"image" : "<partImage><fullbright><backarmsVisible>"
+				}
 			}
 		}
 	},
@@ -729,6 +754,25 @@
 			"interpolated": false
 		},
 		"tailbob": {
+			"interpolated": false
+		},
+
+		"weapon_frontarms": {
+			"interpolated": false
+		},
+		"weapon_backarms": {
+			"interpolated": false
+		},
+		"blade_frontarms_offset": {
+			"interpolated": false
+		},
+		"blade_backarms_offset": {
+			"interpolated": false
+		},
+		"handle_frontarms_offset": {
+			"interpolated": false
+		},
+		"handle_backarms_offset": {
 			"interpolated": false
 		}
 

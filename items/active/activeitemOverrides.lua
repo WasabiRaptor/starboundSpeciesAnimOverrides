@@ -7,19 +7,29 @@ local old = {
 	update = update
 }
 
-overrideFuncs = {}
+local activeItemOverrideFuncs = {}
+local animatorOverrideFuncs = {}
+local ItemOverrideData = {
+
+}
 
 function init()
 	activeItem.setInstanceValue("itemHasOverrideLockScript", true)
 
 	hand = activeItem.hand()
 
-	status.setStatusProperty(hand.."ItemOverrideData", {})
-
-	for funcName, func in pairs(overrideFuncs) do
+	for funcName, func in pairs(activeItemOverrideFuncs) do
 		old[funcName] = activeItem[funcName]
 		activeItem[funcName] = func
 	end
+	for funcName, func in pairs(animatorOverrideFuncs) do
+		old[funcName] = animator[funcName]
+		ItemOverrideData[funcName] = {}
+		animator[funcName] = func
+	end
+
+	status.setStatusProperty(hand.."ItemOverrideData", ItemOverrideData)
+
 
 	message.setHandler( hand.."ItemLock", function(_,_, lock)
 		lockItem(lock)
@@ -57,37 +67,81 @@ function uninit()
 	if old.uninit ~= nil then old.uninit() end
 end
 
-local function saveDataDoOld(funcName, data)
+function saveDataDoOld(funcName, ...)
 	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
-	itemData[funcName] = data
+	itemData[funcName] = ...
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
-	old[funcName](data)
+	old[funcName](...)
+end
+function animatorSaveDataDoOld(funcName, ...)
+	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
+	table.insert(itemData[funcName], {...})
+	status.setStatusProperty(hand.."ItemOverrideData", itemData)
+	old[funcName](...)
 end
 
-function overrideFuncs.setInventoryIcon(data)
-	saveDataDoOld("setInventoryIcon", data)
+function activeItemOverrideFuncs.setInventoryIcon(...)
+	saveDataDoOld("setInventoryIcon", ...)
 end
 
-function overrideFuncs.setHoldingItem(data)
-	saveDataDoOld("setHoldingItem", data)
+function activeItemOverrideFuncs.setHoldingItem(...)
+	saveDataDoOld("setHoldingItem", ...)
 end
 
-function overrideFuncs.setBackArmFrame(data)
-	saveDataDoOld("setBackArmFrame", data)
+function activeItemOverrideFuncs.setBackArmFrame(...)
+	saveDataDoOld("setBackArmFrame", ...)
 end
 
-function overrideFuncs.setFrontArmFrame(data)
-	saveDataDoOld("setFrontArmFrame", data)
+function activeItemOverrideFuncs.setFrontArmFrame(...)
+	saveDataDoOld("setFrontArmFrame", ...)
 end
 
-function overrideFuncs.setTwoHandedGrip(data)
-	saveDataDoOld("setTwoHandedGrip", data)
+function activeItemOverrideFuncs.setTwoHandedGrip(...)
+	saveDataDoOld("setTwoHandedGrip", ...)
 end
 
-function overrideFuncs.setOutsideOfHand(data)
-	saveDataDoOld("setOutsideOfHand", data)
+function activeItemOverrideFuncs.setOutsideOfHand(...)
+	saveDataDoOld("setOutsideOfHand", ...)
 end
 
-function overrideFuncs.setArmAngle(data)
-	saveDataDoOld("setArmAngle", data)
+function activeItemOverrideFuncs.setArmAngle(...)
+	saveDataDoOld("setArmAngle", ...)
+end
+
+function animatorOverrideFuncs.rotateTransformationGroup(...)
+	animatorSaveDataDoOld("rotateTransformationGroup", ...)
+end
+
+function animatorOverrideFuncs.scaleTransformationGroup(...)
+	animatorSaveDataDoOld("scaleTransformationGroup", ...)
+end
+
+function animatorOverrideFuncs.transformTransformationGroup(...)
+	animatorSaveDataDoOld("transformTransformationGroup", ...)
+end
+
+function animatorOverrideFuncs.translateTransformationGroup(...)
+	animatorSaveDataDoOld("translateTransformationGroup", ...)
+end
+
+function animatorOverrideFuncs.resetTransformationGroup(...)
+	animatorSaveDataDoOld("resetTransformationGroup", ...)
+end
+
+function animatorOverrideFuncs.setAnimationState(...)
+	animatorSaveDataDoOld("setAnimationState", ...)
+end
+
+function animatorOverrideFuncs.setGlobalTag(tagname, tagvalue)
+	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
+	itemData.setGlobalTag[tagname] = tagvalue
+	status.setStatusProperty(hand.."ItemOverrideData", itemData)
+	old.setGlobalTag(tagname, tagvalue)
+end
+
+function animatorOverrideFuncs.setPartTag(part, tagname, tagvalue)
+	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
+	itemData.setPartTag[part] = {tagname = tagname, tagvalue = tagvalue}
+	status.setStatusProperty(hand.."ItemOverrideData", itemData)
+	old.setPartTag(part, tagname, tagvalue)
 end

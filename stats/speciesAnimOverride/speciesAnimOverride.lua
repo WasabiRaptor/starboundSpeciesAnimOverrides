@@ -468,20 +468,83 @@ end
 local itemImages = { primary = { parts = {} }, alt = { parts = {} } }
 local usedparts = {}
 function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
+	local newItem = false
+	local refreshImages = false
 	if itemImages[hand].name ~= itemDescriptor.name then
-		local animation = sb.jsonMerge( (root.assetJson(fixFilepath(item.config.animation, item)) or {}), (item.config.animationCustom or {}))
+		itemImages[hand].animation = sb.jsonMerge( (root.assetJson(fixFilepath(item.config.animation, item)) or {}), (item.config.animationCustom or {}))
 
 		itemImages[hand].name = itemDescriptor.name
-		itemImages[hand].tags = animation.globalTagDefaults
+		itemImages[hand].tags = itemImages[hand].animation.globalTagDefaults
+		itemImages[hand].partStates = {}
 
-		for itemPart, data in pairs(animation.animatedParts.parts or {}) do
-			table.insert(usedparts, itemPart)
-			local image = (data.properties or {}).image
+		newItem = true
+		refreshImages = true
+	end
+
+	for stateType, data in pairs(itemImages[hand].animation.animatedParts.stateTypes or {}) do
+		if newItem then
+			itemImages[hand].partStates[stateType] = {
+				current = data.default,
+				states = data.states,
+				updated = 0,
+				time = 0,
+				frame = 0,
+			}
+		end
+
+		stateData = itemImages[hand].partStates[stateType]
+		setAnimData = itemOverrideData.setAnimationState[stateType]
+		if stateData then
+			if setAnimData and setAnimData[3] ~= stateData.updated then
+				local old = stateData.current
+				local startNew
+				stateData.current, startNew, stateData.updated = table.unpack(setAnimData)
+				if old ~= stateData.current or startNew then
+					stateData.time = -script.updateDt() -- cancel increment to 0
+				end
+				refreshImages = true
+			end
+			stateData.time = stateData.time + script.updateDt()
+			local currentState = stateData.states[stateData.current]
+			if not currentState or not currentState.cycle then
+				stateData.frame = 0
+			elseif stateData.time <= currentState.cycle then
+				stateData.frame = stateData.time / currentState.cycle * currentState.frames
+			else
+				local mode = stateData.states[stateData.current].mode
+				if mode == "loop" then
+					stateData.frame = stateData.frame % currentState.frames
+				elseif mode == "end" then
+					stateData.frame = currentState.frames
+				elseif mode == "transition" then
+					stateData.current = currentState.transition
+					stateData.time = stateData.time - currentState.cycle
+					currentState = stateData.states[stateData.current]
+					stateData.frame = stateData.time / currentState.cycle * currentState.frames
+					refreshImages = true
+				end
+			end
+			
+		end
+	end
+
+	if refreshImages then
+		for itemPart, data in pairs(itemImages[hand].animation.animatedParts.parts or {}) do
+			usedparts[itemPart] = true
+			local properties = data.properties
+			local partStates = {}
+			for stateType, states in pairs(data.partStates or {}) do
+				table.insert(partStates, stateType)
+				properties = sb.jsonMerge(properties,
+					states[itemImages[hand].partStates[stateType].current]
+				)
+			end
+			local image = (properties or {}).image
 			if type(image) == "string" then
 				local tags = {
 					partImage = (item.config.animationParts or {})[itemPart]
 				}
-				for tagname, tag in pairs(data.properties) do
+				for tagname, tag in pairs(properties) do
 					local tagType = type(tag)
 					if (tagType == "string" or tagType == "number") and (tagname ~= "zLevel" and tagname ~= "image") then
 						tags[tagname] = tostring(tag)
@@ -493,16 +556,15 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 					remapPart = remapPart[itemPart],
 					tags = tags,
 					image = image,
-					fullbright = data.properties.fullbright,
-					offset = data.properties.offset,
-					rotationCenter = data.properties.rotationCenter
+					fullbright = properties.fullbright,
+					offset = properties.offset,
+					rotationCenter = properties.rotationCenter,
+					partStates = partStates
 				}
 			end
 		end
-		setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
-	else
-		setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
 	end
+	setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
 end
 
 function setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
@@ -528,12 +590,15 @@ function setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
 			animator.setPartTag( partname.."_"..part, "fullbright", "")
 		end
 		local tagtable = sb.jsonMerge( itemImages[hand].tags or {}, sb.jsonMerge( itemOverrideData.setGlobalTag or {}, sb.jsonMerge( data.tags or {}, itemOverrideData.setPartTag[partname] or {} )))
+		for i, stateType in ipairs(data.partStates) do
+			tagtable.frame = itemImages[hand].partStates[stateType].frame
+		end
 		animator.setPartTag( partname.."_"..part, "partImage", fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item) or "")
 	end
 end
 
 function clearAnimatedActiveItemTags(hand, part)
-	for i, partname in ipairs(usedparts) do
+	for partname, used in pairs(usedparts) do
 		animator.setPartTag( partname.."_"..part, "partImage", "")
 	end
 	itemImages[hand] = { parts = {} }

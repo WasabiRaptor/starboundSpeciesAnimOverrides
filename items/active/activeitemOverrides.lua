@@ -11,6 +11,7 @@ local activeItemOverrideFuncs = {}
 local animatorOverrideFuncs = {}
 local ItemOverrideData = {
 	transformQueue = {{}},
+	setAnimationState = {},
 	setGlobalTag = {},
 	setPartTag = {}
 }
@@ -106,11 +107,12 @@ interceptTransform("transformTransformationGroup")
 interceptTransform("translateTransformationGroup")
 interceptTransform("resetTransformationGroup")
 
---[[
-function animatorOverrideFuncs.setAnimationState(...)
-	animatorSaveDataDoOld("setAnimationState", ...)
+function animatorOverrideFuncs.setAnimationState(statetype, state, startNew)
+	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
+	itemData.setAnimationState[statetype] = {state, startNew, world.time()} -- time to differentiate repeat calls
+	status.setStatusProperty(hand.."ItemOverrideData", itemData)
+	old.setAnimationState(statetype, state, startNew)
 end
-]]
 
 function animatorOverrideFuncs.setGlobalTag(tagname, tagvalue)
 	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}

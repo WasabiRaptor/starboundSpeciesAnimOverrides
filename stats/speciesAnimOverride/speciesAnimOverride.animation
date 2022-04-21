@@ -426,7 +426,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2.8,
-					"transformationGroups": ["flip", "handoffset", "backarmoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["flip", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"backarmsItemRotationState": {
@@ -684,7 +684,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2.80,
-					"transformationGroups": ["flip", "blade_backarms_offset", "weapon_backarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"transformationGroups": ["flip", "blade_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
 			},
@@ -700,7 +700,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2.79,
-					"transformationGroups": ["flip", "blade_backarms_offset", "weapon_backarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"transformationGroups": ["flip", "blade_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
 			},
@@ -716,7 +716,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2.80,
-					"transformationGroups": ["flip", "blade_backarms_offset", "weapon_backarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"transformationGroups": ["flip", "blade_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
 			},
@@ -732,7 +732,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2.79,
-					"transformationGroups": ["flip", "blade_backarms_offset", "weapon_backarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"transformationGroups": ["flip", "blade_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
 			},
@@ -748,7 +748,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2.78,
-					"transformationGroups": ["flip", "handle_backarms_offset", "weapon_backarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"transformationGroups": ["flip", "handle_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
 			}
@@ -795,20 +795,10 @@
 		"handoffset": {
 			"interpolated": false
 		},
-		"backarmoffset": {
-			"interpolated": false
-		},
 		"legsbob": {
 			"interpolated": false
 		},
 		"tailbob": {
-			"interpolated": false
-		},
-
-		"weapon_frontarms": {
-			"interpolated": false
-		},
-		"weapon_backarms": {
 			"interpolated": false
 		},
 		"blade_frontarms_offset": {
@@ -822,7 +812,11 @@
 		},
 		"handle_backarms_offset": {
 			"interpolated": false
-		}
+		},
+		"weapon_frontarms": {},
+		"weapon_backarms": {}
+
+
 
 	},
 	"sounds": {

@@ -56,10 +56,8 @@ function initAfterInit()
 	self.speciesFile = speciesFile
 	self.bodyconfig = root.assetJson((speciesFile or {}).humanoidConfig or "/humanoid.config")
 	animator.resetTransformationGroup("handoffset")
-	animator.resetTransformationGroup("backarmoffset")
 	animator.resetTransformationGroup("globalOffset")
 	animator.translateTransformationGroup("handoffset", {self.bodyconfig.frontHandPosition[1]/8,self.bodyconfig.frontHandPosition[2]/8})
-	animator.translateTransformationGroup("backarmoffset", {self.bodyconfig.backArmOffset[1]/8,self.bodyconfig.backArmOffset[2]/8})
 	animator.translateTransformationGroup("globalOffset", {((self.speciesData.globalOffset or {})[1] or 0)/8, ((self.speciesData.globalOffset or {})[2] or 0)/8})
 
 	for tagname, string in pairs(self.speciesData.globalTagDefaults or {}) do
@@ -459,6 +457,7 @@ function getHandItem(hand, part, continue)
 end
 
 local itemImages = { primary = { parts = {} }, alt = { parts = {} } }
+local usedparts = {}
 function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
 	if itemImages[hand].name ~= itemDescriptor.name then
 		local animation = sb.jsonMerge( (root.assetJson(fixFilepath(item.config.animation, item)) or {}), (item.config.animationCustom or {}))
@@ -467,6 +466,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 		itemImages[hand].tags = animation.globalTagDefaults
 
 		for itemPart, data in pairs(animation.animatedParts.parts or {}) do
+			table.insert(usedparts, itemPart)
 			local image = (data.properties or {}).image
 			if type(image) == "string" then
 				local tags = {
@@ -520,8 +520,11 @@ function setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
 	for partname, data in pairs(itemImages[hand].parts or {}) do
 		local offsetGroup = partname.."_"..part.."_offset"
 		if animator.hasTransformationGroup(offsetGroup) then
+			local offset = self.bodyconfig[armsToArm[part].."Offset"] or {0,0}
+			local itemOffset = data.offset or {0,0}
+
 			animator.resetTransformationGroup(offsetGroup)
-			animator.translateTransformationGroup(offsetGroup, data.offset or {0,0})
+			animator.translateTransformationGroup(offsetGroup, {itemOffset[1]+(offset[1]/8), itemOffset[2]+(offset[2]/8)} )
 		end
 		if data.fullbright then
 			animator.setPartTag( partname.."_"..part, "fullbright", "?multiply=FFFFFFfb")
@@ -534,7 +537,7 @@ function setAnimatedActiveItemTags(hand, part, itemOverrideData, item)
 end
 
 function clearAnimatedActiveItemTags(hand, part)
-	for partname, data in pairs(itemImages[hand].parts or {}) do
+	for i, partname in ipairs(usedparts) do
 		animator.setPartTag( partname.."_"..part, "partImage", "")
 	end
 	itemImages[hand] = { parts = {} }

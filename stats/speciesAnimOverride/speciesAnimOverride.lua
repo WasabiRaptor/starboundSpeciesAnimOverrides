@@ -697,8 +697,7 @@ function setEmptyHand(hand, part)
 	animator.setPartTag(part.."_item", "partImage", "" )
 	animator.setGlobalTag( part.."RotationVisible", "?crop;0;0;0;0" )
 	animator.setGlobalTag( part.."Visible", "" )
-	clearAnimatedActiveItemTags("primary", part)
-	clearAnimatedActiveItemTags("alt", part)
+	clearAnimatedActiveItemTags(hand, part)
 	itemImages[hand] = { parts = {} }
 end
 

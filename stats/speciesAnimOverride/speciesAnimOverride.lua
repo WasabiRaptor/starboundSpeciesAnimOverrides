@@ -473,6 +473,7 @@ function getHandItem(hand, part, continue)
 end
 
 local itemImages = { primary = {}, alt = {} }
+local usedParts = 0
 function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
 	local newItem = false
 	local refreshImages = false
@@ -505,6 +506,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			return a.z < b.z
 		end)
 		for i,part in ipairs(zlevels) do
+			usedParts = math.max(usedParts, (i-1))
 			itemImages[hand].partMap[part.name] = i - 1
 		end
 
@@ -608,39 +610,44 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 
 	for partname, data in pairs(itemImages[hand].parts or {}) do
 		local partname = part.."_item_"..data.partIndex
-		local offsetGroup = partname.."_offset"
 
-		if animator.hasTransformationGroup(offsetGroup) then
+		--[[
+			so the funny thing here is, the game doesn't care if you're trying to set a tag on a part that doesn't exist
+			but it throws a fucking fit and crashes if you try and transform a group that doesn't exist, so its a good thing
+			we can check if those exist, but even if it doesn't crash on setting a non-existent part if we don't have the transform
+			group then we very much don't have the part either
+		]]
+		if animator.hasTransformationGroup(partname) then
+			local offsetGroup = partname.."_offset"
 			local offset = self.bodyconfig[armsToArm[part].."Offset"] or {0,0}
 			local itemOffset = data.offset or {0,0}
 
 			animator.resetTransformationGroup(offsetGroup)
+			animator.resetTransformationGroup(partname)
+
 			animator.translateTransformationGroup(offsetGroup, {itemOffset[1]+(offset[1]/8), itemOffset[2]+(offset[2]/8)} )
-		end
-
-		if data.fullbright then
-			animator.setPartTag( partname, "fullbright", "?multiply=FFFFFFfb")
-		else
-			animator.setPartTag( partname, "fullbright", "")
-		end
-
-		animator.resetTransformationGroup(partname)
-		for i, transformGroup in ipairs(data.transformationGroups or {}) do
-			for j, transformation in ipairs(itemImages[hand].transformationGroups[transformGroup] or {}) do
-				doHandItemTransform( partname, table.unpack(transformation))
+			for i, transformGroup in ipairs(data.transformationGroups or {}) do
+				for j, transformation in ipairs(itemImages[hand].transformationGroups[transformGroup] or {}) do
+					doHandItemTransform( partname, table.unpack(transformation))
+				end
 			end
-		end
+			if data.fullbright then
+				animator.setPartTag( partname, "fullbright", "?multiply=FFFFFFfb")
+			else
+				animator.setPartTag( partname, "fullbright", "")
+			end
 
-		local tagtable = sb.jsonMerge( itemImages[hand].tags or {}, sb.jsonMerge( itemOverrideData.setGlobalTag or {}, sb.jsonMerge( data.tags or {}, itemOverrideData.setPartTag[partname] or {} )))
-		for i, stateType in ipairs(data.partStates or {}) do
-			tagtable.frame = (itemImages[hand].partStates[stateType] or {}).frame or tagtable.frame
+			local tagtable = sb.jsonMerge( itemImages[hand].tags or {}, sb.jsonMerge( itemOverrideData.setGlobalTag or {}, sb.jsonMerge( data.tags or {}, itemOverrideData.setPartTag[partname] or {} )))
+			for i, stateType in ipairs(data.partStates or {}) do
+				tagtable.frame = (itemImages[hand].partStates[stateType] or {}).frame or tagtable.frame
+			end
+			animator.setPartTag( partname, "partImage", fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item) or "")
 		end
-		animator.setPartTag( partname, "partImage", fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item) or "")
 	end
 end
 
 function clearAnimatedActiveItemTags(hand, part)
-	for index = 0, 4 do
+	for index = 0, usedParts do
 		animator.setPartTag( part.."_item_"..index, "partImage", "")
 	end
 end
@@ -896,7 +903,7 @@ end
 
 function getCosmeticDirectives(item)
 	local colors = item.config.colorOptions
-	local index = ((item.parameters.colorIndex or 1) % #colors) + 1
+	local index = ((item.parameters.colorIndex or 0) % #colors) + 1
 	local colorReplaceString = ""
 	for color, replace in pairs(colors[index]) do
 		colorReplaceString = colorReplaceString.."?replace;"..color.."="..replace

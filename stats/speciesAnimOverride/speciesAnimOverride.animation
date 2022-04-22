@@ -259,7 +259,7 @@
 			"back_cosmetic": {
 				"properties": {
 					"centered": true,
-					"zLevel": -0.1,
+					"zLevel": -2,
 					"transformationGroups": ["chestbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
@@ -712,11 +712,27 @@
 					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
 				}
 			},
+			"frontarms_item_5" : {
+				"properties": {
+					"centered": true,
+					"zLevel": 3.5,
+					"transformationGroups": ["frontarms_item_5_offset", "frontarms_item_5", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+				}
+			},
+			"frontarms_item_6" : {
+				"properties": {
+					"centered": true,
+					"zLevel": 3.6,
+					"transformationGroups": ["frontarms_item_6_offset", "frontarms_item_6", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+				}
+			},
 
 			"backarms_item_0" : {
 				"properties": {
 					"centered": true,
-					"zLevel": -3.4,
+					"zLevel": -3.6,
 					"transformationGroups": ["backarms_item_0_offset", "backarms_item_0", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
@@ -724,7 +740,7 @@
 			"backarms_item_1" : {
 				"properties": {
 					"centered": true,
-					"zLevel": -3.3,
+					"zLevel": -3.5,
 					"transformationGroups": ["backarms_item_1_offset", "backarms_item_1", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
@@ -732,7 +748,7 @@
 			"backarms_item_2" : {
 				"properties": {
 					"centered": true,
-					"zLevel": -3.2,
+					"zLevel": -3.4,
 					"transformationGroups": ["backarms_item_2_offset", "backarms_item_2", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
@@ -740,7 +756,7 @@
 			"backarms_item_3" : {
 				"properties": {
 					"centered": true,
-					"zLevel": -3.1,
+					"zLevel": -3.3,
 					"transformationGroups": ["backarms_item_3_offset", "backarms_item_3", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
@@ -748,8 +764,24 @@
 			"backarms_item_4" : {
 				"properties": {
 					"centered": true,
-					"zLevel": -3.0,
+					"zLevel": -3.2,
 					"transformationGroups": ["backarms_item_4_offset", "backarms_item_4", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"image" : "<partImage><fullbright><backarmsRotationVisible>"
+				}
+			},
+			"backarms_item_5" : {
+				"properties": {
+					"centered": true,
+					"zLevel": -3.1,
+					"transformationGroups": ["backarms_item_5_offset", "backarms_item_5", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"image" : "<partImage><fullbright><backarmsRotationVisible>"
+				}
+			},
+			"backarms_item_6" : {
+				"properties": {
+					"centered": true,
+					"zLevel": -3.0,
+					"transformationGroups": ["backarms_item_6_offset", "backarms_item_6", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
 			}
@@ -807,13 +839,16 @@
 		"frontarms_item_2_offset": {}, "frontarms_item_2": {},
 		"frontarms_item_3_offset": {}, "frontarms_item_3": {},
 		"frontarms_item_4_offset": {}, "frontarms_item_4": {},
+		"frontarms_item_5_offset": {}, "frontarms_item_5": {},
+		"frontarms_item_6_offset": {}, "frontarms_item_6": {},
 
 		"backarms_item_0_offset": {}, "backarms_item_0": {},
 		"backarms_item_1_offset": {}, "backarms_item_1": {},
 		"backarms_item_2_offset": {}, "backarms_item_2": {},
 		"backarms_item_3_offset": {}, "backarms_item_3": {},
-		"backarms_item_4_offset": {}, "backarms_item_4": {}
-
+		"backarms_item_4_offset": {}, "backarms_item_4": {},
+		"backarms_item_5_offset": {}, "backarms_item_5": {},
+		"backarms_item_6_offset": {}, "backarms_item_6": {}
 
 	},
 	"sounds": {

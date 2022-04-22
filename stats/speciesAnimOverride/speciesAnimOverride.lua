@@ -537,7 +537,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			for stateType, states in pairs(data.partStates or {}) do
 				table.insert(partStates, stateType)
 				properties = sb.jsonMerge(properties,
-					states[itemImages[hand].partStates[stateType].current].properties or {}
+					(states[itemImages[hand].partStates[stateType].current] or {}).properties or {}
 				)
 			end
 			local image = (properties or {}).image
@@ -563,6 +563,9 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 					rotationCenter = properties.rotationCenter,
 					partStates = partStates
 				}
+			else
+				itemImages[hand].parts[itemPart] = nil
+				animator.setPartTag(itemPart.."_"..part, "partImage", "")
 			end
 		end
 	end

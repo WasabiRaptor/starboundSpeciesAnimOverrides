@@ -480,7 +480,11 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			parts = {},
 			partMap = {},
 			partStates = {},
+			transformationGroups = {}
 		}
+		for transformationGroup, data in pairs(animation.transformationGroups) do
+			itemImages[hand].transformationGroups[transformationGroup] = {}
+		end
 
 		local zlevels = {}
 		for itemPart, data in pairs(itemImages[hand].animation.animatedParts.parts or {}) do
@@ -569,6 +573,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 				end
 
 				itemImages[hand].parts[itemPart] = {
+					transformationGroups = properties.transformationGroups,
 					partIndex = itemImages[hand].partMap[itemPart],
 					tags = tags,
 					image = image,
@@ -585,7 +590,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 	end
 
 	for i, args in ipairs(itemOverrideData.transformQueue) do
-		doHandItemTransform(hand, part, table.unpack(args))
+		queueHandItemTransform(hand, part, table.unpack(args))
 	end
 	itemOverrideData.transformQueue = {{}}
 	status.setStatusProperty(hand.."ItemOverrideData", itemOverrideData)
@@ -593,6 +598,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 	for partname, data in pairs(itemImages[hand].parts or {}) do
 		local partname = part.."_item_"..data.partIndex
 		local offsetGroup = partname.."_offset"
+
 		if animator.hasTransformationGroup(offsetGroup) then
 			local offset = self.bodyconfig[armsToArm[part].."Offset"] or {0,0}
 			local itemOffset = data.offset or {0,0}
@@ -600,11 +606,20 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			animator.resetTransformationGroup(offsetGroup)
 			animator.translateTransformationGroup(offsetGroup, {itemOffset[1]+(offset[1]/8), itemOffset[2]+(offset[2]/8)} )
 		end
+
 		if data.fullbright then
 			animator.setPartTag( partname, "fullbright", "?multiply=FFFFFFfb")
 		else
 			animator.setPartTag( partname, "fullbright", "")
 		end
+
+		animator.resetTransformationGroup(partname)
+		for i, transformGroup in ipairs(data.transformationGroups or {}) do
+			for j, transformation in ipairs(itemImages[hand].transformationGroups[transformGroup] or {}) do
+				doHandItemTransform( partname, table.unpack(transformation))
+			end
+		end
+
 		local tagtable = sb.jsonMerge( itemImages[hand].tags or {}, sb.jsonMerge( itemOverrideData.setGlobalTag or {}, sb.jsonMerge( data.tags or {}, itemOverrideData.setPartTag[partname] or {} )))
 		for i, stateType in ipairs(data.partStates or {}) do
 			tagtable.frame = (itemImages[hand].partStates[stateType] or {}).frame or tagtable.frame
@@ -619,11 +634,16 @@ function clearAnimatedActiveItemTags(hand, part)
 	end
 end
 
-function doHandItemTransform(hand, part, func, transformGroup, ...)
-	local group = (transformGroup or "").."_"..part
-	if animator.hasTransformationGroup(group) then
-		animator[func](group, ...)
+function queueHandItemTransform(hand, part, func, transformGroup, ...)
+	if func == "resetTransformationGroup" then
+		itemImages[hand].transformationGroups[transformGroup] = {}
+	elseif type(transformGroup) == "string" then
+		table.insert(itemImages[hand].transformationGroups[transformGroup], {func, ... })
 	end
+end
+
+function doHandItemTransform(transformGroup, func, ...)
+	animator[func](transformGroup, ...)
 end
 
 function localToGlobal( position )

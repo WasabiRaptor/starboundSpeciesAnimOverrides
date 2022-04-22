@@ -463,6 +463,8 @@ function getHandItem(hand, part, continue)
 			animator.setPartTag(part .. "_item", "partImage", continue.secondArmImage or "")
 			if continue.secondArmAnimatedItem then
 				animatedActiveItem(continue.item, continue.itemDescriptor, continue.itemOverrideData, continue.secondArmAnimatedItem, part, continue)
+			else
+				clearAnimatedActiveItemTags(hand, part)
 			end
 		else
 			setEmptyHand(hand, part)
@@ -634,7 +636,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 end
 
 function clearAnimatedActiveItemTags(hand, part)
-	for itemPart, index in pairs(itemImages[hand].partMap or {}) do
+	for index = 0, 4 do
 		animator.setPartTag( part.."_item_"..index, "partImage", "")
 	end
 end

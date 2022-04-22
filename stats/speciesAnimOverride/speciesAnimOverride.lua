@@ -382,6 +382,7 @@ function getHandItem(hand, part, continue)
 				rotateArmAngle(part, angle)
 
 				if item.config.animation then
+					animator.setPartTag(part .. "_item", "partImage", "")
 					if itemOverrideData.setTwoHandedGrip then
 						if part == "backarms" then
 							clearAnimatedActiveItemTags(hand, part)
@@ -395,6 +396,7 @@ function getHandItem(hand, part, continue)
 						return
 					end
 				else
+					clearAnimatedActiveItemTags(hand, part)
 					local itemImage = fixFilepath(item.config.inventoryIcon, item)
 
 					if itemOverrideData.setTwoHandedGrip then
@@ -412,50 +414,53 @@ function getHandItem(hand, part, continue)
 			else
 				setEmptyHand(hand, part)
 			end
-		elseif itemType == "beamminingtool" then
-			local aim = status.statusProperty("speciesAnimOverrideAim")
-			if not aim then return end
-			local angle = rotateAimArm(aim, part)
-			rotationArmVisible(part)
-			local itemImage = fixFilepath(item.config.image, item)
-			beamMinerImage = itemImage
-			if part == "backarms" then
-				animator.setPartTag(part.."_item", "partImage", "" )
-				return { secondArmAngle = angle, secondArmImage = itemImage }
-			else
-				animator.setPartTag(part.."_item", "partImage", itemImage or "" )
-				return { secondArmAngle = angle }
-			end
-		elseif itemType == "wiretool" or itemType == "paintingbeamtool" or itemType == "inspectiontool" then
-			local aim = status.statusProperty("speciesAnimOverrideAim")
-			if not aim then return end
-			local angle = rotateAimArm(aim, part)
-			local itemImage = fixFilepath(item.config.image, item)
-			animator.setPartTag(part.."_item", "partImage", itemImage or "" )
-			rotationArmVisible(part)
-			if part == "backarms" then
-				animator.setPartTag(part.."_item", "partImage", "" )
-				return { secondArmAngle = angle, secondArmImage = itemImage }
-			else
-				animator.setPartTag(part.."_item", "partImage", itemImage or "" )
-				return { secondArmAngle = angle }
-			end
-		elseif itemType == "object" or itemType == "material" then
-			local aim = status.statusProperty("speciesAnimOverrideAim")
-			if not aim then return end
-			rotateAimArm(aim, part)
-			local itemImage = beamMinerImage
-			animator.setPartTag(part.."_item", "partImage", itemImage or "" )
-			rotationArmVisible(part)
-			return
 		else
-			setEmptyHand(hand, part)
+			clearAnimatedActiveItemTags(hand, part)
+			if itemType == "beamminingtool" then
+				local aim = status.statusProperty("speciesAnimOverrideAim")
+				if not aim then return end
+				local angle = rotateAimArm(aim, part)
+				rotationArmVisible(part)
+				local itemImage = fixFilepath(item.config.image, item)
+				beamMinerImage = itemImage
+				if part == "backarms" then
+					animator.setPartTag(part .. "_item", "partImage", "")
+					return { secondArmAngle = angle, secondArmImage = itemImage }
+				else
+					animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+					return { secondArmAngle = angle }
+				end
+			elseif itemType == "wiretool" or itemType == "paintingbeamtool" or itemType == "inspectiontool" then
+				local aim = status.statusProperty("speciesAnimOverrideAim")
+				if not aim then return end
+				local angle = rotateAimArm(aim, part)
+				local itemImage = fixFilepath(item.config.image, item)
+				animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+				rotationArmVisible(part)
+				if part == "backarms" then
+					animator.setPartTag(part .. "_item", "partImage", "")
+					return { secondArmAngle = angle, secondArmImage = itemImage }
+				else
+					animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+					return { secondArmAngle = angle }
+				end
+			elseif itemType == "object" or itemType == "material" then
+				local aim = status.statusProperty("speciesAnimOverrideAim")
+				if not aim then return end
+				rotateAimArm(aim, part)
+				local itemImage = beamMinerImage
+				animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+				rotationArmVisible(part)
+				return
+			else
+				setEmptyHand(hand, part)
+			end
 		end
 	else
 		if continue.secondArmAngle then
 			rotationArmVisible(part)
 			rotateArmAngle(part, continue.secondArmAngle)
-			animator.setPartTag(part.."_item", "partImage", continue.secondArmImage or "" )
+			animator.setPartTag(part .. "_item", "partImage", continue.secondArmImage or "")
 			if continue.secondArmAnimatedItem then
 				animatedActiveItem(continue.item, continue.itemDescriptor, continue.itemOverrideData, continue.secondArmAnimatedItem, part, continue)
 			end
@@ -690,7 +695,8 @@ function setEmptyHand(hand, part)
 	animator.setPartTag(part.."_item", "partImage", "" )
 	animator.setGlobalTag( part.."RotationVisible", "?crop;0;0;0;0" )
 	animator.setGlobalTag( part.."Visible", "" )
-	clearAnimatedActiveItemTags(hand, part)
+	clearAnimatedActiveItemTags("primary", part)
+	clearAnimatedActiveItemTags("alt", part)
 	itemImages[hand] = { parts = {} }
 end
 

@@ -465,17 +465,33 @@ function getHandItem(hand, part, continue)
 	end
 end
 
-local itemImages = { primary = { parts = {} }, alt = { parts = {} } }
-local usedparts = {}
+local itemImages = { primary = {}, alt = {} }
 function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
 	local newItem = false
 	local refreshImages = false
 	if itemImages[hand].name ~= itemDescriptor.name then
-		itemImages[hand].animation = sb.jsonMerge( (root.assetJson(fixFilepath(item.config.animation, item)) or {}), (item.config.animationCustom or {}))
+		clearAnimatedActiveItemTags(hand, part)
+		local animation = sb.jsonMerge( (root.assetJson(fixFilepath(item.config.animation, item)) or {}), (item.config.animationCustom or {}))
 
-		itemImages[hand].name = itemDescriptor.name
-		itemImages[hand].tags = itemImages[hand].animation.globalTagDefaults
-		itemImages[hand].partStates = {}
+		itemImages[hand] = {
+			name = itemDescriptor.name,
+			animation = animation,
+			tags = animation.globalTagDefaults,
+			parts = {},
+			partMap = {},
+			partStates = {},
+		}
+
+		local zlevels = {}
+		for itemPart, data in pairs(itemImages[hand].animation.animatedParts.parts or {}) do
+			table.insert(zlevels, {z = data.zLevel or 0, name = itemPart})
+		end
+		table.sort(zlevels, function(a,b)
+			return a.z < b.z
+		end)
+		for i,part in ipairs(zlevels) do
+			itemImages[hand].partMap[part.name] = i - 1
+		end
 
 		newItem = true
 		refreshImages = true
@@ -551,11 +567,9 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 						tags[tagname] = tostring(tag)
 					end
 				end
-				local remapPart = root.assetJson("/stats/speciesAnimOverride/itemPartNameMap.config")
-				usedparts[ remapPart[itemPart] or itemPart ] = true
 
 				itemImages[hand].parts[itemPart] = {
-					remapPart = remapPart[itemPart],
+					partIndex = itemImages[hand].partMap[itemPart],
 					tags = tags,
 					image = image,
 					fullbright = properties.fullbright,
@@ -565,7 +579,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 				}
 			else
 				itemImages[hand].parts[itemPart] = nil
-				animator.setPartTag(itemPart.."_"..part, "partImage", "")
+				animator.setPartTag(part.."_item_"..itemImages[hand].partMap[itemPart], "partImage", "")
 			end
 		end
 	end
@@ -577,8 +591,8 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 	status.setStatusProperty(hand.."ItemOverrideData", itemOverrideData)
 
 	for partname, data in pairs(itemImages[hand].parts or {}) do
-		local partname = data.remapPart or partname
-		local offsetGroup = partname.."_"..part.."_offset"
+		local partname = part.."_item_"..data.partIndex
+		local offsetGroup = partname.."_offset"
 		if animator.hasTransformationGroup(offsetGroup) then
 			local offset = self.bodyconfig[armsToArm[part].."Offset"] or {0,0}
 			local itemOffset = data.offset or {0,0}
@@ -587,21 +601,21 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			animator.translateTransformationGroup(offsetGroup, {itemOffset[1]+(offset[1]/8), itemOffset[2]+(offset[2]/8)} )
 		end
 		if data.fullbright then
-			animator.setPartTag( partname.."_"..part, "fullbright", "?multiply=FFFFFFfb")
+			animator.setPartTag( partname, "fullbright", "?multiply=FFFFFFfb")
 		else
-			animator.setPartTag( partname.."_"..part, "fullbright", "")
+			animator.setPartTag( partname, "fullbright", "")
 		end
 		local tagtable = sb.jsonMerge( itemImages[hand].tags or {}, sb.jsonMerge( itemOverrideData.setGlobalTag or {}, sb.jsonMerge( data.tags or {}, itemOverrideData.setPartTag[partname] or {} )))
 		for i, stateType in ipairs(data.partStates or {}) do
-			tagtable.frame = itemImages[hand].partStates[stateType].frame
+			tagtable.frame = (itemImages[hand].partStates[stateType] or {}).frame or tagtable.frame
 		end
-		animator.setPartTag( partname.."_"..part, "partImage", fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item) or "")
+		animator.setPartTag( partname, "partImage", fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item) or "")
 	end
 end
 
 function clearAnimatedActiveItemTags(hand, part)
-	for partname, used in pairs(usedparts) do
-		animator.setPartTag( partname.."_"..part, "partImage", "")
+	for itemPart, index in pairs(itemImages[hand].partMap or {}) do
+		animator.setPartTag( part.."_item_"..index, "partImage", "")
 	end
 end
 
@@ -838,6 +852,7 @@ end
 function fixFilepath(string, item)
 	if type(string) == "string" then
 		if string == "" then return
+		elseif string:sub(1,1) == "?" then return
 		elseif string:find("^/") then
 			return string
 		else

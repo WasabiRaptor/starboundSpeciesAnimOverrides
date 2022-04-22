@@ -206,7 +206,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 0,
-					"transformationGroups": ["flip", "bodybob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["bodybob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"bodyState": {
@@ -224,7 +224,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 0.15,
-					"transformationGroups": ["flip", "bodybob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["bodybob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"bodyState": {
@@ -242,7 +242,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 0.2,
-					"transformationGroups": ["flip", "chestbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["chestbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"bodyState": {
@@ -260,7 +260,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -0.1,
-					"transformationGroups": ["flip", "chestbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["chestbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"bodyState": {
@@ -278,7 +278,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 4,
-					"transformationGroups": ["flip", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"armsState": {
@@ -296,7 +296,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 4,
-					"transformationGroups": ["flip", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"frontarmsRotationState": {
@@ -311,7 +311,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -4,
-					"transformationGroups": ["flip", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"armsState": {
@@ -329,7 +329,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -4,
-					"transformationGroups": ["flip", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"backarmsRotationState": {
@@ -344,7 +344,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 4.1,
-					"transformationGroups": ["flip", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"armsState": {
@@ -362,7 +362,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 4.1,
-					"transformationGroups": ["flip", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"frontarmsRotationState": {
@@ -377,7 +377,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -3.9,
-					"transformationGroups": ["flip", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"armsState": {
@@ -395,7 +395,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -3.9,
-					"transformationGroups": ["flip", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"backarmsRotationState": {
@@ -410,7 +410,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.9,
-					"transformationGroups": ["flip", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"frontarmsItemRotationState": {
@@ -426,7 +426,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2.8,
-					"transformationGroups": ["flip", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"backarmsItemRotationState": {
@@ -442,7 +442,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2,
-					"transformationGroups": ["flip", "legsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["legsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"legsState": {
@@ -460,7 +460,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.1,
-					"transformationGroups": ["flip", "legsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["legsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"legsState": {
@@ -478,7 +478,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2,
-					"transformationGroups": ["flip", "legsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["legsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"legsState": {
@@ -496,7 +496,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -1.9,
-					"transformationGroups": ["flip", "legsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["legsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"legsState": {
@@ -514,7 +514,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -1,
-					"transformationGroups": ["flip", "tailbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["tailbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"tailState": {
@@ -533,7 +533,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -0.9,
-					"transformationGroups": ["flip", "tailbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["tailbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"tailState": {
@@ -552,7 +552,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2,
-					"transformationGroups": ["flip", "headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"headState": {
@@ -570,7 +570,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.2,
-					"transformationGroups": ["flip", "headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"headState": {
@@ -588,7 +588,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.3,
-					"transformationGroups": ["flip", "headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"headState": {
@@ -606,7 +606,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.4,
-					"transformationGroups": ["flip", "headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"headState": {
@@ -624,7 +624,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -1,
-					"transformationGroups": ["flip", "headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"headState": {
@@ -642,7 +642,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.1,
-					"transformationGroups": ["flip", "headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"emoteState": {
@@ -657,7 +657,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.3,
-					"transformationGroups": ["flip", "headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"headState": {
@@ -672,170 +672,90 @@
 				}
 			},
 
-			"blade_frontarms" : {
+			"frontarms_item_0" : {
 				"properties": {
 					"centered": true,
-					"zLevel": 2.90,
-					"transformationGroups": ["flip", "blade_frontarms_offset", "weapon_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"zLevel": 3.0,
+					"transformationGroups": ["frontarms_item_0_offset", "frontarms_item_0", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
 				}
 			},
-			"blade_backarms" : {
+			"frontarms_item_1" : {
 				"properties": {
 					"centered": true,
-					"zLevel": -2.80,
-					"transformationGroups": ["flip", "blade_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"zLevel": 3.1,
+					"transformationGroups": ["frontarms_item_1_offset", "frontarms_item_1", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+				}
+			},
+			"frontarms_item_2" : {
+				"properties": {
+					"centered": true,
+					"zLevel": 3.2,
+					"transformationGroups": ["frontarms_item_2_offset", "frontarms_item_2", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+				}
+			},
+			"frontarms_item_3" : {
+				"properties": {
+					"centered": true,
+					"zLevel": 3.3,
+					"transformationGroups": ["frontarms_item_3_offset", "frontarms_item_0", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+				}
+			},
+			"frontarms_item_4" : {
+				"properties": {
+					"centered": true,
+					"zLevel": 3.4,
+					"transformationGroups": ["frontarms_item_4_offset", "frontarms_item_0", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+				}
+			},
+
+			"backarms_item_0" : {
+				"properties": {
+					"centered": true,
+					"zLevel": -3.4,
+					"transformationGroups": ["backarms_item_0_offset", "backarms_item_0", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
 			},
-			"bladefullbright_frontarms" : {
+			"backarms_item_1" : {
 				"properties": {
 					"centered": true,
-					"zLevel": 2.91,
-					"transformationGroups": ["flip", "bladefullbright_frontarms_offset", "weapon_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
-				}
-			},
-			"bladefullbright_backarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": -2.79,
-					"transformationGroups": ["flip", "bladefullbright_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"zLevel": -3.3,
+					"transformationGroups": ["backarms_item_1_offset", "backarms_item_1", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
 			},
-			"handle_frontarms" : {
+			"backarms_item_2" : {
 				"properties": {
 					"centered": true,
-					"zLevel": 2.92,
-					"transformationGroups": ["flip", "handle_frontarms_offset", "weapon_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
-				}
-			},
-			"handle_backarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": -2.78,
-					"transformationGroups": ["flip", "handle_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"zLevel": -3.2,
+					"transformationGroups": ["backarms_item_2_offset", "backarms_item_0", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
 			},
-			"handlefullbright_frontarms" : {
+			"backarms_item_3" : {
 				"properties": {
 					"centered": true,
-					"zLevel": 2.92,
-					"transformationGroups": ["flip", "handlefullbright_frontarms_offset", "weapon_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
-				}
-			},
-			"handlefullbright_backarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": -2.78,
-					"transformationGroups": ["flip", "handlefullbright_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"zLevel": -3.1,
+					"transformationGroups": ["backarms_item_3_offset", "backarms_item_0", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
 			},
-			"swoosh_frontarms" : {
+			"backarms_item_4" : {
 				"properties": {
 					"centered": true,
-					"zLevel": 2.89,
-					"transformationGroups": ["flip", "swoosh_frontarms_offset", "swoosh_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
-				}
-			},
-			"swoosh_backarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": -2.81,
-					"transformationGroups": ["flip", "swoosh_backarms_offset", "swoosh_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible>"
-				}
-			},
-			"butt_frontarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": 2.90,
-					"transformationGroups": ["flip", "butt_frontarms_offset", "weapon_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
-				}
-			},
-			"butt_backarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": -2.80,
-					"transformationGroups": ["flip", "butt_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible>"
-				}
-			},
-			"middle_frontarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": 2.90,
-					"transformationGroups": ["flip", "middle_frontarms_offset", "weapon_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
-				}
-			},
-			"middle_backarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": -2.80,
-					"transformationGroups": ["flip", "middle_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible>"
-				}
-			},
-			"barrel_frontarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": 2.90,
-					"transformationGroups": ["flip", "barrel_frontarms_offset", "weapon_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
-				}
-			},
-			"barrel_backarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": -2.80,
-					"transformationGroups": ["flip", "barrel_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible>"
-				}
-			},
-			"muzzleFlash_frontarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": 2.89,
-					"transformationGroups": ["flip", "muzzleFlash_frontarms_offset", "muzzle_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
-				}
-			},
-			"muzzleFlash_backarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": -2.81,
-					"transformationGroups": ["flip", "muzzleFlash_backarms_offset", "muzzle_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible>"
-				}
-			},
-			"chargeEffect_frontarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": 2.93,
-					"transformationGroups": ["flip", "chargeEffect_frontarms_offset", "weapon_frontarms", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
-				}
-			},
-			"chargeEffect_backarms" : {
-				"properties": {
-					"centered": true,
-					"zLevel": -2.77,
-					"transformationGroups": ["flip", "chargeEffect_backarms_offset", "weapon_backarms", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
+					"zLevel": -3.0,
+					"transformationGroups": ["backarms_item_4_offset", "backarms_item_0", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible>"
 				}
 			}
 		}
 	},
 	"transformationGroups": {
-		"flip": {},
 		"globalRotation": {
 			"interpolated": true
 		},
@@ -881,44 +801,18 @@
 		"tailbob": {
 			"interpolated": false
 		},
-		"blade_frontarms_offset": {},
-		"blade_backarms_offset": {},
 
-		"bladefullbright_frontarms_offset": {},
-		"bladefullbright_backarms_offset": {},
+		"frontarms_item_0_offset": {}, "frontarms_item_0": {},
+		"frontarms_item_1_offset": {}, "frontarms_item_1": {},
+		"frontarms_item_2_offset": {}, "frontarms_item_2": {},
+		"frontarms_item_3_offset": {}, "frontarms_item_3": {},
+		"frontarms_item_4_offset": {}, "frontarms_item_4": {},
 
-		"handle_frontarms_offset": {},
-		"handle_backarms_offset": {},
-
-		"handlefullbright_frontarms_offset": {},
-		"handlefullbright_backarms_offset": {},
-
-		"swoosh_frontarms_offset": {},
-		"swoosh_backarms_offset": {},
-
-		"butt_frontarms_offset": {},
-		"butt_backarms_offset": {},
-
-		"middle_frontarms_offset": {},
-		"middle_backarms_offset": {},
-
-		"barrel_frontarms_offset": {},
-		"barrel_backarms_offset": {},
-
-		"muzzleFlash_frontarms_offset": {},
-		"muzzleFlash_backarms_offset": {},
-
-		"chargeEffect_frontarms_offset": {},
-		"chargeEffect_backarms_offset": {},
-
-		"weapon_frontarms": {},
-		"weapon_backarms": {},
-
-		"swoosh_frontarms": {},
-		"swoosh_backarms": {},
-
-		"muzzle_frontarms": {},
-		"muzzle_backarms": {}
+		"backarms_item_0_offset": {}, "backarms_item_0": {},
+		"backarms_item_1_offset": {}, "backarms_item_1": {},
+		"backarms_item_2_offset": {}, "backarms_item_2": {},
+		"backarms_item_3_offset": {}, "backarms_item_3": {},
+		"backarms_item_4_offset": {}, "backarms_item_4": {}
 
 
 	},

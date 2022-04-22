@@ -494,8 +494,12 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 		end
 
 		local zlevels = {}
+		local usedZlevels = {}
 		for itemPart, data in pairs(itemImages[hand].animation.animatedParts.parts or {}) do
-			table.insert(zlevels, {z = data.zLevel or 0, name = itemPart})
+			local z = data.properties.zLevel or 0
+			while usedZlevels[z] do z = z - 0.01 end
+			usedZlevels[z] = true
+			table.insert(zlevels, {z = z, name = itemPart})
 		end
 		table.sort(zlevels, function(a,b)
 			return a.z < b.z

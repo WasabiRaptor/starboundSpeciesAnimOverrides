@@ -60,23 +60,6 @@ function initAfterInit()
 	animator.translateTransformationGroup("handoffset", {self.bodyconfig.frontHandPosition[1]/8,self.bodyconfig.frontHandPosition[2]/8})
 	animator.translateTransformationGroup("globalOffset", {((self.speciesData.globalOffset or {})[1] or 0)/8, ((self.speciesData.globalOffset or {})[2] or 0)/8})
 
-	for tagname, string in pairs(self.speciesData.globalTagDefaults or {}) do
-		local part = replaceSpeciesGenderTags(string)
-		self.globalTagDefaults[tagname] = part
-		animator.setGlobalTag(tagname, part)
-	end
-	for partname, string in pairs(self.speciesData.partImages or {}) do
-		local part = replaceSpeciesGenderTags(string)
-		animator.setPartTag(partname, "partImage", part)
-		self.parts[partname] = part
-	end
-	for partname, data in pairs(self.speciesData.partTagDefaults or {}) do
-		for tagname, string in pairs(data) do
-			local part = replaceSpeciesGenderTags(string)
-			animator.setPartTag(partname, tagname, part)
-		end
-	end
-
 	if not self.identity.hairGroup and type(self.speciesFile) == "table" then
 		for i, data in ipairs(self.speciesFile.genders or {}) do
 			if data.name == self.gender then
@@ -188,26 +171,35 @@ function initAfterInit()
 	animator.setGlobalTag( "backarmPersonality", self.identity.arm )
 	animator.setGlobalTag( "frontarmPersonality", self.identity.arm )
 
-	if self.identity.hairType ~= nil then
-		local hairPath = "/humanoid/"..self.species.."/"..self.identity.hairGroup.."/"..self.identity.hairType..".png"
-		animator.setPartTag( "hair", "partImage", hairPath )
-		animator.setPartTag( "hair_fg", "partImage", hairPath )
+	for tagname, string in pairs(self.speciesData.globalTagDefaults or {}) do
+		local part = replaceSpeciesGenderTags(string)
+		self.globalTagDefaults[tagname] = part
+		animator.setGlobalTag(tagname, part)
 	end
-	if self.identity.facialHairType ~= nil then
-		local hairPath = "/humanoid/"..self.species.."/"..self.identity.facialHairGroup.."/"..self.identity.facialHairType..".png"
-		animator.setPartTag( "facialHair", "partImage", hairPath )
+	for partname, string in pairs(self.speciesData.partImages or {}) do
+		local part = replaceSpeciesGenderTags(string)
+		local success, size = pcall(root.imageSize, (part))
+		if success then
+			animator.setPartTag(partname, "partImage", part)
+			self.parts[partname] = part
+		end
 	end
-	if self.identity.facialMaskType ~= nil then
-		local hairPath = "/humanoid/"..self.species.."/"..self.identity.facialMaskGroup.."/"..self.identity.facialMaskType..".png"
-		animator.setPartTag( "facialMask", "partImage", hairPath )
+	for partname, data in pairs(self.speciesData.partTagDefaults or {}) do
+		for tagname, string in pairs(data) do
+			local part = replaceSpeciesGenderTags(string)
+			animator.setPartTag(partname, tagname, part)
+		end
 	end
-
 
 	self.inited = true
 end
 
 function replaceSpeciesGenderTags(string)
-	return sb.replaceTags(string, { gender = self.gender, species = self.species })
+	return sb.replaceTags(string, { gender = self.gender, species = self.species,
+		hair = self.identity.hairType, hairGroup = self.identity.hairGroup,
+		facialHair = self.identity.facialHairType, facialHairGroup = self.identity.facialHairGroup,
+		facialMask = self.identity.facialMaskType, facialMaskGroup = self.identity.facialMaskGroup,
+	})
 end
 
 function update(dt)

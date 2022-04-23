@@ -52,7 +52,7 @@ function initAfterInit()
 			require(script)
 		end
 	end
-	local success, speciesFile = pcall(root.assetJson,("/species/"..self.species..".species"))
+	success, speciesFile = pcall(root.assetJson,("/species/"..self.species..".species"))
 	self.speciesFile = speciesFile
 	self.bodyconfig = root.assetJson((speciesFile or {}).humanoidConfig or "/humanoid.config")
 	animator.resetTransformationGroup("handoffset")
@@ -178,9 +178,9 @@ function initAfterInit()
 	end
 	for partname, string in pairs(self.speciesData.partImages or {}) do
 		local part = replaceSpeciesGenderTags(string)
-		local success, size = pcall(root.imageSize, (part))
-		if success then
-			animator.setPartTag(partname, "partImage", part)
+		success, notEmpty = pcall(root.nonEmptyRegion, (part))
+		if success and notEmpty ~= nil then
+				animator.setPartTag(partname, "partImage", part)
 			self.parts[partname] = part
 		end
 	end

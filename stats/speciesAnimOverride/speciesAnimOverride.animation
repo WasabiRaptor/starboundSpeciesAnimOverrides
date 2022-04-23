@@ -818,6 +818,9 @@
 		"bellybob": {
 			"interpolated": false
 		},
+		"crotchbob": {
+			"interpolated": false
+		},
 		"frontarmsrotation": {
 			"interpolated": true
 		},

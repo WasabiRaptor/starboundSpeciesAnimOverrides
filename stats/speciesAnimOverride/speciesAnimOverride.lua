@@ -43,14 +43,24 @@ function initAfterInit()
 	local success, speciesData = pcall(root.assetJson, ("/humanoid/"..self.species.."/speciesAnimOverride.config"))
 	if success then
 		self.speciesData = speciesData
-		if type(speciesData.merge) == "table" then
-			for i, path in ipairs(speciesData.merge) do
-				self.speciesData = sb.jsonMerge(root.assetJson(path), self.speciesData)
-			end
-		end
 	else
 		self.speciesData = root.assetJson("/humanoid/speciesAnimOverride.config")
 	end
+	local scripts = self.speciesData.scripts or {}
+	local mergeConfigs = speciesData.merge or {} -- to make it return us the data not get a pointer to the table
+	while type(mergeConfigs[1]) == "string" do
+		local newConfig = root.assetJson(mergeConfigs[1])
+		for i, path in ipairs(newConfig.merge or {}) do
+			table.insert(mergeConfigs, path)
+		end
+		for i, script in ipairs(newConfig.scripts or {}) do -- make sure to get new scripts and add them rather than overwrite them
+			table.insert(scripts, script)
+		end
+
+		self.speciesData = sb.jsonMerge(newConfig, self.speciesData)
+		table.remove(mergeConfigs, 1)
+	end
+	self.speciesData.scripts = scripts
 
 	if self.speciesData.scripts ~= nil then
 		for _, script in ipairs(self.speciesData.scripts) do
@@ -183,7 +193,6 @@ function initAfterInit()
 	end
 	for partname, string in pairs(self.speciesData.partImages or {}) do
 		local part = replaceSpeciesGenderTags(string)
-		sb.logInfo(part)
 		success, notEmpty = pcall(root.nonEmptyRegion, (part))
 		if success and notEmpty ~= nil then
 				animator.setPartTag(partname, "partImage", part)

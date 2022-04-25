@@ -40,6 +40,11 @@ function initAfterInit()
 	self.species = self.overrideData.species or world.entitySpecies(entity.id())
 	self.gender = self.overrideData.gender or world.entityGender(entity.id())
 	self.identity = self.overrideData.identity or {}
+
+	success, speciesFile = pcall(root.assetJson,("/species/"..self.species..".species"))
+	self.speciesFile = speciesFile
+	self.bodyconfig = root.assetJson((speciesFile or {}).humanoidConfig or "/humanoid.config")
+
 	local success, speciesData = pcall(root.assetJson, ("/humanoid/"..self.species.."/speciesAnimOverride.config"))
 	if success then
 		self.speciesData = speciesData
@@ -68,9 +73,7 @@ function initAfterInit()
 			require(script)
 		end
 	end
-	success, speciesFile = pcall(root.assetJson,("/species/"..self.species..".species"))
-	self.speciesFile = speciesFile
-	self.bodyconfig = root.assetJson((speciesFile or {}).humanoidConfig or "/humanoid.config")
+
 	animator.resetTransformationGroup("handoffset")
 	animator.resetTransformationGroup("globalOffset")
 	animator.translateTransformationGroup("handoffset", {self.bodyconfig.frontHandPosition[1]/8,self.bodyconfig.frontHandPosition[2]/8})
@@ -211,7 +214,7 @@ function initAfterInit()
 end
 
 function replaceSpeciesGenderTags(string)
-	return sb.replaceTags(string, { gender = self.gender, species = self.species,
+	return sb.replaceTags(string, { gender = self.gender, species = self.species, reskin = self.reskin or "",
 		hair = self.identity.hairType, hairGroup = self.identity.hairGroup,
 		facialHair = self.identity.facialHairType, facialHairGroup = self.identity.facialHairGroup,
 		facialMask = self.identity.facialMaskType, facialMaskGroup = self.identity.facialMaskGroup,

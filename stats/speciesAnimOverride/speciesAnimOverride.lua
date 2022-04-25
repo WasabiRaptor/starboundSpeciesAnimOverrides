@@ -738,12 +738,15 @@ function getCosmeticItems()
 		setCosmetic.legs(data.legsCosmetic or data.legs)
 		setCosmetic.back(data.backCosmetic or data.back)
 		self.loungingIn = data.lounging
+		refreshCosmetics = false
 	end )
 end
 
+refreshCosmetics = true
+
 function setCosmetic.head(cosmetic)
 	if cosmetic ~= nil then
-		if currentCosmeticName.head == cosmetic.name then return end
+		if currentCosmeticName.head == cosmetic.name and not refreshCosmetics then return end
 		currentCosmeticName.head = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
@@ -772,7 +775,7 @@ end
 
 function setCosmetic.chest(cosmetic)
 	if cosmetic ~= nil then
-		if currentCosmeticName.chest == cosmetic.name then return end
+		if currentCosmeticName.chest == cosmetic.name and not refreshCosmetics then return end
 		currentCosmeticName.chest = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
@@ -831,7 +834,7 @@ end
 
 function setCosmetic.legs(cosmetic)
 	if cosmetic ~= nil then
-		if currentCosmeticName.legs == cosmetic.name then return end
+		if currentCosmeticName.legs == cosmetic.name and not refreshCosmetics then return end
 		currentCosmeticName.legs = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
@@ -879,7 +882,7 @@ end
 
 function setCosmetic.back(cosmetic)
 	if cosmetic ~= nil then
-		if currentCosmeticName.back == cosmetic.name then return end
+		if currentCosmeticName.back == cosmetic.name and not refreshCosmetics then return end
 		currentCosmeticName.back = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)

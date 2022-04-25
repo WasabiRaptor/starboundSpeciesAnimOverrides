@@ -677,7 +677,7 @@
 					"centered": true,
 					"zLevel": 3.0,
 					"transformationGroups": ["frontarms_item_0_offset", "frontarms_item_0", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
 				}
 			},
 			"frontarms_item_1" : {
@@ -685,7 +685,7 @@
 					"centered": true,
 					"zLevel": 3.1,
 					"transformationGroups": ["frontarms_item_1_offset", "frontarms_item_1", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
 				}
 			},
 			"frontarms_item_2" : {
@@ -693,7 +693,7 @@
 					"centered": true,
 					"zLevel": 3.2,
 					"transformationGroups": ["frontarms_item_2_offset", "frontarms_item_2", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
 				}
 			},
 			"frontarms_item_3" : {
@@ -701,7 +701,7 @@
 					"centered": true,
 					"zLevel": 3.3,
 					"transformationGroups": ["frontarms_item_3_offset", "frontarms_item_3", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
 				}
 			},
 			"frontarms_item_4" : {
@@ -709,7 +709,7 @@
 					"centered": true,
 					"zLevel": 3.4,
 					"transformationGroups": ["frontarms_item_4_offset", "frontarms_item_4", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
 				}
 			},
 			"frontarms_item_5" : {
@@ -717,7 +717,7 @@
 					"centered": true,
 					"zLevel": 3.5,
 					"transformationGroups": ["frontarms_item_5_offset", "frontarms_item_5", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
 				}
 			},
 			"frontarms_item_6" : {
@@ -725,7 +725,7 @@
 					"centered": true,
 					"zLevel": 3.6,
 					"transformationGroups": ["frontarms_item_6_offset", "frontarms_item_6", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible>"
+					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
 				}
 			},
 
@@ -734,7 +734,7 @@
 					"centered": true,
 					"zLevel": -3.6,
 					"transformationGroups": ["backarms_item_0_offset", "backarms_item_0", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible>"
+					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
 				}
 			},
 			"backarms_item_1" : {
@@ -742,7 +742,7 @@
 					"centered": true,
 					"zLevel": -3.5,
 					"transformationGroups": ["backarms_item_1_offset", "backarms_item_1", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible>"
+					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
 				}
 			},
 			"backarms_item_2" : {
@@ -750,7 +750,7 @@
 					"centered": true,
 					"zLevel": -3.4,
 					"transformationGroups": ["backarms_item_2_offset", "backarms_item_2", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible>"
+					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
 				}
 			},
 			"backarms_item_3" : {
@@ -758,7 +758,7 @@
 					"centered": true,
 					"zLevel": -3.3,
 					"transformationGroups": ["backarms_item_3_offset", "backarms_item_3", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible>"
+					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
 				}
 			},
 			"backarms_item_4" : {
@@ -766,7 +766,7 @@
 					"centered": true,
 					"zLevel": -3.2,
 					"transformationGroups": ["backarms_item_4_offset", "backarms_item_4", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible>"
+					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
 				}
 			},
 			"backarms_item_5" : {
@@ -774,7 +774,7 @@
 					"centered": true,
 					"zLevel": -3.1,
 					"transformationGroups": ["backarms_item_5_offset", "backarms_item_5", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible>"
+					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
 				}
 			},
 			"backarms_item_6" : {
@@ -782,7 +782,7 @@
 					"centered": true,
 					"zLevel": -3.0,
 					"transformationGroups": ["backarms_item_6_offset", "backarms_item_6", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible>"
+					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
 				}
 			}
 		}

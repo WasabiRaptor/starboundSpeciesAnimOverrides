@@ -244,7 +244,12 @@ function doUpdate(dt)
 	getCosmeticItems()
 	getHandItems()
 	checkHumanoidAnim()
-	mcontroller.controlParameters({ collisionPoly = self.hitbox })
+
+	if self.controlParameters and not status.statusProperty("speciesAnimOverrideControlParams") then
+		mcontroller.controlParameters(self.controlParameters)
+	end
+	status.setStatusProperty("speciesAnimOverrideControlParams", nil)
+
 	animator.resetTransformationGroup("globalRotation")
 	animator.rotateTransformationGroup("globalRotation", mcontroller.rotation() * mcontroller.facingDirection())
 end
@@ -1047,7 +1052,7 @@ function doAnims( anims, force )
 			setAnimTag( anim )
 		elseif state == "priority" then
 			changePriorityLength( anim )
-		elseif state == "hitbox" then
+		elseif state == "controlParameters" then
 		elseif state == "state" then
 			animator.setGlobalTag("state", anim)
 		else
@@ -1055,7 +1060,7 @@ function doAnims( anims, force )
 		end
 	end
 
-	self.hitbox = ( (anims or {}).hitbox or self.speciesData.animations.idle.hitbox )
+	self.controlParameters = ( (anims or {}).controlParameters or self.speciesData.animations.idle.controlParameters )
 end
 
 function doAnim( state, anim, force)

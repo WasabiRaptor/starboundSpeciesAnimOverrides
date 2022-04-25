@@ -1,14 +1,17 @@
 local oldinit = init
 local olduninit = uninit
 
-local oldSetParentDirectives
+local _setParentDirectives
+local _controlParameters
 local effectUUID
 
 
 function init()
 	effectUUID = sb.makeUuid()
-	oldSetParentDirectives = effect.setParentDirectives
+	_setParentDirectives = effect.setParentDirectives
 	effect.setParentDirectives = effect_setParentDirectives
+	_controlParameters = mcontroller.controlParameters
+	mcontroller.controlParameters = mcontroller_controlParameters
 
 	if oldinit ~= nil then oldinit() end
 end
@@ -17,7 +20,13 @@ function effect_setParentDirectives(string)
 	local directives = status.statusProperty("speciesAnimOverrideDirectives") or {}
 	directives[effectUUID] = string
 	status.setStatusProperty("speciesAnimOverrideDirectives", directives)
-	oldSetParentDirectives(string)
+	_setParentDirectives(string)
+end
+
+function mcontroller_controlParameters(...)
+	status.setStatusProperty("speciesAnimOverrideControlParams", true)
+	mcontroller.controlParameters(...)
+	_controlParameters(...)
 end
 
 function uninit()

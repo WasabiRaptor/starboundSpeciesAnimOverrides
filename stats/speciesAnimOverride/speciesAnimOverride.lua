@@ -46,8 +46,9 @@ function initAfterInit()
 	else
 		self.speciesData = root.assetJson("/humanoid/speciesAnimOverride.config")
 	end
+
 	local scripts = self.speciesData.scripts or {}
-	local mergeConfigs = speciesData.merge or {} -- to make it return us the data not get a pointer to the table
+	local mergeConfigs = self.speciesData.merge or {} -- to make it return us the data not get a pointer to the table
 	while type(mergeConfigs[1]) == "string" do
 		local newConfig = root.assetJson(mergeConfigs[1])
 		for i, path in ipairs(newConfig.merge or {}) do
@@ -193,7 +194,6 @@ function initAfterInit()
 	end
 	for partname, string in pairs(self.speciesData.partImages or {}) do
 		local part = replaceSpeciesGenderTags(string)
-		sb.logInfo(part)
 		success, notEmpty = pcall(root.nonEmptyRegion, (part))
 		if success and notEmpty ~= nil then
 				animator.setPartTag(partname, "partImage", part)

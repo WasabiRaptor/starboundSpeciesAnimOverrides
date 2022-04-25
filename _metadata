@@ -4,5 +4,7 @@
   "name" : "starboundSpeciesAnimOverrides",
   "author" : "Wasabi_Raptor",
   "description" : "A library to override the anims of a humanoid species via a status effect.",
-  "includes" : [ ]
+  "includes" : [
+    "Umbreon Race Mod"
+   ]
 }

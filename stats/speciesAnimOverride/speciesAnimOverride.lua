@@ -193,6 +193,7 @@ function initAfterInit()
 	end
 	for partname, string in pairs(self.speciesData.partImages or {}) do
 		local part = replaceSpeciesGenderTags(string)
+		sb.logInfo(part)
 		success, notEmpty = pcall(root.nonEmptyRegion, (part))
 		if success and notEmpty ~= nil then
 				animator.setPartTag(partname, "partImage", part)

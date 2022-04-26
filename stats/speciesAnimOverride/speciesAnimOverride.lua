@@ -372,6 +372,7 @@ local armsToArm = {
 	backarms = "backArm"
 }
 local beamMinerImage = "/items/tools/miningtools/beamaxe.png"
+local beamMinerOffset = {-2, 0}
 function getHandItem(hand, part, continue)
 	--if true then return true end -- I am just, tired of trying to do this, none of it works really
 
@@ -432,43 +433,51 @@ function getHandItem(hand, part, continue)
 			end
 		else
 			clearAnimatedActiveItemTags(hand, part)
-			if itemType == "beamminingtool" then
+			if itemType == "beamminingtool" or itemType == "wiretool" or itemType == "paintingbeamtool" or itemType == "inspectiontool" or itemType == "flashlight" then
 				local aim = status.statusProperty("speciesAnimOverrideAim")
 				if not aim then return end
 				local angle = rotateAimArm(aim, part)
-				rotationArmVisible(part)
 				local itemImage = fixFilepath(item.config.image, item)
-				beamMinerImage = itemImage
-				if part == "backarms" then
-					animator.setPartTag(part .. "_item", "partImage", "")
-					return { secondArmAngle = angle, secondArmImage = itemImage }
-				else
-					animator.setPartTag(part .. "_item", "partImage", itemImage or "")
-					return { secondArmAngle = angle }
+				local offset = item.config.handPosition or {0,0}
+				if itemType == "inspectiontool" then
+					offset[1] = offset[1]*8
+					offset[2] = offset[2]*8
 				end
-			elseif itemType == "wiretool" or itemType == "paintingbeamtool" or itemType == "inspectiontool" then
-				local aim = status.statusProperty("speciesAnimOverrideAim")
-				if not aim then return end
-				local angle = rotateAimArm(aim, part)
-				local itemImage = fixFilepath(item.config.image, item)
-				animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+				offset[1] = offset[1] * -1
+				offset[2] = offset[2] * -1
+
+				if itemType == "beamminingtool" then
+					beamMinerImage = itemImage
+					beamMinerOffset = offset
+				end
 				rotationArmVisible(part)
-				if part == "backarms" then
-					animator.setPartTag(part .. "_item", "partImage", "")
-					return { secondArmAngle = angle, secondArmImage = itemImage }
+
+				sb.logInfo(sb.printJson(offset))
+				if item.config.twoHanded then
+					if part == "backarms" then
+						animator.setPartTag(part .. "_item", "partImage", "")
+						return { secondArmAngle = angle, secondArmImage = itemImage, secondArmOffset = offset }
+					else
+						translateArmOffset(hand, part, offset)
+						animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+						return { secondArmAngle = angle }
+					end
 				else
+					translateArmOffset(hand, part, offset)
 					animator.setPartTag(part .. "_item", "partImage", itemImage or "")
-					return { secondArmAngle = angle }
 				end
 			elseif itemType == "object" or itemType == "material" then
 				local aim = status.statusProperty("speciesAnimOverrideAim")
 				if not aim then return end
 				rotateAimArm(aim, part)
 				local itemImage = beamMinerImage
+				local offset = beamMinerOffset
+				translateArmOffset(hand, part, offset)
 				animator.setPartTag(part .. "_item", "partImage", itemImage or "")
 				rotationArmVisible(part)
 				return
 			else
+				sb.logInfo(itemType)
 				setEmptyHand(hand, part)
 			end
 		end
@@ -477,6 +486,9 @@ function getHandItem(hand, part, continue)
 			rotationArmVisible(part)
 			rotateArmAngle(part, continue.secondArmAngle)
 			animator.setPartTag(part .. "_item", "partImage", continue.secondArmImage or "")
+			if continue.secondArmOffset then
+				translateArmOffset(hand, part, continue.secondArmOffset)
+			end
 			if continue.secondArmAnimatedItem then
 				animatedActiveItem(continue.item, continue.itemDescriptor, continue.itemOverrideData, continue.secondArmAnimatedItem, part, continue)
 			else
@@ -486,6 +498,12 @@ function getHandItem(hand, part, continue)
 			setEmptyHand(hand, part)
 		end
 	end
+end
+
+function translateArmOffset(hand, part, addOffset)
+	local offset = self.bodyconfig[armsToArm[part].."Offset"] or {0,0}
+	animator.resetTransformationGroup(part.."_item_offset")
+	animator.translateTransformationGroup(part.."_item_offset", {(offset[1]+addOffset[1])/8, (offset[2]+addOffset[2])/8})
 end
 
 local itemImages = { primary = {}, alt = {} }

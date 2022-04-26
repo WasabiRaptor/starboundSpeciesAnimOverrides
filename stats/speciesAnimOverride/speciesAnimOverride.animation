@@ -410,7 +410,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.9,
-					"transformationGroups": ["handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["frontarms_item_offset", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"frontarmsItemRotationState": {
@@ -426,7 +426,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2.8,
-					"transformationGroups": ["handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["backarms_item_offset", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"backarmsItemRotationState": {
@@ -836,6 +836,8 @@
 		"tailbob": {
 			"interpolated": false
 		},
+
+		"frontarms_item_offset": {}, "backarms_item_offset": {},
 
 		"frontarms_item_0_offset": {}, "frontarms_item_0": {},
 		"frontarms_item_1_offset": {}, "frontarms_item_1": {},

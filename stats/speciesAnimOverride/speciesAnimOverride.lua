@@ -452,7 +452,6 @@ function getHandItem(hand, part, continue)
 				end
 				rotationArmVisible(part)
 
-				sb.logInfo(sb.printJson(offset))
 				if item.config.twoHanded then
 					if part == "backarms" then
 						animator.setPartTag(part .. "_item", "partImage", "")
@@ -477,7 +476,6 @@ function getHandItem(hand, part, continue)
 				rotationArmVisible(part)
 				return
 			else
-				sb.logInfo(itemType)
 				setEmptyHand(hand, part)
 			end
 		end
@@ -684,7 +682,6 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			tagtable.variant = ((item.parameters or {}).animationPartVariants or {})[truePartname] or ""
 
 			local path = fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item)
-			sb.logInfo(path or "")
 			animator.setPartTag( partname, "partImage", path or "" )
 		end
 	end

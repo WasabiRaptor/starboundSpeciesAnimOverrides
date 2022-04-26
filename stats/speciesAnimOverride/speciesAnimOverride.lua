@@ -591,9 +591,14 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			end
 			local image = (properties or {}).image
 			if type(image) == "string" then
-				local tags = {
-					partImage = (item.config.animationParts or {})[itemPart]
-				}
+				local tags = {}
+				if type((item.config.animationParts or {})[itemPart]) == "string" then
+					tags.partImage = (item.config.animationParts or {})[itemPart]
+				end
+				if type((item.parameters.animationParts or {})[itemPart]) == "string" then
+					tags.partImage = (item.parameters.animationParts or {})[itemPart]
+				end
+
 				for tagname, tag in pairs(properties) do
 					local tagType = type(tag)
 					if (tagType == "string" or tagType == "number") and (tagname ~= "zLevel" and tagname ~= "image") then
@@ -624,7 +629,8 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 	itemOverrideData.transformQueue = {{}}
 	status.setStatusProperty(hand.."ItemOverrideData", itemOverrideData)
 
-	for partname, data in pairs(itemImages[hand].parts or {}) do
+	for truePartname, data in pairs(itemImages[hand].parts or {}) do
+
 		local partname = part.."_item_"..data.partIndex
 
 		--[[
@@ -657,7 +663,11 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			for i, stateType in ipairs(data.partStates or {}) do
 				tagtable.frame = (itemImages[hand].partStates[stateType] or {}).frame or tagtable.frame
 			end
-			animator.setPartTag( partname, "partImage", fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item) or "")
+			tagtable.variant = ((item.parameters or {}).animationPartVariants or {})[truePartname] or ""
+
+			local path = fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item)
+			sb.logInfo(path or "")
+			animator.setPartTag( partname, "partImage", path or "" )
 		end
 	end
 end
@@ -908,9 +918,10 @@ end
 
 function fixFilepath(string, item)
 	if type(string) == "string" then
+		local firstChar = string:sub(1,1)
 		if string == "" then return
-		elseif string:sub(1,1) == "?" then return
-		elseif string:find("^/") then
+		elseif firstChar == "?" or firstChar == ":" then return
+		elseif firstChar == "/" then
 			return string
 		else
 			return item.directory..string

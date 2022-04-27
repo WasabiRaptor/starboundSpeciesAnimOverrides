@@ -522,7 +522,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			partStates = {},
 			transformationGroups = {}
 		}
-		for transformationGroup, data in pairs(animation.transformationGroups) do
+		for transformationGroup, data in pairs(animation.transformationGroups or {}) do
 			itemImages[hand].transformationGroups[transformationGroup] = {}
 		end
 

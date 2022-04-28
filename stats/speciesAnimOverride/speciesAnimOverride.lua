@@ -46,32 +46,37 @@ function initAfterInit()
 	self.bodyconfig = root.assetJson((speciesFile or {}).humanoidConfig or "/humanoid.config")
 
 	local success, speciesData = pcall(root.assetJson, ("/humanoid/"..self.species.."/speciesAnimOverride.config"))
-	if success then
-		self.speciesData = speciesData
-	else
-		self.speciesData = root.assetJson("/humanoid/speciesAnimOverride.config")
+	if not success then
+		speciesData = root.assetJson("/humanoid/speciesAnimOverride.config")
 	end
 
-	local scripts = self.speciesData.scripts or {}
-	local mergeConfigs = self.speciesData.merge or {} -- to make it return us the data not get a pointer to the table
-	while type(mergeConfigs[1]) == "string" do
-		local newConfig = root.assetJson(mergeConfigs[1])
-		for i, path in ipairs(newConfig.merge or {}) do
-			table.insert(mergeConfigs, path)
+	local mergeConfigs = speciesData.merge or {}
+	local configs = { speciesData }
+	while type(mergeConfigs[#mergeConfigs]) == "string" do
+		local insertPos = #mergeConfigs
+		local newConfig = root.assetJson(mergeConfigs[#mergeConfigs])
+		for i = #(newConfig.merge or {}), 1, -1 do
+			table.insert(mergeConfigs, insertPos, newConfig.merge[i])
 		end
-		for i, script in ipairs(newConfig.scripts or {}) do -- make sure to get new scripts and add them rather than overwrite them
+
+		table.insert(configs, 1, newConfig)
+
+		table.remove(mergeConfigs, #mergeConfigs)
+	end
+
+	local scripts = {}
+	local finalConfig = {}
+	for i, config in ipairs(configs) do
+		finalConfig = sb.jsonMerge(finalConfig, config)
+		for j, script in ipairs(config.scripts or {}) do
 			table.insert(scripts, script)
 		end
-
-		self.speciesData = sb.jsonMerge(newConfig, self.speciesData)
-		table.remove(mergeConfigs, 1)
 	end
+	self.speciesData = finalConfig
 	self.speciesData.scripts = scripts
 
-	if self.speciesData.scripts ~= nil then
-		for _, script in ipairs(self.speciesData.scripts) do
-			require(script)
-		end
+	for _, script in ipairs(self.speciesData.scripts) do
+		require(script)
 	end
 
 	animator.resetTransformationGroup("handoffset")

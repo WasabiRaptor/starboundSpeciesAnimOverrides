@@ -406,38 +406,6 @@
 					}
 				}
 			},
-			"frontarms_item" : {
-				"properties": {
-					"centered": true,
-					"zLevel": 2.9,
-					"transformationGroups": ["frontarms_item_offset", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
-				},
-				"partStates": {
-					"frontarmsItemRotationState": {
-						"none": { "properties": {} },
-
-						"item": { "properties": { "image": "<partImage><itemDirectives><directives>" } },
-
-						"item_outside": { "properties": { "zLevel": 3.2, "image": "<partImage><itemDirectives><directives>" } }
-					}
-				}
-			},
-			"backarms_item" : {
-				"properties": {
-					"centered": true,
-					"zLevel": -2.8,
-					"transformationGroups": ["backarms_item_offset", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
-				},
-				"partStates": {
-					"backarmsItemRotationState": {
-						"none": { "properties": {} },
-
-						"item": { "properties": { "image": "<partImage><itemDirectives><directives>" } },
-
-						"item_outside": { "properties": { "zLevel": -3.1, "image": "<partImage><itemDirectives><directives>" } }
-					}
-				}
-			},
 			"frontlegs": {
 				"properties": {
 					"centered": true,
@@ -678,6 +646,11 @@
 					"zLevel": 3.0,
 					"transformationGroups": ["frontarms_item_0_offset", "frontarms_item_0", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"frontarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": 5.0 } }
+					}
 				}
 			},
 			"frontarms_item_1" : {
@@ -686,6 +659,11 @@
 					"zLevel": 3.1,
 					"transformationGroups": ["frontarms_item_1_offset", "frontarms_item_1", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"frontarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": 5.1 } }
+					}
 				}
 			},
 			"frontarms_item_2" : {
@@ -694,6 +672,11 @@
 					"zLevel": 3.2,
 					"transformationGroups": ["frontarms_item_2_offset", "frontarms_item_2", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"frontarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": 5.2 } }
+					}
 				}
 			},
 			"frontarms_item_3" : {
@@ -702,6 +685,11 @@
 					"zLevel": 3.3,
 					"transformationGroups": ["frontarms_item_3_offset", "frontarms_item_3", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"frontarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": 5.3 } }
+					}
 				}
 			},
 			"frontarms_item_4" : {
@@ -710,6 +698,11 @@
 					"zLevel": 3.4,
 					"transformationGroups": ["frontarms_item_4_offset", "frontarms_item_4", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"frontarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": 5.4 } }
+					}
 				}
 			},
 			"frontarms_item_5" : {
@@ -718,6 +711,11 @@
 					"zLevel": 3.5,
 					"transformationGroups": ["frontarms_item_5_offset", "frontarms_item_5", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"frontarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": 5.5 } }
+					}
 				}
 			},
 			"frontarms_item_6" : {
@@ -726,6 +724,11 @@
 					"zLevel": 3.6,
 					"transformationGroups": ["frontarms_item_6_offset", "frontarms_item_6", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"frontarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": 5.6 } }
+					}
 				}
 			},
 
@@ -735,6 +738,11 @@
 					"zLevel": -3.6,
 					"transformationGroups": ["backarms_item_0_offset", "backarms_item_0", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"backarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": -5.6 } }
+					}
 				}
 			},
 			"backarms_item_1" : {
@@ -743,6 +751,11 @@
 					"zLevel": -3.5,
 					"transformationGroups": ["backarms_item_1_offset", "backarms_item_1", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"backarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": -5.5 } }
+					}
 				}
 			},
 			"backarms_item_2" : {
@@ -751,6 +764,11 @@
 					"zLevel": -3.4,
 					"transformationGroups": ["backarms_item_2_offset", "backarms_item_2", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"backarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": -5.4 } }
+					}
 				}
 			},
 			"backarms_item_3" : {
@@ -759,6 +777,11 @@
 					"zLevel": -3.3,
 					"transformationGroups": ["backarms_item_3_offset", "backarms_item_3", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"backarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": -5.3 } }
+					}
 				}
 			},
 			"backarms_item_4" : {
@@ -767,6 +790,11 @@
 					"zLevel": -3.2,
 					"transformationGroups": ["backarms_item_4_offset", "backarms_item_4", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"backarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": -5.2 } }
+					}
 				}
 			},
 			"backarms_item_5" : {
@@ -775,6 +803,11 @@
 					"zLevel": -3.1,
 					"transformationGroups": ["backarms_item_5_offset", "backarms_item_5", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"backarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": -5.1 } }
+					}
 				}
 			},
 			"backarms_item_6" : {
@@ -783,6 +816,11 @@
 					"zLevel": -3.0,
 					"transformationGroups": ["backarms_item_6_offset", "backarms_item_6", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"],
 					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+				},
+				"partStates": {
+					"backarmsItemRotationState": {
+						"item_outside": { "properties": { "zLevel": -5.0 } }
+					}
 				}
 			}
 		}
@@ -836,8 +874,6 @@
 		"tailbob": {
 			"interpolated": false
 		},
-
-		"frontarms_item_offset": {}, "backarms_item_offset": {},
 
 		"frontarms_item_0_offset": {}, "frontarms_item_0": {},
 		"frontarms_item_1_offset": {}, "frontarms_item_1": {},

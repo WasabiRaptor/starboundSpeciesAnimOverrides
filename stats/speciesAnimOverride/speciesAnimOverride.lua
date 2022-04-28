@@ -392,6 +392,8 @@ function getHandItem(hand, part, continue)
 			setEmptyHand(hand, part)
 			return
 		end
+		clearAnimatedActiveItemTags(hand, part)
+
 		if itemType == "activeitem" then
 			local itemOverrideData = status.statusProperty(hand.."ItemOverrideData") or {}
 			if itemOverrideData.setHoldingItem ~= false then
@@ -404,10 +406,9 @@ function getHandItem(hand, part, continue)
 				rotateArmAngle(part, angle)
 
 				if item.config.animation then
-					animator.setPartTag(part .. "_item", "partImage", "")
+					animator.setPartTag(part .. "_item_0", "partImage", "")
 					if itemOverrideData.setTwoHandedGrip then
 						if part == "backarms" then
-							clearAnimatedActiveItemTags(hand, part)
 							return { secondArmAngle = angle, secondArmAnimatedItem = hand, itemOverrideData = itemOverrideData, itemDescriptor = itemDescriptor, item = item }
 						else
 							animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
@@ -418,26 +419,27 @@ function getHandItem(hand, part, continue)
 						return
 					end
 				else
-					clearAnimatedActiveItemTags(hand, part)
+					animator.resetTransformationGroup( part .. "_item_0")
+
 					local itemImage = fixFilepath(item.config.inventoryIcon, item)
 
 					if itemOverrideData.setTwoHandedGrip then
 						if part == "backarms" then
-							animator.setPartTag(part .. "_item", "partImage", "")
+							animator.setPartTag(part .. "_item_0", "partImage", "")
 							return { secondArmAngle = angle, secondArmImage = itemImage }
 						else
-							animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+							animator.setPartTag(part .. "_item_0", "partImage", itemImage or "")
 							return { secondArmAngle = angle }
 						end
 					else
-						animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+						animator.setPartTag(part .. "_item_0", "partImage", itemImage or "")
 					end
 				end
 			else
 				setEmptyHand(hand, part)
 			end
 		else
-			clearAnimatedActiveItemTags(hand, part)
+			animator.resetTransformationGroup( part .. "_item_0")
 			if itemType == "beamminingtool" or itemType == "wiretool" or itemType == "paintingbeamtool" or itemType == "inspectiontool" or itemType == "flashlight" then
 				local aim = status.statusProperty("speciesAnimOverrideAim")
 				if not aim then return end
@@ -459,16 +461,16 @@ function getHandItem(hand, part, continue)
 
 				if item.config.twoHanded then
 					if part == "backarms" then
-						animator.setPartTag(part .. "_item", "partImage", "")
+						animator.setPartTag(part .. "_item_0", "partImage", "")
 						return { secondArmAngle = angle, secondArmImage = itemImage, secondArmOffset = offset }
 					else
 						translateArmOffset(hand, part, offset)
-						animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+						animator.setPartTag(part .. "_item_0", "partImage", itemImage or "")
 						return { secondArmAngle = angle }
 					end
 				else
 					translateArmOffset(hand, part, offset)
-					animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+					animator.setPartTag(part .. "_item_0", "partImage", itemImage or "")
 				end
 			elseif itemType == "object" or itemType == "material" then
 				local aim = status.statusProperty("speciesAnimOverrideAim")
@@ -477,7 +479,7 @@ function getHandItem(hand, part, continue)
 				local itemImage = beamMinerImage
 				local offset = beamMinerOffset
 				translateArmOffset(hand, part, offset)
-				animator.setPartTag(part .. "_item", "partImage", itemImage or "")
+				animator.setPartTag(part .. "_item_0", "partImage", itemImage or "")
 				rotationArmVisible(part)
 				return
 			else
@@ -488,14 +490,12 @@ function getHandItem(hand, part, continue)
 		if continue.secondArmAngle then
 			rotationArmVisible(part)
 			rotateArmAngle(part, continue.secondArmAngle)
-			animator.setPartTag(part .. "_item", "partImage", continue.secondArmImage or "")
+			animator.setPartTag(part .. "_item_0", "partImage", continue.secondArmImage or "")
 			if continue.secondArmOffset then
 				translateArmOffset(hand, part, continue.secondArmOffset)
 			end
 			if continue.secondArmAnimatedItem then
 				animatedActiveItem(continue.item, continue.itemDescriptor, continue.itemOverrideData, continue.secondArmAnimatedItem, part, continue)
-			else
-				clearAnimatedActiveItemTags(hand, part)
 			end
 		else
 			setEmptyHand(hand, part)
@@ -503,10 +503,10 @@ function getHandItem(hand, part, continue)
 	end
 end
 
-function translateArmOffset(hand, part, addOffset)
+function translateArmOffset(hand, part, addOffset, number)
 	local offset = self.bodyconfig[armsToArm[part].."Offset"] or {0,0}
-	animator.resetTransformationGroup(part.."_item_offset")
-	animator.translateTransformationGroup(part.."_item_offset", {(offset[1]+addOffset[1])/8, (offset[2]+addOffset[2])/8})
+	animator.resetTransformationGroup(part.."_item_"..(number or 0).."_offset")
+	animator.translateTransformationGroup(part.."_item_"..(number or 0).."_offset", {(offset[1]+addOffset[1])/8, (offset[2]+addOffset[2])/8})
 end
 
 local itemImages = { primary = {}, alt = {} }
@@ -515,7 +515,6 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 	local newItem = false
 	local refreshImages = false
 	if itemImages[hand].name ~= itemDescriptor.name then
-		clearAnimatedActiveItemTags(hand, part)
 		local animation = sb.jsonMerge( (root.assetJson(fixFilepath(item.config.animation, item)) or {}), (item.config.animationCustom or {}))
 
 		itemImages[hand] = {
@@ -751,7 +750,6 @@ end
 function setEmptyHand(hand, part)
 	animator.setAnimationState(part.."ItemRotationState", "none")
 	animator.setAnimationState(part.."RotationState", "none")
-	animator.setPartTag(part.."_item", "partImage", "" )
 	animator.setGlobalTag( part.."RotationVisible", "?crop;0;0;0;0" )
 	animator.setGlobalTag( part.."Visible", "" )
 	clearAnimatedActiveItemTags(hand, part)

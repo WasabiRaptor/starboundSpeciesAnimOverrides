@@ -1,0 +1,102 @@
+[
+	{
+	  "op": "replace",
+	  "path": "/undyColor/0/f32200",
+	  "value": "ef0000FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/0/dc1f00",
+	  "value": "ae0000FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/1/f32200",
+	  "value": "f57d00FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/1/dc1f00",
+	  "value": "be6200FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/2/f32200",
+	  "value": "efea00FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/2/dc1f00",
+	  "value": "b5b200FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/3/f32200",
+	  "value": "00ef14FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/3/dc1f00",
+	  "value": "00ae0eFB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/4/f32200",
+	  "value": "008df5FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/4/dc1f00",
+	  "value": "0068b3FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/5/f32200",
+	  "value": "d400ffFB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/5/dc1f00",
+	  "value": "b100d6FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/6/f32200",
+	  "value": "ef00daFB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/6/dc1f00",
+	  "value": "c000d1FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/7/f32200",
+	  "value": "00edefFB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/7/dc1f00",
+	  "value": "00acaeFB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/8/f32200",
+	  "value": "ef0063FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/8/dc1f00",
+	  "value": "ae0048FB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/9/f32200",
+	  "value": "ffffffFB"
+	},
+	{
+	  "op": "replace",
+	  "path": "/undyColor/9/dc1f00",
+	  "value": "cbcbcbFB"
+	}
+  ]

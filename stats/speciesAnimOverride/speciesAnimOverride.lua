@@ -84,6 +84,15 @@ function initAfterInit()
 	animator.translateTransformationGroup("handoffset", {self.bodyconfig.frontHandPosition[1]/8,self.bodyconfig.frontHandPosition[2]/8})
 	animator.translateTransformationGroup("globalOffset", {((self.speciesData.globalOffset or {})[1] or 0)/8, ((self.speciesData.globalOffset or {})[2] or 0)/8})
 
+	if not self.speciesData.animations.idle.controlParameters then
+		self.speciesData.animations.idle.controlParameters = self.bodyconfig.movementParameters or {}
+		self.speciesData.animations.idle.controlParameters.collissionPoly = self.bodyconfig.standingPoly
+	end
+	if not self.speciesData.animations.duck.controlParameters then
+		self.speciesData.animations.duck.controlParameters = self.bodyconfig.movementParameters
+		self.speciesData.animations.duck.controlParameters.collissionPoly = self.bodyconfig.crouchingPoly
+	end
+
 	if not self.identity.hairGroup and type(self.speciesFile) == "table" then
 		for i, data in ipairs(self.speciesFile.genders or {}) do
 			if data.name == self.gender then
@@ -106,6 +115,9 @@ function initAfterInit()
 		end
 	end
 
+	self.directives = self.overrideData.directives
+	self.hairDirectives = self.overrideData.hairDirectives
+
 	local portrait = world.entityPortrait(entity.id(), "full")
 	for _, part in ipairs(portrait) do
 		local imageString = part.image
@@ -116,11 +128,7 @@ function initAfterInit()
 				self.identity.body = imageString:sub(found2+1, found2+1)
 
 				local directives = imageString:sub(found2+2)
-				if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
-					directives = directives.."?multiply=FFFFFFfb"
-				end
 				self.directives = self.overrideData.directives or directives
-				animator.setGlobalTag("customizeDirectives", self.directives)
 			end
 		end
 		if not self.identity.arm then
@@ -143,9 +151,6 @@ function initAfterInit()
 					hairDirectives = hairDirectives.."?multiply=FFFFFFfb"
 				end
 				self.hairDirectives = self.overrideData.hairDirectives or hairDirectives
-				animator.setPartTag("hair", "customizeDirectives", self.hairDirectives)
-				animator.setPartTag("hair_fg", "customizeDirectives", self.hairDirectives)
-				animator.setPartTag("facialHair", "customizeDirectives", self.hairDirectives)
 			end
 		end
 
@@ -187,6 +192,15 @@ function initAfterInit()
 			end
 		end
 	end
+	if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
+		self.directives = (self.directives or "").."?multiply=FFFFFFfb"
+		self.hairDirectives = (self.hairDirectives or "").."?multiply=FFFFFFfb"
+	end
+	animator.setGlobalTag("customizeDirectives", self.directives or "")
+	animator.setPartTag("hair", "customizeDirectives", self.hairDirectives or self.directives or "")
+	animator.setPartTag("hair_fg", "customizeDirectives", self.hairDirectives or self.directives or "")
+	animator.setPartTag("facialHair", "customizeDirectives", self.hairDirectives or self.directives or "")
+
 	animator.setGlobalTag( "bodyPersonality", self.identity.body )
 	for i, data in ipairs( ((self.speciesData.personalityOffsets or {}).bodyOffsets or {})[self.identity.body] or {} ) do
 		table.insert(self.speciesData.animations.idle.offset.parts, data)

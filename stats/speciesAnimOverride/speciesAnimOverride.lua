@@ -149,9 +149,6 @@ function initAfterInit()
 				local found5, found6 = imageString:find("?addmask=")
 				local hairDirectives = imageString:sub(found4+1, (found5 or 0)-1) -- this is really elegant haha
 
-				if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
-					hairDirectives = hairDirectives.."?multiply=FFFFFFfb"
-				end
 				self.hairDirectives = self.overrideData.hairDirectives or hairDirectives
 			end
 		end

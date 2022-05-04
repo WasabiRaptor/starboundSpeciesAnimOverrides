@@ -84,12 +84,14 @@ function initAfterInit()
 	animator.translateTransformationGroup("handoffset", {self.bodyconfig.frontHandPosition[1]/8,self.bodyconfig.frontHandPosition[2]/8})
 	animator.translateTransformationGroup("globalOffset", {((self.speciesData.globalOffset or {})[1] or 0)/8, ((self.speciesData.globalOffset or {})[2] or 0)/8})
 
+	self.playerMovementParams = root.assetJson("/player.config").movementParameters
+	self.zeroGMovementParams = root.assetJson("/player.config").zeroGMovementParameters
 	if not self.speciesData.animations.idle.controlParameters then
-		self.speciesData.animations.idle.controlParameters = self.bodyconfig.movementParameters or {}
+		self.speciesData.animations.idle.controlParameters = sb.jsonMerge((self.bodyconfig.movementParameters or {}), self.playerMovementParams)
 		self.speciesData.animations.idle.controlParameters.collissionPoly = self.bodyconfig.standingPoly
 	end
 	if not self.speciesData.animations.duck.controlParameters then
-		self.speciesData.animations.duck.controlParameters = self.bodyconfig.movementParameters
+		self.speciesData.animations.duck.controlParameters = sb.jsonMerge((self.bodyconfig.movementParameters or {}), self.playerMovementParams)
 		self.speciesData.animations.duck.controlParameters.collissionPoly = self.bodyconfig.crouchingPoly
 	end
 

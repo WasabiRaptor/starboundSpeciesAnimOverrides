@@ -260,7 +260,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -2,
-					"transformationGroups": ["chestbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
+					"transformationGroups": ["bodybob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
 					"bodyState": {

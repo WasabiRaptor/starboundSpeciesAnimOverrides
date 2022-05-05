@@ -377,11 +377,15 @@ end
 
 function getHandItems()
 	if mcontroller.facingDirection() < 0 then
-		local continue = getHandItem("primary", "frontarms", {})
-		getHandItem("alt", "backarms", continue or {})
+		local continue = getHandItem("alt", "backarms", getHandItem("primary", "frontarms", {}) or {})
+		if continue then
+			doSecondHand("primary", "frontarms", continue)
+		end
 	else
-		local continue = getHandItem("primary", "backarms", {})
-		getHandItem("alt", "frontarms", continue or {})
+		local continue = getHandItem("alt", "frontarms", getHandItem("primary", "backarms", {}) or {})
+		if continue then
+			doSecondHand("primary", "backarms", continue)
+		end
 	end
 end
 
@@ -396,7 +400,7 @@ function getHandItem(hand, part, continue)
 
 	local itemDescriptor = world.entityHandItemDescriptor(entity.id(), hand)
 
-	if itemDescriptor ~= nil then
+	if itemDescriptor ~= nil and continue.secondArmAngle == nil then
 		local item = root.itemConfig(itemDescriptor)
 		local itemType = root.itemType(itemDescriptor.name)
 		if ( itemType == "activeitem" or itemType == "beamminingtool" )
@@ -500,19 +504,23 @@ function getHandItem(hand, part, continue)
 			end
 		end
 	else
-		if continue.secondArmAngle then
-			rotationArmVisible(part)
-			rotateArmAngle(part, continue.secondArmAngle)
-			animator.setPartTag(part .. "_item_0", "partImage", continue.secondArmImage or "")
-			if continue.secondArmOffset then
-				translateArmOffset(hand, part, continue.secondArmOffset)
-			end
-			if continue.secondArmAnimatedItem then
-				animatedActiveItem(continue.item, continue.itemDescriptor, continue.itemOverrideData, continue.secondArmAnimatedItem, part, continue)
-			end
-		else
-			setEmptyHand(hand, part)
+		doSecondHand(hand, part, continue)
+	end
+end
+
+function doSecondHand(hand, part, continue)
+	if continue.secondArmAngle then
+		rotationArmVisible(part)
+		rotateArmAngle(part, continue.secondArmAngle)
+		animator.setPartTag(part .. "_item_0", "partImage", continue.secondArmImage or "")
+		if continue.secondArmOffset then
+			translateArmOffset(hand, part, continue.secondArmOffset)
 		end
+		if continue.secondArmAnimatedItem then
+			animatedActiveItem(continue.item, continue.itemDescriptor, continue.itemOverrideData, continue.secondArmAnimatedItem, part, continue)
+		end
+	else
+		setEmptyHand(hand, part)
 	end
 end
 

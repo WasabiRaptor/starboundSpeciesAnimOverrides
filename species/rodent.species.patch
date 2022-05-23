@@ -1,0 +1,7 @@
+[
+	{
+		"op": "add",
+		"path": "/speciesAnimOverride",
+		"value": "speciesAnimOverride.config"
+	}
+]

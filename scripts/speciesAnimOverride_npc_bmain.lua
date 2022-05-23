@@ -1,4 +1,5 @@
 local oldinit = init
+require("/scripts/speciesAnimOverride_npc_species.lua")
 function init()
 	oldinit()
 	message.setHandler("animOverrideGetEquipsAndLounge", function(_,_)

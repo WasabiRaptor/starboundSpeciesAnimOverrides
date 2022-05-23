@@ -41,14 +41,25 @@ function initAfterInit()
 	self.gender = self.overrideData.gender or world.entityGender(entity.id())
 	self.identity = self.overrideData.identity or {}
 
-	success, speciesFile = pcall(root.assetJson,("/species/"..self.species..".species"))
-	self.speciesFile = speciesFile
-	self.bodyconfig = root.assetJson((speciesFile or {}).humanoidConfig or "/humanoid.config")
+	self.speciesFile = root.assetJson("/species/"..self.species..".species") or {}
+	self.bodyconfig = root.assetJson("/humanoid.config")
+	local speciesData
+	sb.logInfo(tostring(self.speciesFile.speciesAnimOverride))
 
-	local success, speciesData = pcall(root.assetJson, ("/humanoid/"..self.species.."/speciesAnimOverride.config"))
-	if not success then
+	if self.speciesFile.speciesAnimOverride ~= nil then
+		if self.speciesFile.speciesAnimOverride:sub(1,1) == "/" then
+			speciesData = root.assetJson(self.speciesFile.speciesAnimOverride)
+		else
+			speciesData = root.assetJson("/humanoid/"..self.species.."/"..self.speciesFile.speciesAnimOverride)
+		end
+	else
 		speciesData = root.assetJson("/humanoid/speciesAnimOverride.config")
 	end
+	if self.speciesFile.humanoidConfig ~= nil then
+		local bodyconfig = root.assetJson(self.speciesFile.humanoidConfig)
+		self.bodyconfig = sb.jsonMerge(self.bodyconfig, bodyconfig)
+	end
+
 
 	local mergeConfigs = speciesData.merge or {}
 	local configs = { speciesData }
@@ -215,7 +226,7 @@ function initAfterInit()
 	end
 	for partname, string in pairs(self.speciesData.partImages or {}) do
 		local part = replaceSpeciesGenderTags(string)
-		success, notEmpty = pcall(root.nonEmptyRegion, (part))
+		local success, notEmpty = pcall(root.nonEmptyRegion, (part))
 		if success and notEmpty ~= nil then
 				animator.setPartTag(partname, "partImage", part)
 			self.parts[partname] = part
@@ -828,9 +839,6 @@ function setCosmetic.chest(cosmetic)
 		currentCosmeticName.chest = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
-		local bodyType = item.bodyType or "humanoid"
-		if bodyType ~= self.speciesData.bodyType then return setCosmetic.chest_clear(cosmetic) end
-
 		local images = item.config[self.gender.."Frames"]
 
 		local chest = fixFilepath(images.body, item)
@@ -887,8 +895,6 @@ function setCosmetic.legs(cosmetic)
 		currentCosmeticName.legs = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
-		local bodyType = item.bodyType or "humanoid"
-		if bodyType ~= self.speciesData.bodyType then return setCosmetic.legs_clear(cosmetic) end
 
 		local body = fixFilepath(item.config[self.gender.."Frames"], item)
 		local tail = fixFilepath(item.config[self.gender.."TailFrames"], item)
@@ -935,8 +941,6 @@ function setCosmetic.back(cosmetic)
 		currentCosmeticName.back = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
-		local bodyType = item.bodyType or "humanoid"
-		if bodyType ~= self.speciesData.bodyType then return setCosmetic.back_clear(cosmetic) end
 
 		local directives = getCosmeticDirectives(item)
 

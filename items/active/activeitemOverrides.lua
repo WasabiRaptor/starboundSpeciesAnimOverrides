@@ -22,12 +22,16 @@ function init()
 	hand = activeItem.hand()
 
 	for funcName, func in pairs(activeItemOverrideFuncs) do
-		old[funcName] = activeItem[funcName]
-		activeItem[funcName] = func
+		if type(old[funcName]) ~= "function" then
+			old[funcName] = activeItem[funcName]
+			activeItem[funcName] = func
+		end
 	end
 	for funcName, func in pairs(animatorOverrideFuncs) do
-		old[funcName] = animator[funcName]
-		animator[funcName] = func
+		if type(old[funcName]) ~= "function" then
+			old[funcName] = animator[funcName]
+			animator[funcName] = func
+		end
 	end
 
 	status.setStatusProperty(hand.."ItemOverrideData", ItemOverrideData)

@@ -3,5 +3,10 @@
 		"op": "add",
 		"path": "/companionsConfig/scripts/-",
 		"value": "/scripts/speciesAnimOverride_player_companion.lua"
+	},
+	{
+		"op": "add",
+		"path": "/deploymentConfig/scripts/-",
+		"value": "/scripts/speciesAnimOverride_player_species.lua"
 	}
 ]

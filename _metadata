@@ -1,10 +1,10 @@
 {
-  "version" : "0.1",
-  "friendlyName" : "Starbound Species Anim Overrides",
-  "name" : "starboundSpeciesAnimOverrides",
-  "author" : "Wasabi_Raptor",
-  "description" : "A library to override the anims of a humanoid species via a status effect.",
-  "includes" : [
-    "Umbreon Race Mod"
-   ]
+	"version" : "0.1",
+	"friendlyName" : "Starbound Species Anim Overrides",
+	"name" : "starboundSpeciesAnimOverrides",
+	"author" : "Wasabi_Raptor",
+	"description" : "A library to override the anims of a humanoid species via a status effect.",
+	"includes" : [
+		"Umbreon Race Mod", "Avali", "novalirace", "Gnolls", "lucario", "The Crylik Race [BETA]", "Lyceen  Race", "ssvm", "Draconis Race(Humanoid Dragon Race)"
+	]
 }

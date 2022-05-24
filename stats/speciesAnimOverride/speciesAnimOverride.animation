@@ -853,6 +853,9 @@
 		"chestbob": {
 			"interpolated": false
 		},
+		"breastsbob": {
+			"interpolated": false
+		},
 		"bellybob": {
 			"interpolated": false
 		},

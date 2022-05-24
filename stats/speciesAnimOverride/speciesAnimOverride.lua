@@ -227,7 +227,7 @@ function initAfterInit()
 		local part = replaceSpeciesGenderTags(string)
 		local success, notEmpty = pcall(root.nonEmptyRegion, (part))
 		if success and notEmpty ~= nil then
-				animator.setPartTag(partname, "partImage", part)
+			animator.setPartTag(partname, "partImage", part)
 			self.parts[partname] = part
 		end
 	end

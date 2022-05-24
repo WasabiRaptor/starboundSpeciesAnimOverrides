@@ -5,6 +5,6 @@
 	"author" : "Wasabi_Raptor",
 	"description" : "A library to override the anims of a humanoid species via a status effect.",
 	"includes" : [
-		"Umbreon Race Mod", "Avali", "novalirace", "Gnolls", "lucario", "The Crylik Race [BETA]", "Lyceen  Race", "ssvm", "Draconis Race(Humanoid Dragon Race)"
+		"Umbreon Race Mod", "Avali", "novalirace", "Gnolls", "lucario", "The Crylik Race [BETA]", "Lyceen  Race", "ssvm", "Draconis Race(Humanoid Dragon Race)", "Familiars"
 	]
 }

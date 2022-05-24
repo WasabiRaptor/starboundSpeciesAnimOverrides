@@ -44,8 +44,6 @@ function initAfterInit()
 	self.speciesFile = root.assetJson("/species/"..self.species..".species") or {}
 	self.bodyconfig = root.assetJson("/humanoid.config")
 	local speciesData
-	sb.logInfo(tostring(self.speciesFile.speciesAnimOverride))
-
 	if self.speciesFile.speciesAnimOverride ~= nil then
 		if self.speciesFile.speciesAnimOverride:sub(1,1) == "/" then
 			speciesData = root.assetJson(self.speciesFile.speciesAnimOverride)
@@ -93,7 +91,7 @@ function initAfterInit()
 	animator.resetTransformationGroup("handoffset")
 	animator.resetTransformationGroup("globalOffset")
 	animator.translateTransformationGroup("handoffset", {self.bodyconfig.frontHandPosition[1]/8,self.bodyconfig.frontHandPosition[2]/8})
-	animator.translateTransformationGroup("globalOffset", {((self.speciesData.globalOffset or {})[1] or 0)/8, ((self.speciesData.globalOffset or {})[2] or 0)/8})
+	animator.translateTransformationGroup("globalOffset", {((self.bodyconfig.globalOffset or {})[1] or 0)/8, ((self.bodyconfig.globalOffset or {})[2] or 0)/8})
 
 	self.playerMovementParams = root.assetJson("/player.config").movementParameters
 	self.zeroGMovementParams = root.assetJson("/player.config").zeroGMovementParameters
@@ -202,6 +200,7 @@ function initAfterInit()
 			end
 		end
 	end
+	addDirectives()
 	if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
 		self.directives = (self.directives or "").."?multiply=FFFFFFfb"
 		self.hairDirectives = (self.hairDirectives or "").."?multiply=FFFFFFfb"
@@ -240,6 +239,9 @@ function initAfterInit()
 	end
 
 	self.inited = true
+end
+
+function addDirectives()
 end
 
 function replaceSpeciesGenderTags(string)

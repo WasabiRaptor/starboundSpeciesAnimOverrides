@@ -1,5 +1,4 @@
 local oldinit = init
-require("/scripts/speciesAnimOverride_player_species.lua")
 function init()
 	oldinit()
 	message.setHandler("animOverrideGetEquipsAndLounge", function(_,_)
@@ -87,3 +86,5 @@ function reuturnLockScriptItemDescriptor(itemDescriptor, script)
 	newItemDescriptor.parameters.itemHasOverrideLockScript = true
 	return sb.jsonMerge(itemDescriptor, newItemDescriptor)
 end
+
+require("/scripts/speciesAnimOverride_player_species.lua")

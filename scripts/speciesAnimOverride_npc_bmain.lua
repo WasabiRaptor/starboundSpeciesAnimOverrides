@@ -1,5 +1,4 @@
 local oldinit = init
-require("/scripts/speciesAnimOverride_npc_species.lua")
 function init()
 	oldinit()
 	message.setHandler("animOverrideGetEquipsAndLounge", function(_,_)
@@ -23,3 +22,5 @@ function init()
 		status.setPersistentEffects("speciesAnimOverride", { speciesAnimOverrideData.customAnimStatus or "speciesAnimOverride"})
 	end
 end
+
+require("/scripts/speciesAnimOverride_npc_species.lua")

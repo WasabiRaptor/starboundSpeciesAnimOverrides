@@ -7,7 +7,7 @@ function init()
 		speciesOverride.species = npc.species
 		npc.species = speciesOverride._species
 
-		speciesOverride.gender = npc.species
+		speciesOverride.gender = npc.gender
 		npc.gender = speciesOverride._gender
 	end
 

@@ -53,9 +53,10 @@ function initAfterInit()
 	else
 		speciesData = root.assetJson("/humanoid/speciesAnimOverride.config")
 	end
-	if self.speciesFile.humanoidConfig ~= nil then
-		local bodyconfig = root.assetJson(self.speciesFile.humanoidConfig)
-		self.bodyconfig = sb.jsonMerge(self.bodyconfig, bodyconfig)
+	if self.overrideData.humanoidConfig then
+		self.bodyconfig = sb.jsonMerge(self.bodyconfig, root.assetJson(self.overrideData.humanoidConfig))
+	elseif self.speciesFile.humanoidConfig ~= nil then
+		self.bodyconfig = sb.jsonMerge(self.bodyconfig, root.assetJson(self.speciesFile.humanoidConfig))
 	end
 
 
@@ -132,6 +133,17 @@ function initAfterInit()
 	local portrait = world.entityPortrait(entity.id(), "full")
 	for _, part in ipairs(portrait) do
 		local imageString = part.image
+
+		if not self.identity.imagePath and not self.overrideData.species then
+			local found1, found2 = imageString:find("humanoid/")
+			if found1 then
+				local found3, found4 = imageString:find("/"..world.entityGender(entity.id()).."body")
+				self.identity.imagePath = imageString:sub(found2+1, found3-1)
+			end
+		else
+			self.identity.imagePath = self.species
+		end
+
 		--get personality values
 		if not self.identity.body then
 			local found1, found2 = imageString:find("body.png:idle.")
@@ -245,7 +257,7 @@ function addDirectives()
 end
 
 function replaceSpeciesGenderTags(string)
-	return sb.replaceTags(string, { gender = self.gender, species = self.species, reskin = self.reskin or "",
+	return sb.replaceTags(string, { gender = self.gender, species = self.identity.imagePath, reskin = self.reskin or "",
 		hair = self.identity.hairType, hairGroup = self.identity.hairGroup,
 		facialHair = self.identity.facialHairType, facialHairGroup = self.identity.facialHairGroup,
 		facialMask = self.identity.facialMaskType, facialMaskGroup = self.identity.facialMaskGroup,

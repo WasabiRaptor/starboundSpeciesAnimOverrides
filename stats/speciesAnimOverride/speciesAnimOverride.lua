@@ -138,7 +138,9 @@ function initAfterInit()
 			local found1, found2 = imageString:find("humanoid/")
 			if found1 then
 				local found3, found4 = imageString:find("/"..world.entityGender(entity.id()).."body")
-				self.identity.imagePath = imageString:sub(found2+1, found3-1)
+				if found3 then
+					self.identity.imagePath = imageString:sub(found2+1, found3-1)
+				end
 			end
 		else
 			self.identity.imagePath = self.species

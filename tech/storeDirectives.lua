@@ -2,8 +2,9 @@ local oldinit = init
 local olduninit = uninit
 local oldupdate = update
 
-local oldSetParentDirectives
-local oldSetParentHidden
+local _setParentDirectives
+local _setParentHidden
+local _controlParameters
 
 local techUUID
 
@@ -11,9 +12,18 @@ local curDirectives = ""
 local curHidden = ""
 
 function init()
-	techUUID = sb.makeUuid()
-	oldSetParentDirectives = tech.setParentDirectives
-	tech.setParentDirectives = tech_setParentDirectives
+	if not _setParentDirectives then
+		techUUID = sb.makeUuid()
+
+		_setParentDirectives = tech.setParentDirectives
+		tech.setParentDirectives = tech_setParentDirectives
+
+		_setParentHidden = tech.setParentHidden
+		tech.setParentHidden = tech_setParentHidden
+
+		_controlParameters = mcontroller.controlParameters
+		mcontroller.controlParameters = mcontroller_controlParameters
+	end
 
 	oldSetParentHidden = tech.setParentHidden
 	tech.setParentHidden = tech_setParentHidden
@@ -30,7 +40,14 @@ end
 function tech_setParentDirectives(string)
 	curDirectives = string or ""
 	setStatusPropertyDirectives()
-	oldSetParentDirectives(string)
+	_setParentDirectives(string)
+end
+
+function mcontroller_controlParameters(data)
+	if data.collisionPoly ~= nil then
+		status.setStatusProperty("speciesAnimOverrideControlParams", true)
+	end
+	_controlParameters(data)
 end
 
 function tech_setParentHidden(bool)
@@ -41,7 +58,7 @@ function tech_setParentHidden(bool)
 	end
 
 	setStatusPropertyDirectives()
-	oldSetParentHidden(bool)
+	_setParentHidden(bool)
 end
 
 function setStatusPropertyDirectives()

@@ -7,11 +7,15 @@ local effectUUID
 
 
 function init()
-	effectUUID = sb.makeUuid()
-	_setParentDirectives = effect.setParentDirectives
-	effect.setParentDirectives = effect_setParentDirectives
-	_controlParameters = mcontroller.controlParameters
-	mcontroller.controlParameters = mcontroller_controlParameters
+	if not _setParentDirectives then
+		effectUUID = sb.makeUuid()
+
+		_setParentDirectives = effect.setParentDirectives
+		effect.setParentDirectives = effect_setParentDirectives
+
+		_controlParameters = mcontroller.controlParameters
+		mcontroller.controlParameters = mcontroller_controlParameters
+	end
 
 	if oldinit ~= nil then oldinit() end
 end
@@ -23,10 +27,11 @@ function effect_setParentDirectives(string)
 	_setParentDirectives(string)
 end
 
-function mcontroller_controlParameters(...)
-	status.setStatusProperty("speciesAnimOverrideControlParams", true)
-	mcontroller.controlParameters(...)
-	_controlParameters(...)
+function mcontroller_controlParameters(data)
+	if data.collisionPoly ~= nil then
+		status.setStatusProperty("speciesAnimOverrideControlParams", true)
+	end
+	_controlParameters(data)
 end
 
 function uninit()

@@ -624,7 +624,7 @@
 			"head_cosmetic": {
 				"properties": {
 					"centered": true,
-					"zLevel": 2.3,
+					"zLevel": 2.5,
 					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {

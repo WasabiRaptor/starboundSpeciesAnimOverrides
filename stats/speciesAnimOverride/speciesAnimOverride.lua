@@ -1053,6 +1053,7 @@ function endAnim(state, statename)
 	end
 end
 
+local falling
 function checkHumanoidAnim()
 	local portrait = world.entityPortrait(entity.id(), "full")
 	local gotEmote
@@ -1080,15 +1081,16 @@ function checkHumanoidAnim()
 	end
 
 	if mcontroller.onGround() then
+		falling = false
 		if mcontroller.walking() then movement.walking() return end
 		if mcontroller.running() then movement.running() return end
 		if mcontroller.crouching() then movement.crouching() return end
 		movement.idle() return
 	end
-	if mcontroller.liquidMovement() then movement.liquidMovement() return end
-	if mcontroller.jumping() then movement.jumping() return end
+	if mcontroller.liquidMovement() then falling = false movement.liquidMovement() return end
+	if mcontroller.jumping() then falling = false movement.jumping() return end
 	if mcontroller.falling() then movement.falling() return end
-	if mcontroller.flying() then movement.flying() return end
+	if mcontroller.flying() then falling = false movement.flying() return end
 end
 
 movement = {}
@@ -1118,7 +1120,10 @@ function movement.jumping()
 end
 
 function movement.falling()
-	doAnims(self.speciesData.animations.fall)
+	if not falling then
+		doAnims(self.speciesData.animations.fall)
+		falling = true
+	end
 end
 
 function movement.flying()

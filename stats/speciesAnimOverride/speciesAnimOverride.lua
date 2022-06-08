@@ -992,22 +992,20 @@ end
 
 function getCosmeticDirectives(item)
 	local colors = item.config.colorOptions
+	local colorReplaceString = item.parameters.directives or ""
 	if type(colors) == "string" then
 		return colors
 	elseif type(colors) == "table" then
 		local index = ((item.parameters.colorIndex or 0) % #colors) + 1
 		if type(colors[index]) == "string" then
-			return colors[index]
+			return colorReplaceString..colors[index]
 		else
-			local colorReplaceString = ""
 			for color, replace in pairs(colors[index] or {}) do
 				colorReplaceString = colorReplaceString.."?replace;"..color.."="..replace
 			end
-			return colorReplaceString
 		end
-	else
-		return ""
 	end
+	return colorReplaceString
 end
 
 function updateAnims(dt)

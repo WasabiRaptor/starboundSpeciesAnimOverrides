@@ -41,21 +41,17 @@ local essentialItems = {"beamaxe", "wiretool", "painttool", "inspectiontool"}
 
 function giveHeldItemOverrideLockScript(itemDescriptor)
 	local itemType = root.itemType(itemDescriptor.name)
-	if (itemType == "activeitem" or itemType == "beamminingtool")
-	and not blacklistedOverrideItem(itemDescriptor.name) then
-		local newItemDescriptor
-		if itemType == "activeitem" then
-			newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua" )
-		elseif itemType == "beamminingtool" then
-			newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/toolItemOverrides.lua")
-		end
+	if (itemType == "activeitem") and not blacklistedOverrideItem(itemDescriptor.name) then
+		local newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua" )
+
 		if newItemDescriptor ~= nil then
-			if sb.printJson(player.swapSlotItem()) == sb.printJson(itemDescriptor) then
+			local itemDescriptorString = sb.printJson(itemDescriptor)
+			if sb.printJson(player.swapSlotItem()) == itemDescriptorString then
 				player.setSwapSlotItem(newItemDescriptor)
 				return
 			else
 				local consumed = player.consumeItem(itemDescriptor, false, true)
-				if consumed ~= nil then
+				if sb.printJson(consumed) == itemDescriptorString then
 					player.giveItem(newItemDescriptor)
 					return
 				else

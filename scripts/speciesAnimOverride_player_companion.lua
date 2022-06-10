@@ -51,7 +51,7 @@ function giveHeldItemOverrideLockScript(itemDescriptor)
 				return
 			else
 				local consumed = player.consumeItem(itemDescriptor, false, true)
-				if sb.printJson(consumed) == itemDescriptorString then
+				if consumed ~= nil then
 					player.giveItem(newItemDescriptor)
 					return
 				else

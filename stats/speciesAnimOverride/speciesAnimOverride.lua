@@ -94,6 +94,11 @@ function initAfterInit()
 	animator.translateTransformationGroup("handoffset", {self.bodyconfig.frontHandPosition[1]/8,self.bodyconfig.frontHandPosition[2]/8})
 	animator.translateTransformationGroup("globalOffset", {((self.bodyconfig.globalOffset or {})[1] or 0)/8, ((self.bodyconfig.globalOffset or {})[2] or 0)/8})
 
+	for name, offset in pairs( self.speciesData.offsets or {} ) do
+		animator.resetTransformationGroup(name)
+		animator.translateTransformationGroup(name, {offset[1]/8, offset[2]/8})
+	end
+
 	self.playerMovementParams = root.assetJson("/player.config").movementParameters
 	self.zeroGMovementParams = root.assetJson("/player.config").zeroGMovementParameters
 	if not self.speciesData.animations.idle.controlParameters then

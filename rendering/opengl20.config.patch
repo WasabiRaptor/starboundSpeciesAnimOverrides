@@ -72,7 +72,7 @@
         discard;
 
       bool lightMapEnabled2 = lightMapEnabled;
-      if (abs(texColor.a - 0.9843137255) < 0.001) {
+      if (abs(texColor.a - 0.99607843137) < 0.001) {
         texColor.a = 1.0;
         lightMapEnabled2 = false;
       }

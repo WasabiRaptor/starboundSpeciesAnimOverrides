@@ -221,8 +221,8 @@ function initAfterInit()
 	end
 	addDirectives()
 	if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
-		self.directives = (self.directives or "").."?multiply=FFFFFFfb"
-		self.hairDirectives = (self.hairDirectives or "").."?multiply=FFFFFFfb"
+		self.directives = (self.directives or "").."?multiply=FFFFFFfe"
+		self.hairDirectives = (self.hairDirectives or "").."?multiply=FFFFFFfe"
 	end
 	animator.setGlobalTag("customizeDirectives", self.directives or "")
 	animator.setPartTag("hair", "customizeDirectives", self.hairDirectives or self.directives or "")
@@ -727,7 +727,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 				end
 			end
 			if data.fullbright then
-				animator.setPartTag( partname, "fullbright", "?multiply=FFFFFFfb")
+				animator.setPartTag( partname, "fullbright", "?multiply=FFFFFFfe")
 			else
 				animator.setPartTag( partname, "fullbright", "")
 			end

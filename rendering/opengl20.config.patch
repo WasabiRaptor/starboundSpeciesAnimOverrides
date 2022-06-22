@@ -76,6 +76,10 @@
         texColor.a = 1.0;
         lightMapEnabled2 = false;
       }
+      if (abs(texColor.a - 0.9843137255) < 0.001) {
+        texColor.a = 1.0;
+        lightMapEnabled2 = false;
+      }
 
       vec4 finalColor = texColor * fragmentColor;
       float finalLightMapMultiplier = fragmentLightMapMultiplier * lightMapMultiplier;

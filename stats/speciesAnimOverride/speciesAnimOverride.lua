@@ -32,13 +32,21 @@ function init()
 		status.setStatusProperty("speciesAnimOverrideData", config.getParameter("overrideData"))
 	end
 
+	effect.setParentDirectives("crop;0;0;0;0")
+	self.overrideData = status.statusProperty("speciesAnimOverrideData") or {}
+
+	if status.statusProperty("animOverridesStoredPortrait") then
+		initAfterInit(true)
+	end
 end
 
-function initAfterInit()
-	world.sendEntityMessage(entity.id(), "giveAnimOverrideAimTech" )
+function initAfterInit(inInit)
+	if not inInit then
+		world.sendEntityMessage(entity.id(), "giveAnimOverrideAimTech" )
+	end
 
-	self.species = self.overrideData.species or world.entitySpecies(entity.id())
-	self.gender = self.overrideData.gender or world.entityGender(entity.id())
+	self.species = self.overrideData.species or status.statusProperty("animOverridesStoredSpecies") or world.entitySpecies(entity.id())
+	self.gender = self.overrideData.gender or status.statusProperty("animOverridesStoredGender") or world.entityGender(entity.id())
 	self.identity = self.overrideData.identity or {}
 
 	self.speciesFile = root.assetJson("/species/"..self.species..".species") or {}
@@ -135,14 +143,22 @@ function initAfterInit()
 	self.directives = self.overrideData.directives
 	self.hairDirectives = self.overrideData.hairDirectives
 
-	local portrait = world.entityPortrait(entity.id(), "full")
+	local portrait = status.statusProperty("animOverridesStoredPortrait")
+	if not portrait then
+		portrait = world.entityPortrait(entity.id(), "full")
+		status.setStatusProperty("animOverridesStoredGender", world.entityGender(entity.id()))
+		status.setStatusProperty("animOverridesStoredSpecies", world.entitySpecies(entity.id()))
+		status.setStatusProperty("animOverridesStoredPortrait", portrait)
+	end
+
+	local gotOffsets
 	for _, part in ipairs(portrait) do
 		local imageString = part.image
 
 		if not self.identity.imagePath and not self.overrideData.species then
 			local found1, found2 = imageString:find("humanoid/")
 			if found1 then
-				local found3, found4 = imageString:find("/"..world.entityGender(entity.id()).."body")
+				local found3, found4 = imageString:find("/"..status.statusProperty("animOverridesStoredGender") or world.entityGender(entity.id()).."body")
 				if found3 then
 					self.identity.imagePath = imageString:sub(found2+1, found3-1)
 				end
@@ -197,11 +213,11 @@ function initAfterInit()
 			end
 		end
 
-		if not self.identity.offsets and (self.identity.body ~= nil) and (self.identity.arm ~= nil) then
+		if not gotOffsets and (self.identity.body ~= nil) and (self.identity.arm ~= nil) then
 			local bodyIdle = "idle."..self.identity.body
 			local armIdle = "idle."..self.identity.arm
 
-			self.identity.offsets = true
+			gotOffsets = true
 
 			for i, data in ipairs(self.bodyconfig.personalities) do
 				if data[1] == bodyIdle and data[2] == armIdle then
@@ -219,6 +235,13 @@ function initAfterInit()
 			end
 		end
 	end
+	self.overrideData.species = self.species
+	self.overrideData.gender = self.gender
+	self.overrideData.identity = self.identity
+	self.overrideData.hairDirectives = self.hairDirectives
+	self.overrideData.directives = self.directives
+	status.setStatusProperty("speciesAnimOverrideData", self.overrideData)
+
 	addDirectives()
 	if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
 		self.directives = (self.directives or "").."?multiply=FFFFFFfe"
@@ -272,14 +295,13 @@ function replaceSpeciesGenderTags(string)
 end
 
 function update(dt)
-	effect.setParentDirectives("crop;0;0;0;0")
-	self.overrideData = status.statusProperty("speciesAnimOverrideData") or {}
 
-	animator.setFlipped(mcontroller.facingDirection() == -1)
-	self.direction = mcontroller.facingDirection() * mcontroller.movingDirection()
+	local direction = mcontroller.facingDirection()
+	animator.setFlipped(direction == -1)
+	self.direction = direction * mcontroller.movingDirection()
 	animator.setGlobalTag("direction", self.direction )
 
-	if (not self.inited) or (self.overrideData.gender ~= nil and self.overrideData.gender ~= self.gender) or (self.overrideData.species ~= nil and self.overrideData.species ~= self.species) then
+	if (not self.inited) then
 		initAfterInit()
 	else
 		doUpdate(dt)

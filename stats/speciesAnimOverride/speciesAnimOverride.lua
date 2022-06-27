@@ -1,6 +1,5 @@
 function init()
 	self.loopedMessages = {}
-	self.equipment = {}
 	self.timerList = {}
 	self.rpcList = {}
 	self.offsets = {enabled = false, parts = {}}
@@ -37,6 +36,10 @@ function init()
 
 	if status.statusProperty("animOverridesStoredPortrait") then
 		initAfterInit(true)
+		local equipment = status.statusProperty("animOverridesStoredEquipment")
+		if equipment then
+			readCosmeticItemData(equipment)
+		end
 	end
 end
 
@@ -833,23 +836,31 @@ end
 
 setCosmetic = {}
 currentCosmeticName = {}
+equipmentChanged = false
+refreshCosmetics = true
 
 function getCosmeticItems()
 	loopedMessage("getEquipsAndLounging", entity.id(), "animOverrideGetEquipsAndLounge", {}, function(data)
-		setCosmetic.head(data.headCosmetic or data.head)
-		setCosmetic.chest(data.chestCosmetic or data.chest)
-		setCosmetic.legs(data.legsCosmetic or data.legs)
-		setCosmetic.back(data.backCosmetic or data.back)
+		readCosmeticItemData(data)
 		self.loungingIn = data.lounging
-		refreshCosmetics = false
 	end )
 end
+function readCosmeticItemData(data)
+	setCosmetic.head(data.headCosmetic or data.head)
+	setCosmetic.chest(data.chestCosmetic or data.chest)
+	setCosmetic.legs(data.legsCosmetic or data.legs)
+	setCosmetic.back(data.backCosmetic or data.back)
+	if equipmentChanged then
+		status.setStatusProperty("animOverridesStoredEquipment", data)
+	end
+	refreshCosmetics = false
+end
 
-refreshCosmetics = true
 
 function setCosmetic.head(cosmetic)
 	if cosmetic ~= nil then
 		if currentCosmeticName.head == cosmetic.name and not refreshCosmetics then return end
+		equipmentChanged = true
 		currentCosmeticName.head = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
@@ -879,6 +890,7 @@ end
 function setCosmetic.chest(cosmetic)
 	if cosmetic ~= nil then
 		if currentCosmeticName.chest == cosmetic.name and not refreshCosmetics then return end
+		equipmentChanged = true
 		currentCosmeticName.chest = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
@@ -935,6 +947,7 @@ end
 function setCosmetic.legs(cosmetic)
 	if cosmetic ~= nil then
 		if currentCosmeticName.legs == cosmetic.name and not refreshCosmetics then return end
+		equipmentChanged = true
 		currentCosmeticName.legs = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)
@@ -981,6 +994,7 @@ end
 function setCosmetic.back(cosmetic)
 	if cosmetic ~= nil then
 		if currentCosmeticName.back == cosmetic.name and not refreshCosmetics then return end
+		equipmentChanged = true
 		currentCosmeticName.back = cosmetic.name
 
 		local item = root.itemConfig(cosmetic)

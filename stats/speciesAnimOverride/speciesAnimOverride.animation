@@ -519,7 +519,7 @@
 			"head": {
 				"properties": {
 					"centered": true,
-					"zLevel": 2,
+					"zLevel": 2.2,
 					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
@@ -537,7 +537,7 @@
 			"hair_fg": {
 				"properties": {
 					"centered": true,
-					"zLevel": 2.2,
+					"zLevel": 2.4,
 					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
@@ -555,7 +555,7 @@
 			"facialHair": {
 				"properties": {
 					"centered": true,
-					"zLevel": 2.3,
+					"zLevel": 2.5,
 					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
@@ -573,7 +573,7 @@
 			"facialMask": {
 				"properties": {
 					"centered": true,
-					"zLevel": 2.4,
+					"zLevel": 2.6,
 					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
@@ -609,7 +609,7 @@
 			"emote": {
 				"properties": {
 					"centered": true,
-					"zLevel": 2.1,
+					"zLevel": 2.3,
 					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {
@@ -624,7 +624,7 @@
 			"head_cosmetic": {
 				"properties": {
 					"centered": true,
-					"zLevel": 2.5,
+					"zLevel": 2.7,
 					"transformationGroups": ["headbob", "sitrotation", "globalOffset", "globalOffset2", "globalRotation"]
 				},
 				"partStates": {

@@ -9,6 +9,12 @@ function init()
 	self.parts = {}
 	self.globalTagDefaults = root.assetJson("/stats/speciesAnimOverride/"..config.getParameter("animationConfig")).globalTagDefaults or {}
 
+	self.settings = status.statusProperty("speciesAnimOverrideSettings") or {}
+
+	message.setHandler("speciesAnimOverrideSettings", function (_,_, settings)
+		self.settings = settings
+	end)
+
 	for statename, state in pairs(self.animStateData) do
 		state.animationState = {
 			anim = state.default,
@@ -453,14 +459,13 @@ local armsToArm = {
 local beamMinerImage = "/items/tools/miningtools/beamaxe.png"
 local beamMinerOffset = {-2, 0}
 function getHandItem(hand, part, continue)
-	--if true then return true end -- I am just, tired of trying to do this, none of it works really
 
 	local itemDescriptor = world.entityHandItemDescriptor(entity.id(), hand)
 
 	if itemDescriptor ~= nil and continue.secondArmAngle == nil then
 		local item = root.itemConfig(itemDescriptor)
 		local itemType = root.itemType(itemDescriptor.name)
-		if ( itemType == "activeitem" or itemType == "beamminingtool" )
+		if ( itemType == "activeitem" )
 		and (not itemDescriptor.parameters or not itemDescriptor.parameters.itemHasOverrideLockScript) then
 			loopedMessage("giveItemScript"..hand, entity.id(), "giveHeldItemOverrideLockScript", {itemDescriptor} )
 			setEmptyHand(hand, part)
@@ -513,7 +518,6 @@ function getHandItem(hand, part, continue)
 				setEmptyHand(hand, part)
 			end
 		else
-			animator.resetTransformationGroup( part .. "_item_0")
 			if itemType == "beamminingtool" or itemType == "wiretool" or itemType == "paintingbeamtool" or itemType == "inspectiontool" or itemType == "flashlight" then
 				local aim = status.statusProperty("speciesAnimOverrideAim")
 				if not aim then return end
@@ -567,14 +571,16 @@ end
 
 function doSecondHand(hand, part, continue)
 	if continue.secondArmAngle then
+		clearAnimatedActiveItemTags(hand, part)
 		rotationArmVisible(part)
 		rotateArmAngle(part, continue.secondArmAngle)
-		animator.setPartTag(part .. "_item_0", "partImage", continue.secondArmImage or "")
 		if continue.secondArmOffset then
 			translateArmOffset(hand, part, continue.secondArmOffset)
 		end
 		if continue.secondArmAnimatedItem then
 			animatedActiveItem(continue.item, continue.itemDescriptor, continue.itemOverrideData, continue.secondArmAnimatedItem, part, continue)
+		else
+			animator.setPartTag(part .. "_item_0", "partImage", continue.secondArmImage or "")
 		end
 	else
 		setEmptyHand(hand, part)
@@ -589,7 +595,9 @@ end
 
 local itemImages = { primary = {}, alt = {} }
 local usedParts = 0
+local resetPart = {}
 function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
+	if self.settings.noAnimatedItems then return end
 	local newItem = false
 	local refreshImages = false
 	if itemImages[hand].name ~= itemDescriptor.name then
@@ -742,9 +750,6 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			local offset = self.bodyconfig[armsToArm[part].."Offset"] or {0,0}
 			local itemOffset = data.offset or {0,0}
 
-			animator.resetTransformationGroup(offsetGroup)
-			animator.resetTransformationGroup(partname)
-
 			animator.translateTransformationGroup(offsetGroup, {itemOffset[1]+(offset[1]/8), itemOffset[2]+(offset[2]/8)} )
 			for i, transformGroup in ipairs(data.transformationGroups or {}) do
 				for j, transformation in ipairs(itemImages[hand].transformationGroups[transformGroup] or {}) do
@@ -771,6 +776,8 @@ end
 
 function clearAnimatedActiveItemTags(hand, part)
 	for index = 0, usedParts do
+		animator.resetTransformationGroup( part.."_item_"..index)
+		animator.resetTransformationGroup( part.."_item_"..index.."_offset")
 		animator.setPartTag( part.."_item_"..index, "partImage", "")
 	end
 end

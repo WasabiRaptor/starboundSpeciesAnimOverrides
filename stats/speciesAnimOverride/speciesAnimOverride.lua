@@ -149,9 +149,6 @@ function initAfterInit(inInit)
 		end
 	end
 
-	self.directives = self.overrideData.directives
-	self.hairDirectives = self.overrideData.hairDirectives
-
 	local portrait = status.statusProperty("animOverridesStoredPortrait")
 	if not portrait then
 		portrait = world.entityPortrait(entity.id(), "full")
@@ -163,6 +160,7 @@ function initAfterInit(inInit)
 	local gotOffsets
 	for _, part in ipairs(portrait) do
 		local imageString = part.image
+		sb.logInfo(imageString)
 
 		if not self.identity.imagePath and not self.overrideData.species then
 			local found1, found2 = imageString:find("humanoid/")
@@ -177,13 +175,22 @@ function initAfterInit(inInit)
 		end
 
 		--get personality values
-		if not self.identity.body then
+		if (not self.identity.body) or (not self.identity.bodyDirectives) then
 			local found1, found2 = imageString:find("body.png:idle.")
 			if found1 ~= nil then
-				self.identity.body = imageString:sub(found2+1, found2+1)
+				self.identity.body = self.identity.body or imageString:sub(found2+1, found2+1)
 
-				local directives = imageString:sub(found2+2)
-				self.directives = self.overrideData.directives or directives
+				local found3 = imageString:find("?")
+				local directives = imageString:sub(found3)
+				self.identity.bodyDirectives = self.identity.bodyDirectives or directives
+			end
+		end
+		if not self.identity.emoteDirectives then
+			local found1, found2 = imageString:find("emote.png")
+			if found1 ~= nil then
+				local found3 = imageString:find("?")
+				local directives = imageString:sub(found3)
+				self.identity.emoteDirectives = self.identity.emoteDirectives or directives
 			end
 		end
 		if not self.identity.arm then
@@ -193,32 +200,40 @@ function initAfterInit(inInit)
 			end
 		end
 
-		if not self.identity.hairType then
+		if (not self.identity.hairType) or (not self.identity.hairDirectives) then
 			local found1, found2 = imageString:find("/"..(self.identity.hairGroup or "hair").."/")
 			if found1 ~= nil then
 				local found3, found4 = imageString:find(".png:normal")
-				self.identity.hairType = imageString:sub(found2+1, found3-1)
+				self.identity.hairType = self.identity.hairType or imageString:sub(found2+1, found3-1)
 
 				local found5, found6 = imageString:find("?addmask=")
-				local hairDirectives = imageString:sub(found4+1, (found5 or 0)-1) -- this is really elegant haha
+				local directives = imageString:sub(found4+1, (found5 or 0)-1) -- this is really elegant haha
 
-				self.hairDirectives = self.overrideData.hairDirectives or hairDirectives
+				self.identity.hairDirectives = self.identity.hairDirectives or directives
 			end
 		end
 
-		if not self.identity.facialHairType then
+		if (not self.identity.facialHairType) or not (self.identity.facialHairDirectives) then
 			local found1, found2 = imageString:find("/"..(self.identity.facialHairGroup or "facialHair").."/")
 			if found1 ~= nil then
 				found3, found4 = imageString:find(".png")
-				self.identity.facialHairType = imageString:sub(found2+1, found3-1)
+				self.identity.facialHairType = self.identity.facialHairType or imageString:sub(found2+1, found3-1)
+
+				local found5, found6 = imageString:find("?addmask=")
+				local directives = imageString:sub(found4+1, (found5 or 0)-1) -- this is really elegant haha
+				self.identity.facialHairDirectives = self.identity.facialHairDirectives or directives
 			end
 		end
 
-		if not self.identity.facialMaskType then
+		if (not self.identity.facialMaskType) or (not self.identity.facialMaskDirectives) then
 			local found1, found2 = imageString:find("/"..(self.identity.facialMaskGroup or "facialMask").."/")
 			if found1 ~= nil then
 				found3, found4 = imageString:find(".png")
 				self.identity.facialMaskType = imageString:sub(found2+1, found3-1)
+
+				local found5, found6 = imageString:find("?addmask=")
+				local directives = imageString:sub(found4+1, (found5 or 0)-1) -- this is really elegant haha
+				self.identity.facialMaskDirectives = self.identity.facialMaskDirectives or directives
 			end
 		end
 
@@ -247,19 +262,22 @@ function initAfterInit(inInit)
 	self.overrideData.species = self.species
 	self.overrideData.gender = self.gender
 	self.overrideData.identity = self.identity
-	self.overrideData.hairDirectives = self.hairDirectives
-	self.overrideData.directives = self.directives
 	status.setStatusProperty("speciesAnimOverrideData", self.overrideData)
 
+	sb.logInfo(self.identity.hairDirectives)
+
 	addDirectives()
+	local fb = ""
 	if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then
-		self.directives = (self.directives or "").."?multiply=FFFFFFfe"
-		self.hairDirectives = (self.hairDirectives or "").."?multiply=FFFFFFfe"
+		fb = "?multiply=FFFFFFfe"
 	end
-	animator.setGlobalTag("customizeDirectives", self.directives or "")
-	animator.setPartTag("hair", "customizeDirectives", self.hairDirectives or self.directives or "")
-	animator.setPartTag("hair_fg", "customizeDirectives", self.hairDirectives or self.directives or "")
-	animator.setPartTag("facialHair", "customizeDirectives", self.hairDirectives or self.directives or "")
+	animator.setGlobalTag("customDirectives", (self.overrideData.directives or ""))
+	animator.setGlobalTag("bodyDirectives", (self.identity.bodyDirectives or "")..fb)
+	animator.setPartTag("hair", "bodyDirectives", (self.identity.hairDirectives or self.identity.bodyDirectives or "")..fb)
+	animator.setPartTag("hair_fg", "bodyDirectives", (self.identity.hairDirectives or self.identity.bodyDirectives or "")..fb)
+	animator.setPartTag("facialHair", "bodyDirectives", (self.identity.facialHairDirectives or self.identity.bodyDirectives or "")..fb)
+	animator.setPartTag("facialMask", "bodyDirectives", (self.identity.facialMaskDirectives or self.identity.bodyDirectives or "")..fb)
+	animator.setPartTag("emote", "bodyDirectives", (self.identity.emoteDirectives or self.identity.bodyDirectives or "")..fb)
 
 	animator.setGlobalTag( "bodyPersonality", self.identity.body )
 	for i, data in ipairs( ((self.speciesData.personalityOffsets or {}).bodyOffsets or {})[self.identity.body] or {} ) do
@@ -430,6 +448,7 @@ function checkTimers(dt)
 				timer.callback()
 			end
 			if type(name) == "number" then
+				---@diagnostic disable-next-line: param-type-mismatch
 				table.remove(self.timerList, name)
 			else
 				self.timerList[name] = nil
@@ -456,8 +475,8 @@ local armsToArm = {
 	frontarms = "frontArm",
 	backarms = "backArm"
 }
-local beamMinerImage = "/items/tools/miningtools/beamaxe.png"
-local beamMinerOffset = {-2, 0}
+beamMinerImage = "/items/tools/miningtools/beamaxe.png"
+beamMinerOffset = {-2, 0}
 function getHandItem(hand, part, continue)
 
 	local itemDescriptor = world.entityHandItemDescriptor(entity.id(), hand)

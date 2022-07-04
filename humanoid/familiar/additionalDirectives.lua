@@ -1,6 +1,6 @@
 
 function addDirectives()
-	local directives = self.directives:lower()
+	local directives = self.identity.bodyDirectives:lower()
 	local found1, found2 = directives:find("00ffa1=")
 	if found1 then
 		local colorStartIndex = found2+1
@@ -25,7 +25,6 @@ function addDirectives()
 			A = color:sub(7,8)
 		end
 		local newReplaceColors = "?replace;00c77d="..string.format("%02x", math.floor(R * multiplyAmount))..string.format("%02x", math.floor(G * multiplyAmount))..string.format("%02x", math.floor(B * multiplyAmount))..A
-		self.directives = self.directives..newReplaceColors
-		self.hairDirectives = self.hairDirectives..newReplaceColors
+		self.identity.bodyDirectives = self.identity.bodyDirectives..newReplaceColors
 	end
 end

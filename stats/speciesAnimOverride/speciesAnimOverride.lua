@@ -160,7 +160,6 @@ function initAfterInit(inInit)
 	local gotOffsets
 	for _, part in ipairs(portrait) do
 		local imageString = part.image
-		sb.logInfo(imageString)
 
 		if not self.identity.imagePath and not self.overrideData.species then
 			local found1, found2 = imageString:find("humanoid/")
@@ -263,8 +262,6 @@ function initAfterInit(inInit)
 	self.overrideData.gender = self.gender
 	self.overrideData.identity = self.identity
 	status.setStatusProperty("speciesAnimOverrideData", self.overrideData)
-
-	sb.logInfo(self.identity.hairDirectives)
 
 	addDirectives()
 	local fb = ""

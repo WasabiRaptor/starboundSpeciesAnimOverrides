@@ -783,6 +783,8 @@ function clearAnimatedActiveItemTags(hand, part)
 		animator.resetTransformationGroup( part.."_item_"..index)
 		animator.resetTransformationGroup( part.."_item_"..index.."_offset")
 		animator.setPartTag( part.."_item_"..index, "partImage", "")
+		animator.setPartTag( part.."_item_"..index, "fullbright", "")
+
 	end
 end
 

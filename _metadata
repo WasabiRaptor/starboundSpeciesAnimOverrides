@@ -6,6 +6,7 @@
 	"description" : "A library to override the anims of a humanoid species via a status effect.",
 	"includes" : [
 		"Umbreon Race Mod", "Avali", "novalirace", "Gnolls", "lucario", "The Crylik Race [BETA]", "Lyceen  Race", "ssvm", "Draconis Race(Humanoid Dragon Race)", "Familiars", "Felins",
+		"Neki",
 		"FrackinUniverse",
 		"XRC_BETA_STARBOUND"
 	]

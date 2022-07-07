@@ -127,24 +127,12 @@ function initAfterInit(inInit)
 		self.speciesData.animations.duck.controlParameters.collissionPoly = self.bodyconfig.crouchingPoly
 	end
 
-	if not self.identity.hairGroup and type(self.speciesFile) == "table" then
+	if type(self.speciesFile) == "table" then
 		for i, data in ipairs(self.speciesFile.genders or {}) do
 			if data.name == self.gender then
-				self.identity.hairGroup = data.hairGroup or "hair"
-			end
-		end
-	end
-	if not self.identity.facialHairGroup and type(self.speciesFile) == "table" then
-		for i, data in ipairs(self.speciesFile.genders or {}) do
-			if data.name == self.gender then
-				self.identity.facialHairGroup = data.facialHairGroup or "facialHair"
-			end
-		end
-	end
-	if not self.identity.facialMaskGroup and type(self.speciesFile) == "table" then
-		for i, data in ipairs(self.speciesFile.genders or {}) do
-			if data.name == self.gender then
-				self.identity.facialMaskGroup = data.facialMaskGroup or "facialMask"
+				self.identity.hairGroup = self.identity.hairGroup or data.hairGroup or "hair"
+				self.identity.facialHairGroup = self.identity.facialHairGroup or data.facialHairGroup or "facialHair"
+				self.identity.facialMaskGroup = self.identity.facialMaskGroup or data.facialMaskGroup or "facialMask"
 			end
 		end
 	end
@@ -215,7 +203,7 @@ function initAfterInit(inInit)
 		if (not self.identity.facialHairType) or not (self.identity.facialHairDirectives) then
 			local found1, found2 = imageString:find("/"..(self.identity.facialHairGroup or "facialHair").."/")
 			if found1 ~= nil then
-				found3, found4 = imageString:find(".png")
+				found3, found4 = imageString:find(".png:normal")
 				self.identity.facialHairType = self.identity.facialHairType or imageString:sub(found2+1, found3-1)
 
 				local found5, found6 = imageString:find("?addmask=")
@@ -227,8 +215,8 @@ function initAfterInit(inInit)
 		if (not self.identity.facialMaskType) or (not self.identity.facialMaskDirectives) then
 			local found1, found2 = imageString:find("/"..(self.identity.facialMaskGroup or "facialMask").."/")
 			if found1 ~= nil then
-				found3, found4 = imageString:find(".png")
-				self.identity.facialMaskType = imageString:sub(found2+1, found3-1)
+				found3, found4 = imageString:find(".png:normal")
+				self.identity.facialMaskType = self.identity.facialMaskType or imageString:sub(found2+1, found3-1)
 
 				local found5, found6 = imageString:find("?addmask=")
 				local directives = imageString:sub(found4+1, (found5 or 0)-1) -- this is really elegant haha

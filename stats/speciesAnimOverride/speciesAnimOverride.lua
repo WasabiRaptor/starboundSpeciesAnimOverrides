@@ -52,6 +52,8 @@ end
 function initAfterInit(inInit)
 	if not inInit then
 		world.sendEntityMessage(entity.id(), "giveAnimOverrideAimTech" )
+	else
+		timer("techMessage", 0.5, function () world.sendEntityMessage(entity.id(), "giveAnimOverrideAimTech" ) end)
 	end
 
 	self.species = self.overrideData.species or status.statusProperty("animOverridesStoredSpecies") or world.entitySpecies(entity.id())

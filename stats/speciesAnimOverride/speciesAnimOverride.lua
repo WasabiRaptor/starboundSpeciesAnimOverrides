@@ -4,6 +4,7 @@ function init()
 	self.rpcList = {}
 	self.offsets = {enabled = false, parts = {}}
 	self.rotating = {enabled = false, parts = {}}
+	self.scaling = {enabled = false, parts = {}}
 	self.animStateData = root.assetJson("/stats/speciesAnimOverride/"..config.getParameter("animationConfig")).animatedParts.stateTypes
 	self.animFunctionQueue = {}
 	self.parts = {}
@@ -1080,7 +1081,7 @@ function updateAnims(dt)
 
 	offsetAnimUpdate()
 	rotationAnimUpdate()
-	--armRotationUpdate()
+	scaleAnimUpdate()
 
 	animator.setGlobalTag( "directives", getDirectives() )
 
@@ -1190,6 +1191,8 @@ function doAnims( anims, force )
 			offsetAnim( anim )
 		elseif state == "rotate" then
 			rotate( anim )
+		elseif state == "scale" then
+			scale( anim )
 		elseif state == "tags" then
 			setAnimTag( anim )
 		elseif state == "priority" then
@@ -1357,6 +1360,51 @@ function rotate( data )
 	end
 end
 
+function scale( data )
+	if data == self.scaling.data and self.scaling.enabled then return
+	else
+		for i, part in ipairs(self.scaling.parts) do
+			for j, group in ipairs(part.groups) do
+				animator.resetTransformationGroup(group)
+			end
+		end
+	end
+
+	self.scaling = {
+		enabled = data ~= nil,
+		data = data,
+		frames = data.frames,
+		parts = {},
+		loop = data.loop or false,
+		timing = data.timing or "body",
+
+		frame = 1,
+		index = 2,
+		prevFrame = 0,
+		prevIndex = 1
+
+	}
+	local continue = false
+	for _, r in ipairs(data.parts or {}) do
+		table.insert(self.scaling.parts, {
+			groups = r.groups or {"globalScale2"},
+			center = r.center or {0,0},
+			x = r.x or {1},
+			y = r.y or {1},
+			lastX = (r.x or {1})[1],
+			lastY = (r.y or {1})[1]
+		})
+		if (r.x and #r.x > 1) or (r.y and #r.y > 1) then
+			continue = true
+		end
+	end
+	scaleAnimUpdate()
+	if not continue then
+		self.scaling.enabled = false
+	end
+end
+
+
 function offsetAnimUpdate()
 	if self.offsets == nil or not self.offsets.enabled then return end
 	local state = self.offsets.timing.."State"
@@ -1427,6 +1475,65 @@ function rotationAnimUpdate()
 		for _, group in ipairs(r.groups) do
 			animator.resetTransformationGroup( group )
 			animator.rotateTransformationGroup( group, (rotation * math.pi/180), r.center)
+		end
+	end
+end
+
+function scaleAnimUpdate()
+	if self.scaling == nil or not self.scaling.enabled then return end
+	local state = self.scaling.timing.."State"
+	local ended, times, time = hasAnimEnded(state)
+	if ended and not self.scaling.loop then self.scaling.enabled = false end
+	local speed = self.animStateData[state].animationState.speed
+	local frame = self.animStateData[state].animationState.frame
+	local index = frame + 1
+	local nextFrame = frame + 1
+	local nextIndex = index + 1
+
+	if self.scaling.prevFrame ~= frame then
+		if self.scaling.frames ~= nil then
+			for i = 1, #self.scaling.frames do
+				if (self.scaling.frames[i] == frame) then
+					self.scaling.prevFrame = frame
+					self.scaling.prevIndex = i
+
+					self.scaling.frame = self.scaling.frames[i + 1] or frame + 1
+					self.scaling.index = i + 1
+				end
+				if self.scaling.loop and (i == #self.scaling.frames) then
+					self.scaling.prevFrame = frame
+					self.scaling.prevIndex = i
+
+					self.scaling.frame = 0
+					self.scaling.index = 1
+				end
+			end
+		else
+			self.scaling.prevFrame = self.scaling.frame
+			self.scaling.frame = nextFrame
+
+			self.scaling.prevIndex = self.scaling.index
+			self.scaling.index = nextIndex
+		end
+	end
+
+	local currTime = time * speed
+	local progress = (currTime - self.scaling.prevFrame)/(math.abs(self.scaling.frame - self.scaling.prevFrame))
+
+	for _, r in ipairs(self.scaling.parts) do
+		local previousX = r.x[self.scaling.prevIndex] or r.lastX
+		local nextX = r.x[self.scaling.index] or previousX
+		local X = previousX + (nextX - previousX) * progress
+		r.lastX = previousX
+
+		local previousY = r.y[self.scaling.prevIndex] or r.lastY
+		local nextY = r.y[self.scaling.index] or previousY
+		local Y = previousY + (nextY - previousY) * progress
+		r.lastY = previousY
+
+		for _, group in ipairs(r.groups) do
+			animator.resetTransformationGroup( group )
+			animator.scaleTransformationGroup( group, {X,Y}, r.center)
 		end
 	end
 end

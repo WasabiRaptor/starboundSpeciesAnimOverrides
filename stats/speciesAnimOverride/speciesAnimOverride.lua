@@ -119,6 +119,13 @@ function initAfterInit(inInit)
 		animator.translateTransformationGroup(name, {offset[1]/8, offset[2]/8})
 	end
 
+	animator.resetTransformationGroup("head_cosmetic_offset")
+	if self.speciesData.hatOffset then
+		animator.translateTransformationGroup("head_cosmetic_offset", {self.speciesData.hatOffset[1]/8,self.speciesData.hatOffset[2]/8})
+		animator.setGlobalTag("headMaskX", self.speciesData.hatOffset[1])
+		animator.setGlobalTag("headMaskY", self.speciesData.hatOffset[2])
+	end
+
 	self.playerMovementParams = root.assetJson("/player.config").movementParameters
 	self.zeroGMovementParams = root.assetJson("/player.config").zeroGMovementParameters
 	if not self.speciesData.animations.idle.controlParameters then

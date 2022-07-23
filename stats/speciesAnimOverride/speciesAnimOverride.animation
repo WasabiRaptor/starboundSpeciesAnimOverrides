@@ -24,7 +24,9 @@
 		"frontarmsMask" : "/humanoid/animOverrideMasks/frontarm.png",
 		"backarmsMask" : "/humanoid/animOverrideMasks/backarm.png",
 		"tailMask" : "/humanoid/animOverrideMasks/malebody.png",
-		"direction" : "1"
+		"direction" : "1",
+		"headMaskX":"0",
+		"headMaskY":"0"
 
 	},
 	"animatedParts": {
@@ -542,11 +544,11 @@
 				},
 				"partStates": {
 					"headState": {
-						"normal": { "properties": { "image": "<partImage>:<headStateAnim>?addmask=<hairFGMask>:<headStateAnim>;0;0?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"normal": { "properties": { "image": "<partImage>:<headStateAnim>?addmask=<hairFGMask>:<headStateAnim>;0;0?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
-						"idle": { "properties": { "image": "<partImage>:<headStateAnim>.<headStateFrame>?addmask=<hairFGMask>:<headStateAnim>.<headStateFrame>;0;0?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:<headStateAnim>.<headStateFrame>?addmask=<hairFGMask>:<headStateAnim>.<headStateFrame>;0;0?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
-						"walk": { "properties": { "image": "<partImage>:<direction>.<headStateAnim>.<headStateFrame>?addmask=<hairFGMask>:<direction>.<headStateAnim>.<headStateFrame>;0;0?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"walk": { "properties": { "image": "<partImage>:<direction>.<headStateAnim>.<headStateFrame>?addmask=<hairFGMask>:<direction>.<headStateAnim>.<headStateFrame>;0;0?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
 						"none": { "properties": {} }
 					}
@@ -560,11 +562,11 @@
 				},
 				"partStates": {
 					"headState": {
-						"normal": { "properties": { "image": "<partImage>:<headStateAnim>?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"normal": { "properties": { "image": "<partImage>:<headStateAnim>?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
-						"idle": { "properties": { "image": "<partImage>:<headStateAnim>.<headStateFrame>?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:<headStateAnim>.<headStateFrame>?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
-						"walk": { "properties": { "image": "<partImage>:<direction>.<headStateAnim>.<headStateFrame>?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"walk": { "properties": { "image": "<partImage>:<direction>.<headStateAnim>.<headStateFrame>?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
 						"none": { "properties": {} }
 					}
@@ -578,11 +580,11 @@
 				},
 				"partStates": {
 					"headState": {
-						"normal": { "properties": { "image": "<partImage>:<headStateAnim>?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"normal": { "properties": { "image": "<partImage>:<headStateAnim>?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
-						"idle": { "properties": { "image": "<partImage>:<headStateAnim>.<headStateFrame>?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:<headStateAnim>.<headStateFrame>?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
-						"walk": { "properties": { "image": "<partImage>:<direction>.<headStateAnim>.<headStateFrame>?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"walk": { "properties": { "image": "<partImage>:<direction>.<headStateAnim>.<headStateFrame>?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
 						"none": { "properties": {} }
 					}
@@ -596,11 +598,11 @@
 				},
 				"partStates": {
 					"headState": {
-						"normal": { "properties": { "image": "<partImage>:<headStateAnim>?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"normal": { "properties": { "image": "<partImage>:<headStateAnim>?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
-						"idle": { "properties": { "image": "<partImage>:<headStateAnim>.<headStateFrame>?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:<headStateAnim>.<headStateFrame>?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
-						"walk": { "properties": { "image": "<partImage>:<direction>.<headStateAnim>.<headStateFrame>?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"walk": { "properties": { "image": "<partImage>:<direction>.<headStateAnim>.<headStateFrame>?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
 						"none": { "properties": {} }
 					}
@@ -615,7 +617,7 @@
 				"partStates": {
 					"emoteState": {
 
-						"idle": { "properties": { "image": "<partImage>:<emoteStateAnim>.<emoteStateFrame>?addmask=<headMask>;0;0<customDirectives><bodyDirectives><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:<emoteStateAnim>.<emoteStateFrame>?addmask=<headMask>;<headMaskX>;<headMaskY><customDirectives><bodyDirectives><directives>" } },
 
 						"none": { "properties": {} }
 					}
@@ -625,7 +627,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.7,
-					"transformationGroups": ["headbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"]
+					"transformationGroups": ["head_cosmetic_offset", "headbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"]
 				},
 				"partStates": {
 					"headState": {
@@ -889,6 +891,8 @@
 		"tailbob": {
 			"interpolated": false
 		},
+
+		"head_cosmetic_offset" : {},
 
 		"crotch_offset" : {},
 		"belly_offset" : {},

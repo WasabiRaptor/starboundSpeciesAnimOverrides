@@ -1,5 +1,13 @@
 [
 	{
+		"op" : "add",
+		"path" : "/baseColorMap",
+		"value" : {
+			"primary" : ["606670", "606670", "9399a3"],
+			"secondary" : ["191126", "392a52", "564375"]
+		}
+	},
+	{
 		"op": "add",
 		"path": "/speciesAnimOverride",
 		"value": "speciesAnimOverride.config"

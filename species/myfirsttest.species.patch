@@ -1,0 +1,21 @@
+[
+	{
+		"op" : "add",
+		"path" : "/charCreationTooltip/title",
+		"value" : "Latex"
+	},
+	{
+		"op" : "add",
+		"path" : "/charCreationTooltip/subTitle",
+		"value" : "C5H8"
+	},
+	{
+		"op" : "add",
+		"path" : "/baseColorMap",
+		"value" : {
+			"primary" : ["c7815b", "d39c6c", "ffc181", "ffe2c5"],
+			"secondary" : ["951500", "be1b00", "dc1f00", "f32200"],
+			"hair" : ["735e3a", "a38d59", "d9c189"]
+		}
+	}
+]

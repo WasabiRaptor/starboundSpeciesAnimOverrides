@@ -3,5 +3,14 @@
 		"op": "add",
 		"path": "/speciesAnimOverride",
 		"value": "speciesAnimOverride.config"
+	},
+	{
+		"op" : "add",
+		"path" : "/baseColorMap",
+		"value" : {
+			"primary" : ["6b583d", "9e8555", "cfbc88", "f0e1bb"],
+			"secondary" : ["7b7b7b", "b6b6b6", "e6e6e6"],
+			"hair" : ["6b583d", "9e8555", "cfbc88", "f0e1bb"]
+		}
 	}
 ]

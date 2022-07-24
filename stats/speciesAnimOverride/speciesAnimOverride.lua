@@ -290,9 +290,34 @@ function initAfterInit(inInit)
 	for partname, string in pairs(self.speciesData.partImages or {}) do
 		local part = replaceSpeciesGenderTags(string)
 		local success, notEmpty = pcall(root.nonEmptyRegion, (part))
-		if success and notEmpty ~= nil then
+		if success and notEmpty ~= nil  then
 			animator.setPartTag(partname, "partImage", part)
+			animator.setPartTag(partname, "colorRemap", "")
 			self.parts[partname] = part
+		elseif (self.speciesData.remapParts or {})[partname] then
+			sb.logInfo(partname.."remap")
+
+			local remapPart = self.speciesData.remapParts[partname]
+			part = replaceSpeciesGenderTags(string, remapPart.imagePath or remapPart.species, remapPart.reskin)
+			success, notEmpty = pcall(root.nonEmptyRegion, (part))
+			if success and notEmpty ~= nil then
+				local success2, baseColorMap = pcall(root.assetJson, "/species/"..remapPart.species..".species:baseColorMap")
+				local colorRemap
+				if success2 and baseColorMap ~= nil and remapPart.remapColors and self.speciesFile.baseColorMap then
+					colorRemap = "?replace"
+					for _, data in ipairs(remapPart.remapColors) do
+						local from = baseColorMap[data[1]]
+						local to = self.speciesFile.baseColorMap[data[2]]
+						for i, color in ipairs(from or {})do
+							colorRemap = colorRemap..";"..color.."="..(to[i] or to[#to])
+						end
+					end
+				end
+
+				animator.setPartTag(partname, "partImage", part)
+				animator.setPartTag(partname, "colorRemap", colorRemap or "")
+				self.parts[partname] = part
+			end
 		end
 	end
 	for partname, data in pairs(self.speciesData.partTagDefaults or {}) do
@@ -308,8 +333,8 @@ end
 function addDirectives()
 end
 
-function replaceSpeciesGenderTags(string)
-	return sb.replaceTags(string, { gender = self.gender, species = self.identity.imagePath, reskin = self.reskin or "",
+function replaceSpeciesGenderTags(string, speciesPath, reskinPath)
+	return sb.replaceTags(string, { gender = self.gender, species = speciesPath or self.identity.imagePath, reskin = reskinPath or self.reskin or "",
 		hair = self.identity.hairType, hairGroup = self.identity.hairGroup,
 		facialHair = self.identity.facialHairType, facialHairGroup = self.identity.facialHairGroup,
 		facialMask = self.identity.facialMaskType, facialMaskGroup = self.identity.facialMaskGroup,

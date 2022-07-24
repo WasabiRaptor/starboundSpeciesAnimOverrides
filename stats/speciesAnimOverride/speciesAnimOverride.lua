@@ -309,8 +309,6 @@ function initAfterInit(inInit)
 					end
 				end
 			end
-			sb.logInfo(part)
-			sb.logInfo("why the absolute fuck is it not working it has the correct path here but that somehow doesn't make it to the part")
 			animator.setPartTag(partname, "partImage", part)
 			animator.setPartTag(partname, "colorRemap", colorRemap or "")
 			self.parts[partname] = part

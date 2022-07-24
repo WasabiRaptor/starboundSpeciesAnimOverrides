@@ -295,29 +295,25 @@ function initAfterInit(inInit)
 			animator.setPartTag(partname, "colorRemap", "")
 			self.parts[partname] = part
 		elseif (self.speciesData.remapParts or {})[partname] then
-			sb.logInfo(partname.."remap")
-
 			local remapPart = self.speciesData.remapParts[partname]
-			part = replaceSpeciesGenderTags(string, remapPart.imagePath or remapPart.species, remapPart.reskin)
-			success, notEmpty = pcall(root.nonEmptyRegion, (part))
-			if success and notEmpty ~= nil then
-				local success2, baseColorMap = pcall(root.assetJson, "/species/"..remapPart.species..".species:baseColorMap")
-				local colorRemap
-				if success2 and baseColorMap ~= nil and remapPart.remapColors and self.speciesFile.baseColorMap then
-					colorRemap = "?replace"
-					for _, data in ipairs(remapPart.remapColors) do
-						local from = baseColorMap[data[1]]
-						local to = self.speciesFile.baseColorMap[data[2]]
-						for i, color in ipairs(from or {})do
-							colorRemap = colorRemap..";"..color.."="..(to[i] or to[#to])
-						end
+			local part = replaceSpeciesGenderTags(string, remapPart.imagePath or remapPart.species, remapPart.reskin)
+			local success2, baseColorMap = pcall(root.assetJson, "/species/" .. remapPart.species .. ".species:baseColorMap")
+			local colorRemap
+			if success2 and baseColorMap ~= nil and remapPart.remapColors and self.speciesFile.baseColorMap then
+				colorRemap = "?replace"
+				for _, data in ipairs(remapPart.remapColors) do
+					local from = baseColorMap[data[1]]
+					local to = self.speciesFile.baseColorMap[data[2]]
+					for i, color in ipairs(from or {}) do
+						colorRemap = colorRemap .. ";" .. color .. "=" .. (to[i] or to[#to])
 					end
 				end
-
-				animator.setPartTag(partname, "partImage", part)
-				animator.setPartTag(partname, "colorRemap", colorRemap or "")
-				self.parts[partname] = part
 			end
+			sb.logInfo(part)
+			sb.logInfo("why the absolute fuck is it not working it has the correct path here but that somehow doesn't make it to the part")
+			animator.setPartTag(partname, "partImage", part)
+			animator.setPartTag(partname, "colorRemap", colorRemap or "")
+			self.parts[partname] = part
 		end
 	end
 	for partname, data in pairs(self.speciesData.partTagDefaults or {}) do

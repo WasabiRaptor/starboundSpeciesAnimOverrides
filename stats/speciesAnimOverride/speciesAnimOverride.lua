@@ -16,6 +16,12 @@ function init()
 		self.settings = settings
 	end)
 
+	message.setHandler("refreshAnimOverrides", function ()
+		self.overrideData = status.statusProperty("speciesAnimOverrideData") or {}
+		initAfterInit()
+	end)
+
+
 	for statename, state in pairs(self.animStateData) do
 		state.animationState = {
 			anim = state.default,

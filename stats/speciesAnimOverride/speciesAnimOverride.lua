@@ -16,7 +16,18 @@ function init()
 		self.settings = settings
 	end)
 
-	message.setHandler("refreshAnimOverrides", function ()
+	message.setHandler("refreshAnimOverrides", function (_,_,fullRefresh)
+		if fullRefresh then
+			for partname, string in pairs(self.parts) do
+				animator.setPartTag(partname, "partImage", "")
+				animator.setPartTag(partname, "colorRemap", "")
+				self.parts[partname] = nil
+			end
+			for name, offset in pairs( self.speciesData.offsets or {} ) do
+				animator.resetTransformationGroup(name)
+			end
+		end
+		refreshCosmetics = true
 		self.overrideData = status.statusProperty("speciesAnimOverrideData") or {}
 		initAfterInit()
 	end)
@@ -318,6 +329,10 @@ function initAfterInit(inInit)
 			animator.setPartTag(partname, "partImage", part)
 			animator.setPartTag(partname, "colorRemap", colorRemap or "")
 			self.parts[partname] = part
+		else
+			animator.setPartTag(partname, "partImage", "")
+			animator.setPartTag(partname, "colorRemap", "")
+			self.parts[partname] = nil
 		end
 	end
 	for partname, data in pairs(self.speciesData.partTagDefaults or {}) do

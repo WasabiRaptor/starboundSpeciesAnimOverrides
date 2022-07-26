@@ -55,6 +55,8 @@ function init()
 		status.setStatusProperty("speciesAnimOverrideData", config.getParameter("overrideData"))
 	end
 
+	beamMinerImage = status.statusProperty("beamMinerImage") or beamMinerImage
+
 	effect.setParentDirectives("crop;0;0;0;0")
 	self.overrideData = status.statusProperty("speciesAnimOverrideData") or {}
 
@@ -65,6 +67,12 @@ function init()
 			readCosmeticItemData(equipment)
 		end
 	end
+
+	message.setHandler("animOverrideScale", function (_,_, scale)
+		self.scale = scale
+		animator.resetTransformationGroup("globalScale")
+		animator.scaleTransformationGroup("globalScale", {scale, scale})
+	end)
 end
 
 function initAfterInit(inInit)
@@ -143,16 +151,23 @@ function initAfterInit(inInit)
 		animator.setGlobalTag("headMaskY", self.speciesData.hatOffset[2])
 	end
 
-	self.playerMovementParams = root.assetJson("/player.config").movementParameters
+	self.playerMovementParams = sb.jsonMerge(root.assetJson("/default_actor_movement.config"), root.assetJson("/player.config").movementParameters)
+	self.playerMovementParams.standingPoly = nil
+	self.playerMovementParams.crouchingPoly = nil
 	self.zeroGMovementParams = root.assetJson("/player.config").zeroGMovementParameters
 	if not self.speciesData.animations.idle.controlParameters then
 		self.speciesData.animations.idle.controlParameters = sb.jsonMerge((self.bodyconfig.movementParameters or {}), self.playerMovementParams)
-		self.speciesData.animations.idle.controlParameters.collissionPoly = self.bodyconfig.standingPoly
+		self.speciesData.animations.idle.controlParameters.collisionPoly = sb.jsonMerge({}, self.bodyconfig.movementParameters.standingPoly)
 	end
 	if not self.speciesData.animations.duck.controlParameters then
 		self.speciesData.animations.duck.controlParameters = sb.jsonMerge((self.bodyconfig.movementParameters or {}), self.playerMovementParams)
-		self.speciesData.animations.duck.controlParameters.collissionPoly = self.bodyconfig.crouchingPoly
+		self.speciesData.animations.duck.controlParameters.collisionPoly = sb.jsonMerge({}, self.bodyconfig.movementParameters.crouchingPoly)
 	end
+	self.speciesData.animations.idle.controlParameters.standingPoly = nil
+	self.speciesData.animations.idle.controlParameters.crouchingPoly = nil
+	self.speciesData.animations.duck.controlParameters.standingPoly = nil
+	self.speciesData.animations.duck.controlParameters.crouchingPoly = nil
+
 
 	if type(self.speciesFile) == "table" then
 		for i, data in ipairs(self.speciesFile.genders or {}) do
@@ -389,6 +404,7 @@ function doUpdate(dt)
 end
 
 function uninit()
+	status.setStatusProperty("beamMinerImage", beamMinerImage)
 	world.sendEntityMessage(entity.id(), "removeAnimOverrideAimTech" )
 end
 
@@ -586,7 +602,7 @@ function getHandItem(hand, part, continue)
 				offset[2] = offset[2] * -1
 
 				if itemType == "beamminingtool" then
-					beamMinerImage = itemImage
+					beamMinerImage = itemImage or beamMinerImage
 					beamMinerOffset = offset
 				end
 				rotationArmVisible(part)
@@ -1244,15 +1260,35 @@ function doAnims( anims, force )
 			setAnimTag( anim )
 		elseif state == "priority" then
 			changePriorityLength( anim )
-		elseif state == "controlParameters" then
+		elseif state == "controlParameters" or state == "scaledControlParameters" then
 		elseif state == "state" then
 			animator.setGlobalTag("state", anim)
 		else
 			doAnim( state.."State", anim, force)
 		end
 	end
+	local animsTable = self.speciesData.animations.idle
+	local scale = (self.scale)
+	if (anims or {}).controlParameters then
+		animsTable = anims
+	end
+	if not animsTable.scaledControlParameters then
+		animsTable.scaledControlParameters = {}
+	end
+	if not animsTable.scaledControlParameters[scale] then
+		animsTable.scaledControlParameters[scale] = sb.jsonMerge(self.playerMovementParams, animsTable.controlParameters or {})
+		local scaledControlParameters = animsTable.scaledControlParameters[scale]
+		for i, coord in ipairs(scaledControlParameters.collisionPoly or {}) do
+			scaledControlParameters.collisionPoly[i] = {coord[1] * scale, coord[2] * scale}
+		end
+		scaledControlParameters.walkSpeed = scaledControlParameters.walkSpeed * scale
+		scaledControlParameters.runSpeed = scaledControlParameters.runSpeed * scale
+		scaledControlParameters.flySpeed = scaledControlParameters.flySpeed * scale
+		scaledControlParameters.airJumpProfile.jumpSpeed = scaledControlParameters.airJumpProfile.jumpSpeed * scale
+		scaledControlParameters.liquidJumpProfile.jumpSpeed = scaledControlParameters.liquidJumpProfile.jumpSpeed * scale
+	end
 
-	self.controlParameters = ( (anims or {}).controlParameters or self.speciesData.animations.idle.controlParameters )
+	self.controlParameters = animsTable.scaledControlParameters[scale] or self.speciesData.animations.idle.scaledControlParameters[scale] or self.speciesData.animations.idle.controlParameters
 end
 
 function doAnim( state, anim, force)

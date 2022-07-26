@@ -73,6 +73,7 @@ function init()
 		animator.resetTransformationGroup("globalScale")
 		animator.scaleTransformationGroup("globalScale", {scale, scale})
 	end)
+	if self.scale == nil then self.scale = 1 end
 end
 
 function initAfterInit(inInit)
@@ -1268,7 +1269,7 @@ function doAnims( anims, force )
 		end
 	end
 	local animsTable = self.speciesData.animations.idle
-	local scale = (self.scale)
+	local scale = self.scale or 1
 	if (anims or {}).controlParameters then
 		animsTable = anims
 	end

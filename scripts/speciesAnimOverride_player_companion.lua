@@ -35,6 +35,14 @@ function init()
 		player.makeTechUnavailable("storeDirectivesEmpty")
 	end)
 
+	message.setHandler("applySpeciesAnimOverride", function ()
+		local speciesAnimOverrideData = status.statusProperty("speciesAnimOverrideData") or {}
+		local effects = status.getPersistentEffects("speciesAnimOverride")
+		if not effects[1] then
+			status.setPersistentEffects("speciesAnimOverride", {  speciesAnimOverrideData.customAnimStatus or "speciesAnimOverride" })
+		end
+	end)
+
 end
 
 local essentialItems = {"beamaxe", "wiretool", "painttool", "inspectiontool"}

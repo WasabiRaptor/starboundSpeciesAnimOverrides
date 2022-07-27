@@ -14,6 +14,13 @@ function init()
 			lounging = npc.loungingIn()
 		}
 	end)
+	message.setHandler("applySpeciesAnimOverride", function ()
+		local speciesAnimOverrideData = status.statusProperty("speciesAnimOverrideData") or {}
+		local effects = status.getPersistentEffects("speciesAnimOverride")
+		if not effects[1] then
+			status.setPersistentEffects("speciesAnimOverride", {  speciesAnimOverrideData.customAnimStatus or "speciesAnimOverride" })
+		end
+	end)
 
 	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
 

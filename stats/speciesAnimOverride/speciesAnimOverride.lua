@@ -72,8 +72,13 @@ function init()
 		self.scale = scale
 		animator.resetTransformationGroup("globalScale")
 		animator.scaleTransformationGroup("globalScale", {scale, scale})
+		status.setStatusProperty("animOverrideScale", scale)
 	end)
-	if self.scale == nil then self.scale = 1 end
+	if self.scale == nil then
+		self.scale = status.statusProperty("animOverrideScale") or 1
+		animator.resetTransformationGroup("globalScale")
+		animator.scaleTransformationGroup("globalScale", {self.scale, self.scale})
+	end
 end
 
 function initAfterInit(inInit)

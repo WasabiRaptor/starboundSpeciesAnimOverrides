@@ -77,7 +77,7 @@ function saveDataDoOld(funcName, ...)
 	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
 	itemData[funcName] = ...
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
-	old[funcName](...)
+	return old[funcName](...)
 end
 function interceptFunction(func)
 	activeItemOverrideFuncs[func] = function(...)
@@ -98,7 +98,7 @@ function transformQueue(funcName, ...)
 		table.insert(itemData.transformQueue, {funcName, ...})
 	end
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
-	old[funcName](...)
+	return old[funcName](...)
 end
 function interceptTransform(func)
 	animatorOverrideFuncs[func] = function(...)
@@ -115,14 +115,14 @@ function animatorOverrideFuncs.setAnimationState(statetype, state, startNew)
 	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
 	itemData.setAnimationState[statetype] = {state, startNew or false, world.time()} -- time to differentiate repeat calls
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
-	old.setAnimationState(statetype, state, startNew)
+	return old.setAnimationState(statetype, state, startNew)
 end
 
 function animatorOverrideFuncs.setGlobalTag(tagname, tagvalue)
 	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
 	itemData.setGlobalTag[tagname] = tagvalue
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
-	old.setGlobalTag(tagname, tagvalue)
+	return old.setGlobalTag(tagname, tagvalue)
 end
 
 function animatorOverrideFuncs.setPartTag(part, tagname, tagvalue)
@@ -130,5 +130,39 @@ function animatorOverrideFuncs.setPartTag(part, tagname, tagvalue)
 	itemData.setPartTag[part] = itemData.setPartTag[part] or {}
 	itemData.setPartTag[part][tagname] = tagvalue
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
-	old.setPartTag(part, tagname, tagvalue)
+	return old.setPartTag(part, tagname, tagvalue)
+end
+
+local handTable = {
+	primary = {"front","","back"},
+	alt = {"back","","front"}
+}
+
+function activeItemOverrideFuncs.handPosition(offset)
+	local arm = handTable[hand][mcontroller.facingDirection()+2]
+	local armOffset = status.statusProperty(arm.."armAnimOverrideArmOffset")
+	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
+	if armOffset and itemData.setArmAngle ~= nil then
+		return old.handPosition(offset)
+	else
+		return old.handPosition(offset)
+	end
+end
+function activeItemOverrideFuncs.aimAngleAndDirection(aimVerticalOffset, targetPosition)
+	local arm = handTable[hand][mcontroller.facingDirection()+2]
+	local armOffset = status.statusProperty(arm.."armAnimOverrideArmOffset")
+	if armOffset then
+		return old.aimAngleAndDirection(aimVerticalOffset, targetPosition)
+	else
+		return old.aimAngleAndDirection(aimVerticalOffset, targetPosition)
+	end
+end
+function activeItemOverrideFuncs.aimAngle(aimVerticalOffset, targetPosition)
+	local arm = handTable[hand][mcontroller.facingDirection()+2]
+	local armOffset = status.statusProperty(arm.."armAnimOverrideArmOffset")
+	if armOffset then
+		return old.aimAngle(aimVerticalOffset, targetPosition)
+	else
+		return old.aimAngle(aimVerticalOffset, targetPosition)
+	end
 end

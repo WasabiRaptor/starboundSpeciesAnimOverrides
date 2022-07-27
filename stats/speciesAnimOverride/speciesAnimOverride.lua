@@ -1303,6 +1303,11 @@ function doAnims( anims, force )
 		scaledControlParameters.flySpeed = scaledControlParameters.flySpeed * currentScale
 		scaledControlParameters.airJumpProfile.jumpSpeed = scaledControlParameters.airJumpProfile.jumpSpeed * currentScale
 		scaledControlParameters.liquidJumpProfile.jumpSpeed = scaledControlParameters.liquidJumpProfile.jumpSpeed * currentScale
+		scaledControlParameters.gravityMultiplier = scaledControlParameters.gravityMultiplier * currentScale
+		-- scaledControlParameters.mass = scaledControlParameters.mass * currentScale
+		scaledControlParameters.groundForce = scaledControlParameters.groundForce * currentScale
+		scaledControlParameters.airForce = scaledControlParameters.airForce * currentScale
+		scaledControlParameters.liquidForce = scaledControlParameters.liquidForce * currentScale
 	end
 
 	self.controlParameters = animsTable.scaledControlParameters[currentScale] or self.speciesData.animations.idle.scaledControlParameters[currentScale] or self.speciesData.animations.idle.controlParameters

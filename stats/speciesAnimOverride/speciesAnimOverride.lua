@@ -68,17 +68,19 @@ function init()
 		end
 	end
 
-	message.setHandler("animOverrideScale", function (_,_, scale)
+	message.setHandler("animOverrideScale", function (_,_, scale, duration)
+		self.oldScale = self.currentScale or self.scale or 1
 		self.scale = scale
-		animator.resetTransformationGroup("globalScale")
-		animator.scaleTransformationGroup("globalScale", {scale, scale})
+		self.scaleDuration = duration or 1
+		self.scaleTime = 0
 		status.setStatusProperty("animOverrideScale", scale)
 	end)
 	if self.scale == nil then
 		self.scale = status.statusProperty("animOverrideScale") or 1
-		animator.resetTransformationGroup("globalScale")
-		animator.scaleTransformationGroup("globalScale", {self.scale, self.scale})
 	end
+	self.oldScale = self.scale
+	self.scaleDuration = 0
+	self.scaleTime = 0
 end
 
 function initAfterInit(inInit)
@@ -407,6 +409,15 @@ function doUpdate(dt)
 
 	animator.resetTransformationGroup("globalRotation")
 	animator.rotateTransformationGroup("globalRotation", mcontroller.rotation() * mcontroller.facingDirection())
+
+	self.scaleTime = self.scaleTime + dt
+	if self.scaleTime < self.scaleDuration then
+		self.currentScale = self.oldScale + (self.scale - self.oldScale) * (self.scaleTime / self.scaleDuration)
+	else
+		self.currentScale = self.scale or 1
+	end
+	animator.resetTransformationGroup("globalScale")
+	animator.scaleTransformationGroup("globalScale", {self.currentScale, self.currentScale})
 end
 
 function uninit()
@@ -1274,27 +1285,27 @@ function doAnims( anims, force )
 		end
 	end
 	local animsTable = self.speciesData.animations.idle
-	local scale = self.scale or 1
+	local currentScale = self.currentScale or 1
 	if (anims or {}).controlParameters then
 		animsTable = anims
 	end
 	if not animsTable.scaledControlParameters then
 		animsTable.scaledControlParameters = {}
 	end
-	if not animsTable.scaledControlParameters[scale] then
-		animsTable.scaledControlParameters[scale] = sb.jsonMerge(self.playerMovementParams, animsTable.controlParameters or {})
-		local scaledControlParameters = animsTable.scaledControlParameters[scale]
+	if not animsTable.scaledControlParameters[currentScale] then
+		animsTable.scaledControlParameters[currentScale] = sb.jsonMerge(self.playerMovementParams, animsTable.controlParameters or {})
+		local scaledControlParameters = animsTable.scaledControlParameters[currentScale]
 		for i, coord in ipairs(scaledControlParameters.collisionPoly or {}) do
-			scaledControlParameters.collisionPoly[i] = {coord[1] * scale, coord[2] * scale}
+			scaledControlParameters.collisionPoly[i] = {coord[1] * currentScale, coord[2] * currentScale}
 		end
-		scaledControlParameters.walkSpeed = scaledControlParameters.walkSpeed * scale
-		scaledControlParameters.runSpeed = scaledControlParameters.runSpeed * scale
-		scaledControlParameters.flySpeed = scaledControlParameters.flySpeed * scale
-		scaledControlParameters.airJumpProfile.jumpSpeed = scaledControlParameters.airJumpProfile.jumpSpeed * scale
-		scaledControlParameters.liquidJumpProfile.jumpSpeed = scaledControlParameters.liquidJumpProfile.jumpSpeed * scale
+		scaledControlParameters.walkSpeed = scaledControlParameters.walkSpeed * currentScale
+		scaledControlParameters.runSpeed = scaledControlParameters.runSpeed * currentScale
+		scaledControlParameters.flySpeed = scaledControlParameters.flySpeed * currentScale
+		scaledControlParameters.airJumpProfile.jumpSpeed = scaledControlParameters.airJumpProfile.jumpSpeed * currentScale
+		scaledControlParameters.liquidJumpProfile.jumpSpeed = scaledControlParameters.liquidJumpProfile.jumpSpeed * currentScale
 	end
 
-	self.controlParameters = animsTable.scaledControlParameters[scale] or self.speciesData.animations.idle.scaledControlParameters[scale] or self.speciesData.animations.idle.controlParameters
+	self.controlParameters = animsTable.scaledControlParameters[currentScale] or self.speciesData.animations.idle.scaledControlParameters[currentScale] or self.speciesData.animations.idle.controlParameters
 end
 
 function doAnim( state, anim, force)

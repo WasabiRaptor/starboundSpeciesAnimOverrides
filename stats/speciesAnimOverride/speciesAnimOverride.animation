@@ -24,6 +24,7 @@
 		"frontarmsMask" : "/humanoid/animOverrideMasks/frontarm.png",
 		"backarmsMask" : "/humanoid/animOverrideMasks/backarm.png",
 		"tailMask" : "/humanoid/animOverrideMasks/malebody.png",
+		"bodyMask1" : "/humanoid/animOverrideMasks/malebody.png",
 		"direction" : "1",
 		"headMaskX":"0",
 		"headMaskY":"0",
@@ -213,11 +214,11 @@
 				},
 				"partStates": {
 					"bodyState": {
-						"idle": { "properties": { "image": "<partImage>:<bodyStateAnim>.<bodyPersonality>?addmask=<bodyMask>:<bodyStateAnim>.<bodyPersonality>;0;0<colorRemap><customDirectives><bodyDirectives><directives>" } },
+						"idle": { "properties": { "image": "<partImage>:<bodyStateAnim>.<bodyPersonality>?addmask=<bodyMask>:<bodyStateAnim>.<bodyPersonality>;0;0?addmask=<bodyMask1>:<bodyStateAnim>.<bodyPersonality>;0;0<colorRemap><customDirectives><bodyDirectives><directives>" } },
 
-						"duck": { "properties": { "image": "<partImage>:<bodyStateAnim>.<bodyStateFrame>?addmask=<bodyMask>:<bodyStateAnim>.<bodyStateFrame>;0;0<colorRemap><customDirectives><bodyDirectives><directives>" } },
+						"duck": { "properties": { "image": "<partImage>:<bodyStateAnim>.<bodyStateFrame>?addmask=<bodyMask>:<bodyStateAnim>.<bodyStateFrame>;0;0?addmask=<bodyMask1>:<bodyStateAnim>.<bodyStateFrame>;0;0<colorRemap><customDirectives><bodyDirectives><directives>" } },
 
-						"walk": { "properties": { "image": "<partImage>:<direction>.<bodyStateAnim>.<bodyStateFrame>?addmask=<bodyMask>:<direction>.<bodyStateAnim>.<bodyStateFrame>;0;0<colorRemap><customDirectives><bodyDirectives><directives>" } },
+						"walk": { "properties": { "image": "<partImage>:<direction>.<bodyStateAnim>.<bodyStateFrame>?addmask=<bodyMask>:<direction>.<bodyStateAnim>.<bodyStateFrame>;0;0?addmask=<bodyMask1>:<direction>.<bodyStateAnim>.<bodyStateFrame>;0;0<colorRemap><customDirectives><bodyDirectives><directives>" } },
 
 						"none": { "properties": {} }
 					}

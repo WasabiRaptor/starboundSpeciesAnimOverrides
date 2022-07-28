@@ -1,3 +1,5 @@
+require("/scripts/poly.lua")
+
 function init()
 	self.loopedMessages = {}
 	self.timerList = {}
@@ -402,10 +404,6 @@ function doUpdate(dt)
 	getHandItems()
 	checkHumanoidAnim()
 
-	if self.controlParameters and not status.statusProperty("speciesAnimOverrideControlParams") then
-		mcontroller.controlParameters(self.controlParameters)
-	end
-	status.setStatusProperty("speciesAnimOverrideControlParams", nil)
 
 	animator.resetTransformationGroup("globalRotation")
 	animator.rotateTransformationGroup("globalRotation", mcontroller.rotation() * mcontroller.facingDirection())
@@ -416,8 +414,14 @@ function doUpdate(dt)
 	else
 		self.currentScale = self.scale or 1
 	end
-	animator.resetTransformationGroup("globalScale")
-	animator.scaleTransformationGroup("globalScale", {self.currentScale, self.currentScale})
+
+	if self.controlParameters and not status.statusProperty("speciesAnimOverrideControlParams") then
+		mcontroller.controlParameters(self.controlParameters)
+		animator.resetTransformationGroup("globalScale")
+		animator.scaleTransformationGroup("globalScale", {self.currentScale, self.currentScale})
+		animator.translateTransformationGroup("globalScale", {0, self.controlParameters.yOffset or 0})
+	end
+	status.setStatusProperty("speciesAnimOverrideControlParams", nil)
 end
 
 function uninit()
@@ -1294,10 +1298,15 @@ function doAnims( anims, force )
 	end
 	if not animsTable.scaledControlParameters[currentScale] then
 		animsTable.scaledControlParameters[currentScale] = sb.jsonMerge(self.playerMovementParams, animsTable.controlParameters or {})
+
 		local scaledControlParameters = animsTable.scaledControlParameters[currentScale]
-		for i, coord in ipairs(scaledControlParameters.collisionPoly or {}) do
-			scaledControlParameters.collisionPoly[i] = {coord[1] * currentScale, coord[2] * currentScale}
-		end
+		scaledControlParameters.collisionPoly = poly.scale(scaledControlParameters.collisionPoly, {currentScale,currentScale})
+
+		local unscaledBox = poly.boundBox(animsTable.controlParameters.collisionPoly)
+		local scaledBox = poly.boundBox(scaledControlParameters.collisionPoly)
+		scaledControlParameters.yOffset = unscaledBox[2] - scaledBox[2] -- first pair of coords in a rect is the lower left, so we want the difference in y between the bottom so we can translate that
+		scaledControlParameters.collisionPoly = poly.translate(scaledControlParameters.collisionPoly, {0, scaledControlParameters.yOffset})
+
 		scaledControlParameters.walkSpeed = scaledControlParameters.walkSpeed * currentScale
 		scaledControlParameters.runSpeed = scaledControlParameters.runSpeed * currentScale
 		scaledControlParameters.flySpeed = scaledControlParameters.flySpeed * currentScale

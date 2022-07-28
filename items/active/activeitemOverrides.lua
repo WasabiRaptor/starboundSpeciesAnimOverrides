@@ -150,7 +150,6 @@ function activeItemOverrideFuncs.aimAngleAndDirection(aimVerticalOffset, targetP
 	local arm = handTable[hand][mcontroller.facingDirection()+2]
 	local armOffset = status.statusProperty(arm.."armAnimOverrideArmOffset")
 	if armOffset then
-		sb.logInfo(sb.printJson(aimVerticalOffset))
 		local offset = vec2.add(world.distance( mcontroller.position(), targetPosition ), {0,aimVerticalOffset})
 		local direction = 1
 		if offset[1] > 0 then

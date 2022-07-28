@@ -114,6 +114,12 @@ function initAfterInit(inInit)
 		self.bodyconfig = sb.jsonMerge(self.bodyconfig, root.assetJson(self.speciesFile.humanoidConfig))
 	end
 
+	local originalSpecies = status.statusProperty("animOverridesStoredSpecies") or world.entitySpecies(entity.id())
+	local originalSpeciesFile = root.assetJson("/species/"..originalSpecies..".species") or {}
+	local originalSpeciesBodyConfig = root.assetJson("/humanoid.config")
+	if self.speciesFile.humanoidConfig ~= nil then
+		originalSpeciesBodyConfig = sb.jsonMerge(originalSpeciesBodyConfig, root.assetJson(originalSpeciesFile.humanoidConfig))
+	end
 
 	local mergeConfigs = speciesData.merge or {}
 	local configs = { speciesData }
@@ -146,8 +152,20 @@ function initAfterInit(inInit)
 
 	animator.resetTransformationGroup("handoffset")
 	animator.resetTransformationGroup("globalOffset")
-	animator.translateTransformationGroup("handoffset", {self.bodyconfig.frontHandPosition[1]/8,self.bodyconfig.frontHandPosition[2]/8})
+	local handoffset = {self.bodyconfig.frontHandPosition[1]/8,self.bodyconfig.frontHandPosition[2]/8}
+	animator.translateTransformationGroup("handoffset", handoffset)
 	animator.translateTransformationGroup("globalOffset", {((self.bodyconfig.globalOffset or {})[1] or 0)/8, ((self.bodyconfig.globalOffset or {})[2] or 0)/8})
+
+	self.frontArmOffsetData = {
+		handPosition = handoffset,
+		rotationCenter = {(self.bodyconfig.frontArmRotationCenter[1] + ((self.bodyconfig.frontArmOffset or {})[1] or 0))/8, (self.bodyconfig.frontArmRotationCenter[2] + ((self.bodyconfig.frontArmOffset or {})[2] or 0))/8 }
+	}
+	self.backArmOffsetData = {
+		handPosition = handoffset,
+		rotationCenter = {(self.bodyconfig.backArmRotationCenter[1] + ((self.bodyconfig.backArmOffset or {})[1] or 0))/8, (self.bodyconfig.backArmRotationCenter[2] + ((self.bodyconfig.backArmOffset or {})[2] or 0))/8 }
+	}
+	status.setStatusProperty("frontarmAnimOverrideArmOffset", self.frontArmOffsetData)
+	status.setStatusProperty("backarmAnimOverrideArmOffset", self.backArmOffsetData)
 
 	for name, offset in pairs( self.speciesData.offsets or {} ) do
 		animator.resetTransformationGroup(name)
@@ -414,12 +432,14 @@ function doUpdate(dt)
 	else
 		self.currentScale = self.scale or 1
 	end
+	status.setStatusProperty("animOverridesCurrentScale", self.currentScale )
 
 	if self.controlParameters and not status.statusProperty("speciesAnimOverrideControlParams") then
 		mcontroller.controlParameters(self.controlParameters)
 		animator.resetTransformationGroup("globalScale")
 		animator.scaleTransformationGroup("globalScale", {self.currentScale, self.currentScale})
 		animator.translateTransformationGroup("globalScale", {0, self.controlParameters.yOffset or 0})
+		status.setStatusProperty("animOverridesGlobalScaleYOffset", self.controlParameters.yOffset or 0)
 	end
 	status.setStatusProperty("speciesAnimOverrideControlParams", nil)
 end

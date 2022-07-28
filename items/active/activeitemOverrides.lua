@@ -9,12 +9,14 @@ local old = {
 
 local activeItemOverrideFuncs = {}
 local animatorOverrideFuncs = {}
-local ItemOverrideData = {
+local itemData = {
 	transformQueue = {{}},
 	setAnimationState = {},
 	setGlobalTag = {},
 	setPartTag = {}
 }
+
+require("/scripts/vec2.lua")
 
 function init()
 	activeItem.setInstanceValue("itemHasOverrideLockScript", true)
@@ -34,7 +36,7 @@ function init()
 		end
 	end
 
-	status.setStatusProperty(hand.."ItemOverrideData", ItemOverrideData)
+	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 
 
 	message.setHandler( hand.."ItemLock", function(_,_, lock)
@@ -74,7 +76,6 @@ function uninit()
 end
 
 function saveDataDoOld(funcName, ...)
-	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
 	itemData[funcName] = ...
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	return old[funcName](...)
@@ -93,7 +94,6 @@ interceptFunction("setOutsideOfHand")
 interceptFunction("setArmAngle")
 
 function transformQueue(funcName, ...)
-	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
 	if #itemData.transformQueue < 30 then
 		table.insert(itemData.transformQueue, {funcName, ...})
 	end
@@ -112,21 +112,18 @@ interceptTransform("translateTransformationGroup")
 interceptTransform("resetTransformationGroup")
 
 function animatorOverrideFuncs.setAnimationState(statetype, state, startNew)
-	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
 	itemData.setAnimationState[statetype] = {state, startNew or false, world.time()} -- time to differentiate repeat calls
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	return old.setAnimationState(statetype, state, startNew)
 end
 
 function animatorOverrideFuncs.setGlobalTag(tagname, tagvalue)
-	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
 	itemData.setGlobalTag[tagname] = tagvalue
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	return old.setGlobalTag(tagname, tagvalue)
 end
 
 function animatorOverrideFuncs.setPartTag(part, tagname, tagvalue)
-	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
 	itemData.setPartTag[part] = itemData.setPartTag[part] or {}
 	itemData.setPartTag[part][tagname] = tagvalue
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
@@ -134,16 +131,17 @@ function animatorOverrideFuncs.setPartTag(part, tagname, tagvalue)
 end
 
 local handTable = {
-	primary = {"front","","back"},
-	alt = {"back","","front"}
+	primary = {"back","","front"},
+	alt = {"front","","back"}
 }
 
 function activeItemOverrideFuncs.handPosition(offset)
 	local arm = handTable[hand][mcontroller.facingDirection()+2]
 	local armOffset = status.statusProperty(arm.."armAnimOverrideArmOffset")
-	local itemData = status.statusProperty(hand.."ItemOverrideData") or {}
 	if armOffset and itemData.setArmAngle ~= nil then
-		return old.handPosition(offset)
+		local scale = status.statusProperty("animOverridesCurrentScale") or 1
+		local yOffset = status.statusProperty("animOverridesGlobalScaleYOffset") or 0
+		return vec2.mul({mcontroller.facingDirection(), 1},vec2.add(vec2.rotate(vec2.mul(vec2.add(armOffset.handPosition, offset), scale), itemData.setArmAngle), vec2.add(vec2.mul(armOffset.rotationCenter, scale), {0, yOffset})))
 	else
 		return old.handPosition(offset)
 	end
@@ -152,7 +150,14 @@ function activeItemOverrideFuncs.aimAngleAndDirection(aimVerticalOffset, targetP
 	local arm = handTable[hand][mcontroller.facingDirection()+2]
 	local armOffset = status.statusProperty(arm.."armAnimOverrideArmOffset")
 	if armOffset then
-		return old.aimAngleAndDirection(aimVerticalOffset, targetPosition)
+		sb.logInfo(sb.printJson(aimVerticalOffset))
+		local offset = vec2.add(world.distance( mcontroller.position(), targetPosition ), {0,aimVerticalOffset})
+		local direction = 1
+		if offset[1] > 0 then
+			direction = -1
+		end
+		local yOffset = status.statusProperty("animOverridesGlobalScaleYOffset") or 0
+		return vec2.angle(vec2.mul(vec2.add(vec2.add(armOffset.rotationCenter, {0, yOffset}), vec2.mul({mcontroller.facingDirection(), 1}, offset)),-1)), direction
 	else
 		return old.aimAngleAndDirection(aimVerticalOffset, targetPosition)
 	end
@@ -161,7 +166,9 @@ function activeItemOverrideFuncs.aimAngle(aimVerticalOffset, targetPosition)
 	local arm = handTable[hand][mcontroller.facingDirection()+2]
 	local armOffset = status.statusProperty(arm.."armAnimOverrideArmOffset")
 	if armOffset then
-		return old.aimAngle(aimVerticalOffset, targetPosition)
+		local offset = vec2.add(world.distance( mcontroller.position(), targetPosition ), {0,aimVerticalOffset})
+		local yOffset = status.statusProperty("animOverridesGlobalScaleYOffset") or 0
+		return vec2.angle(vec2.mul(vec2.add(vec2.add(armOffset.rotationCenter, {0, yOffset}), vec2.mul({mcontroller.facingDirection(), 1}, offset)),-1))
 	else
 		return old.aimAngle(aimVerticalOffset, targetPosition)
 	end

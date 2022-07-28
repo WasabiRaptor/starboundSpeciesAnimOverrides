@@ -89,30 +89,12 @@
 					"rotation": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
 				}
 			},
-			"frontarmsItemRotationState": {
-				"default": "none",
-				"states": {
-					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
-
-					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
-					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
-				}
-			},
 			"backarmsRotationState": {
 				"default": "none",
 				"states": {
 					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
 
 					"rotation": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
-				}
-			},
-			"backarmsItemRotationState": {
-				"default": "none",
-				"states": {
-					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
-
-					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
-					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
 				}
 			},
 			"legsState": {
@@ -202,6 +184,148 @@
 					"sleep": { "frames": 2, "cycle": 1, "mode": "end", "priority": 1, "baseAnim" : "idle" },
 
 					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 }
+				}
+			},
+
+			"frontarms_item_0": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"frontarms_item_1": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"frontarms_item_2": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"frontarms_item_3": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"frontarms_item_4": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"frontarms_item_5": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"frontarms_item_6": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+
+			"backarms_item_0": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"backarms_item_1": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"backarms_item_2": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"backarms_item_3": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"backarms_item_4": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"backarms_item_5": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
+				}
+			},
+			"backarms_item_6": {
+				"default": "none",
+				"states": {
+					"none": { "frames": 1, "cycle": 1, "mode": "end", "priority": -1 },
+					"item": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
+					"item_outside_fullbright": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 }
 				}
 			}
 		},
@@ -649,11 +773,13 @@
 					"centered": true,
 					"zLevel": 3.0,
 					"transformationGroups": ["frontarms_item_0_offset", "frontarms_item_0", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+					"image" : "<partImage><frontarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"frontarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": 5.0 } }
+					"frontarms_item_0": {
+						"item_outside": { "properties": { "zLevel": 5.0 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": 5.0, "fullbright" : true } }
 					}
 				}
 			},
@@ -662,11 +788,13 @@
 					"centered": true,
 					"zLevel": 3.1,
 					"transformationGroups": ["frontarms_item_1_offset", "frontarms_item_1", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+					"image" : "<partImage><frontarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"frontarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": 5.1 } }
+					"frontarms_item_1": {
+						"item_outside": { "properties": { "zLevel": 5.1 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": 5.1, "fullbright" : true } }
 					}
 				}
 			},
@@ -675,11 +803,13 @@
 					"centered": true,
 					"zLevel": 3.2,
 					"transformationGroups": ["frontarms_item_2_offset", "frontarms_item_2", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+					"image" : "<partImage><frontarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"frontarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": 5.2 } }
+					"frontarms_item_2": {
+						"item_outside": { "properties": { "zLevel": 5.2 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": 5.2, "fullbright" : true } }
 					}
 				}
 			},
@@ -688,11 +818,13 @@
 					"centered": true,
 					"zLevel": 3.3,
 					"transformationGroups": ["frontarms_item_3_offset", "frontarms_item_3", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+					"image" : "<partImage><frontarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"frontarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": 5.3 } }
+					"frontarms_item_3": {
+						"item_outside": { "properties": { "zLevel": 5.3 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": 5.3, "fullbright" : true } }
 					}
 				}
 			},
@@ -701,11 +833,13 @@
 					"centered": true,
 					"zLevel": 3.4,
 					"transformationGroups": ["frontarms_item_4_offset", "frontarms_item_4", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+					"image" : "<partImage><frontarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"frontarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": 5.4 } }
+					"frontarms_item_4": {
+						"item_outside": { "properties": { "zLevel": 5.4 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": 5.4, "fullbright" : true } }
 					}
 				}
 			},
@@ -714,11 +848,13 @@
 					"centered": true,
 					"zLevel": 3.5,
 					"transformationGroups": ["frontarms_item_5_offset", "frontarms_item_5", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+					"image" : "<partImage><frontarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"frontarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": 5.5 } }
+					"frontarms_item_5": {
+						"item_outside": { "properties": { "zLevel": 5.5 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": 5.5, "fullbright" : true } }
 					}
 				}
 			},
@@ -727,11 +863,13 @@
 					"centered": true,
 					"zLevel": 3.6,
 					"transformationGroups": ["frontarms_item_6_offset", "frontarms_item_6", "handoffset", "frontarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><frontarmsRotationVisible><directives>"
+					"image" : "<partImage><frontarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"frontarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": 5.6 } }
+					"frontarms_item_6": {
+						"item_outside": { "properties": { "zLevel": 5.6 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": 5.6, "fullbright" : true } }
 					}
 				}
 			},
@@ -741,11 +879,13 @@
 					"centered": true,
 					"zLevel": -3.6,
 					"transformationGroups": ["backarms_item_0_offset", "backarms_item_0", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+					"image" : "<partImage><backarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"backarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": -5.6 } }
+					"backarms_item_0": {
+						"item_outside": { "properties": { "zLevel": -5.6 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": -5.6, "fullbright" : true } }
 					}
 				}
 			},
@@ -754,11 +894,13 @@
 					"centered": true,
 					"zLevel": -3.5,
 					"transformationGroups": ["backarms_item_1_offset", "backarms_item_1", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+					"image" : "<partImage><backarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"backarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": -5.5 } }
+					"backarms_item_1": {
+						"item_outside": { "properties": { "zLevel": -5.5 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": -5.5, "fullbright" : true } }
 					}
 				}
 			},
@@ -767,11 +909,13 @@
 					"centered": true,
 					"zLevel": -3.4,
 					"transformationGroups": ["backarms_item_2_offset", "backarms_item_2", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+					"image" : "<partImage><backarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"backarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": -5.4 } }
+					"backarms_item_2": {
+						"item_outside": { "properties": { "zLevel": -5.4 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": -5.4, "fullbright" : true } }
 					}
 				}
 			},
@@ -780,11 +924,13 @@
 					"centered": true,
 					"zLevel": -3.3,
 					"transformationGroups": ["backarms_item_3_offset", "backarms_item_3", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+					"image" : "<partImage><backarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"backarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": -5.3 } }
+					"backarms_item_3": {
+						"item_outside": { "properties": { "zLevel": -5.3 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": -5.3, "fullbright" : true } }
 					}
 				}
 			},
@@ -793,11 +939,13 @@
 					"centered": true,
 					"zLevel": -3.2,
 					"transformationGroups": ["backarms_item_4_offset", "backarms_item_4", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+					"image" : "<partImage><backarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"backarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": -5.2 } }
+					"backarms_item_4": {
+						"item_outside": { "properties": { "zLevel": -5.2 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": -5.2, "fullbright" : true } }
 					}
 				}
 			},
@@ -806,11 +954,13 @@
 					"centered": true,
 					"zLevel": -3.1,
 					"transformationGroups": ["backarms_item_5_offset", "backarms_item_5", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+					"image" : "<partImage><backarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"backarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": -5.1 } }
+					"backarms_item_5": {
+						"item_outside": { "properties": { "zLevel": -5.1 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": -5.1, "fullbright" : true } }
 					}
 				}
 			},
@@ -819,11 +969,13 @@
 					"centered": true,
 					"zLevel": -3.0,
 					"transformationGroups": ["backarms_item_6_offset", "backarms_item_6", "handoffset", "backarmsrotation", "rotationarmsbob", "chestbob", "armsbob", "sitrotation", "sitrotation2", "globalOffset", "globalOffset2", "globalRotation", "globalRotation2", "globalScale", "globalScale2"],
-					"image" : "<partImage><fullbright><backarmsRotationVisible><directives>"
+					"image" : "<partImage><backarmsRotationVisible><directives>"
 				},
 				"partStates": {
-					"backarmsItemRotationState": {
-						"item_outside": { "properties": { "zLevel": -5.0 } }
+					"backarms_item_6": {
+						"item_outside": { "properties": { "zLevel": -5.0 } },
+						"item_fullbright": { "properties": { "fullbright" : true } },
+						"item_outside_fullbright": { "properties": { "zLevel": -5.0, "fullbright" : true } }
 					}
 				}
 			}

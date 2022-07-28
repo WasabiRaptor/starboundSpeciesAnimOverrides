@@ -12,10 +12,10 @@ function init()
 	self.parts = {}
 	self.globalTagDefaults = root.assetJson("/stats/speciesAnimOverride/"..config.getParameter("animationConfig")).globalTagDefaults or {}
 
-	self.settings = status.statusProperty("speciesAnimOverrideSettings") or {}
+	self.settings = sb.jsonMerge(status.statusProperty("speciesAnimOverrideSettings") or {}, status.statusProperty("speciesAnimOverrideOverrideSettings") or {})
 
-	message.setHandler("speciesAnimOverrideSettings", function (_,_, settings)
-		self.settings = settings
+	message.setHandler("speciesAnimOverrideRefreshSettings", function (_,_, settings)
+		self.settings = sb.jsonMerge(settings, status.statusProperty("speciesAnimOverrideOverrideSettings") or {})
 	end)
 
 	message.setHandler("refreshAnimOverrides", function (_,_,fullRefresh)
@@ -71,11 +71,11 @@ function init()
 	end
 
 	message.setHandler("animOverrideScale", function (_,_, scale, duration)
-		self.oldScale = self.currentScale or self.scale or 1
-		self.scale = scale
+		self.oldScale = math.min(self.settings.scaleMax or 3, math.max(self.currentScale or self.scale or 1, self.settings.scaleMin or 0.1))
+		self.scale = math.min(self.settings.scaleMax or 3, math.max(scale, self.settings.scaleMin or 0.1))
 		self.scaleDuration = duration or 1
 		self.scaleTime = 0
-		status.setStatusProperty("animOverrideScale", scale)
+		status.setStatusProperty("animOverrideScale", self.scale)
 	end)
 	if self.scale == nil then
 		self.scale = status.statusProperty("animOverrideScale") or 1

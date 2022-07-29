@@ -117,7 +117,7 @@ function initAfterInit(inInit)
 	local originalSpecies = status.statusProperty("animOverridesStoredSpecies") or world.entitySpecies(entity.id())
 	local originalSpeciesFile = root.assetJson("/species/"..originalSpecies..".species") or {}
 	local originalSpeciesBodyConfig = root.assetJson("/humanoid.config")
-	if self.speciesFile.humanoidConfig ~= nil then
+	if originalSpeciesFile.humanoidConfig ~= nil then
 		originalSpeciesBodyConfig = sb.jsonMerge(originalSpeciesBodyConfig, root.assetJson(originalSpeciesFile.humanoidConfig))
 	end
 
@@ -186,15 +186,21 @@ function initAfterInit(inInit)
 	if not self.speciesData.animations.idle.controlParameters then
 		self.speciesData.animations.idle.controlParameters = sb.jsonMerge((self.bodyconfig.movementParameters or {}), self.playerMovementParams)
 		self.speciesData.animations.idle.controlParameters.collisionPoly = sb.jsonMerge({}, self.bodyconfig.movementParameters.standingPoly)
+		self.speciesData.animations.idle.controlParameters.standingPoly = nil
+		self.speciesData.animations.idle.controlParameters.crouchingPoly = nil
+	end
+	if not self.speciesData.animations.lay.controlParameters then
+		self.speciesData.animations.lay.controlParameters = sb.jsonMerge((self.bodyconfig.movementParameters or {}), self.playerMovementParams)
+		self.speciesData.animations.lay.controlParameters.collisionPoly = sb.jsonMerge({}, self.bodyconfig.movementParameters.standingPoly)
+		self.speciesData.animations.lay.controlParameters.standingPoly = nil
+		self.speciesData.animations.lay.controlParameters.crouchingPoly = nil
 	end
 	if not self.speciesData.animations.duck.controlParameters then
 		self.speciesData.animations.duck.controlParameters = sb.jsonMerge((self.bodyconfig.movementParameters or {}), self.playerMovementParams)
 		self.speciesData.animations.duck.controlParameters.collisionPoly = sb.jsonMerge({}, self.bodyconfig.movementParameters.crouchingPoly)
+		self.speciesData.animations.duck.controlParameters.standingPoly = nil
+		self.speciesData.animations.duck.controlParameters.crouchingPoly = nil
 	end
-	self.speciesData.animations.idle.controlParameters.standingPoly = nil
-	self.speciesData.animations.idle.controlParameters.crouchingPoly = nil
-	self.speciesData.animations.duck.controlParameters.standingPoly = nil
-	self.speciesData.animations.duck.controlParameters.crouchingPoly = nil
 
 
 	if type(self.speciesFile) == "table" then
@@ -438,7 +444,7 @@ function doUpdate(dt)
 		mcontroller.controlParameters(self.controlParameters)
 		animator.resetTransformationGroup("globalScale")
 		animator.scaleTransformationGroup("globalScale", {self.currentScale, self.currentScale})
-		animator.translateTransformationGroup("globalScale", {0, self.controlParameters.yOffset or 0})
+		animator.translateTransformationGroup("globalScale", {self.controlParameters.xOffset or 0, self.controlParameters.yOffset or 0})
 		status.setStatusProperty("animOverridesGlobalScaleYOffset", self.controlParameters.yOffset or 0)
 	end
 	status.setStatusProperty("speciesAnimOverrideControlParams", nil)
@@ -1304,7 +1310,7 @@ function doAnims( anims, force )
 			setAnimTag( anim )
 		elseif state == "priority" then
 			changePriorityLength( anim )
-		elseif state == "controlParameters" or state == "scaledControlParameters" then
+		elseif state == "controlParameters" or state == "scaledControlParameters" or state == "invertYOffset" then
 		elseif state == "state" then
 			animator.setGlobalTag("state", anim)
 		else
@@ -1327,7 +1333,12 @@ function doAnims( anims, force )
 
 		local unscaledBox = poly.boundBox(animsTable.controlParameters.collisionPoly)
 		local scaledBox = poly.boundBox(scaledControlParameters.collisionPoly)
-		scaledControlParameters.yOffset = unscaledBox[2] - scaledBox[2] -- first pair of coords in a rect is the lower left, so we want the difference in y between the bottom so we can translate that
+		if anims.invertYOffset then
+			scaledControlParameters.yOffset = unscaledBox[4] - scaledBox[4] -- second pair of coords in a rect is the upper right, so we want the difference in y between the top so we can translate that
+		else
+			scaledControlParameters.yOffset = unscaledBox[2] - scaledBox[2] -- first pair of coords in a rect is the lower left, so we want the difference in y between the bottom so we can translate that
+		end
+
 		scaledControlParameters.collisionPoly = poly.translate(scaledControlParameters.collisionPoly, {0, scaledControlParameters.yOffset})
 
 		scaledControlParameters.walkSpeed = scaledControlParameters.walkSpeed * currentScale

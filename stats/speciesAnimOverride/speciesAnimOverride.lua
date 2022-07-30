@@ -34,6 +34,9 @@ function init()
 		initAfterInit()
 	end)
 
+	message.setHandler("setAnimOverridesLoungeAnim", function (anim)
+		self.loungeAnim = anim
+	end)
 
 	for statename, state in pairs(self.animStateData) do
 		state.animationState = {
@@ -1241,11 +1244,19 @@ function checkHumanoidAnim()
 	end
 
 	animator.resetTransformationGroup("sitrotation")
-	if self.loungingIn ~= nil then
+	if self.loungingIn ~= nil and not self.loungeAnim then
 		local sitOrLay = world.getObjectParameter(self.loungingIn, "sitOrientation") or "sit"
 		animator.setGlobalTag("state", sitOrLay)
+		self.loungeAnim = sitOrLay
 		doAnims(self.speciesData.animations[sitOrLay])
+		addRPC(world.sendEntityMessage(self.loungingIn, "animOverridesLoungeAnim", entity.id()), function (anim)
+			self.loungeAnim = anim
+		end)
 		return
+	elseif self.loungingIn ~= nil and self.loungeAnim then
+		doAnims(self.speciesData.animations[self.loungeAnim])
+	else
+		self.loungeAnim = false
 	end
 
 	if mcontroller.onGround() then

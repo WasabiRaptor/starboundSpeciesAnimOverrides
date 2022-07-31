@@ -25,7 +25,7 @@ function init()
 				animator.setPartTag(partname, "colorRemap", "")
 				self.parts[partname] = nil
 			end
-			for name, offset in pairs( self.speciesData.offsets or {} ) do
+			for name, offset in pairs( (self.speciesData or {}).offsets or {} ) do
 				animator.resetTransformationGroup(name)
 			end
 		end

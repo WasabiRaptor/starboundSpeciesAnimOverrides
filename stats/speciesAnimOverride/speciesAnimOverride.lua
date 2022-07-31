@@ -1344,7 +1344,7 @@ function doAnims( anims, force )
 
 		local unscaledBox = poly.boundBox(animsTable.controlParameters.collisionPoly)
 		local scaledBox = poly.boundBox(scaledControlParameters.collisionPoly)
-		if anims.invertYOffset then
+		if (anims or {}).invertYOffset then
 			scaledControlParameters.yOffset = unscaledBox[4] - scaledBox[4] -- second pair of coords in a rect is the upper right, so we want the difference in y between the top so we can translate that
 		else
 			scaledControlParameters.yOffset = unscaledBox[2] - scaledBox[2] -- first pair of coords in a rect is the lower left, so we want the difference in y between the bottom so we can translate that

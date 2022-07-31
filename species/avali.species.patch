@@ -2,7 +2,7 @@
 	{
 		"op": "add",
 		"path": "/speciesAnimOverride",
-		"value": "speciesAnimOverride.config"
+		"value": "speciesAnimOverride1.config"
 	},
 	{
 		"op" : "add",

@@ -1,4 +1,5 @@
 require("/scripts/poly.lua")
+require("/scripts/vec2.lua")
 
 function init()
 	self.loopedMessages = {}
@@ -155,17 +156,20 @@ function initAfterInit(inInit)
 
 	animator.resetTransformationGroup("handoffset")
 	animator.resetTransformationGroup("globalOffset")
-	local handoffset = {self.bodyconfig.frontHandPosition[1]/8,self.bodyconfig.frontHandPosition[2]/8}
+	local handoffset = vec2.div(self.bodyconfig.frontHandPosition, 8)
 	animator.translateTransformationGroup("handoffset", handoffset)
 	animator.translateTransformationGroup("globalOffset", {((self.bodyconfig.globalOffset or {})[1] or 0)/8, ((self.bodyconfig.globalOffset or {})[2] or 0)/8})
+	local frontOffset = vec2.div(self.bodyconfig.frontArmOffset or {0,0}, 8)
+	local backOffset = vec2.div(self.bodyconfig.backArmOffset or {0,0}, 8)
+
 
 	self.frontArmOffsetData = {
-		handPosition = handoffset,
-		rotationCenter = {(self.bodyconfig.frontArmRotationCenter[1] + ((self.bodyconfig.frontArmOffset or {})[1] or 0))/8, (self.bodyconfig.frontArmRotationCenter[2] + ((self.bodyconfig.frontArmOffset or {})[2] or 0))/8 }
+		handPosition = vec2.add(handoffset, frontOffset),
+		rotationCenter = vec2.add(vec2.div(self.bodyconfig.frontArmRotationCenter, 8), frontOffset)
 	}
 	self.backArmOffsetData = {
-		handPosition = handoffset,
-		rotationCenter = {(self.bodyconfig.backArmRotationCenter[1] + ((self.bodyconfig.backArmOffset or {})[1] or 0))/8, (self.bodyconfig.backArmRotationCenter[2] + ((self.bodyconfig.backArmOffset or {})[2] or 0))/8 }
+		handPosition = vec2.add(handoffset, backOffset),
+		rotationCenter = vec2.add(vec2.div(self.bodyconfig.backArmRotationCenter, 8), backOffset)
 	}
 	status.setStatusProperty("frontarmAnimOverrideArmOffset", self.frontArmOffsetData)
 	status.setStatusProperty("backarmAnimOverrideArmOffset", self.backArmOffsetData)
@@ -936,8 +940,7 @@ end
 
 function rotateAimArm(aim, part)
 	local target = globalToLocal(aim)
-	local offset = self.bodyconfig[armsToArm[part].."Offset"] or {0,0}
-	local center = {(self.bodyconfig[armsToArm[part].."RotationCenter"][1]+offset[1])/8, (self.bodyconfig[armsToArm[part].."RotationCenter"][2]+offset[2])/8}
+	local center = vec2.add(vec2.mul(self[armsToArm[part].."OffsetData"].rotationCenter, self.currentScale or 1) {0, (self.controlParameters or {}).yOffset or 0 })
 	local angle = math.atan((target[2] - center[2]), (target[1] - center[1]))
 	animator.resetTransformationGroup( part.."rotation" )
 	animator.rotateTransformationGroup( part.."rotation", angle, center )
@@ -945,8 +948,7 @@ function rotateAimArm(aim, part)
 end
 
 function rotateArmAngle(part, angle)
-	local offset = self.bodyconfig[armsToArm[part] .. "Offset"] or { 0, 0 }
-	local center = { (self.bodyconfig[armsToArm[part] .. "RotationCenter"][1] + offset[1]) / 8, (self.bodyconfig[armsToArm[part] .. "RotationCenter"][2] + offset[2]) / 8 }
+	local center = self[armsToArm[part].."OffsetData"].rotationCenter
 	animator.resetTransformationGroup( part.."rotation" )
 	animator.rotateTransformationGroup( part.."rotation", angle, center )
 	return angle

@@ -12,6 +12,16 @@ function init()
 	self.animFunctionQueue = {}
 	self.parts = {}
 	self.globalTagDefaults = root.assetJson("/stats/speciesAnimOverride/"..config.getParameter("animationConfig")).globalTagDefaults or {}
+	self.armData = {
+		frontArmOffsetData = {
+			handPosition = {0,0},
+			rotationCenter = {0,0}
+		},
+		backArmOffsetData = {
+			handPosition = {0,0},
+			rotationCenter = {0,0}
+		}
+	}
 
 	self.settings = sb.jsonMerge(status.statusProperty("speciesAnimOverrideSettings") or {}, status.statusProperty("speciesAnimOverrideOverrideSettings") or {})
 
@@ -163,16 +173,16 @@ function initAfterInit(inInit)
 	local backOffset = vec2.div(self.bodyconfig.backArmOffset or {0,0}, 8)
 
 
-	self.frontArmOffsetData = {
+	self.armData.frontArmOffsetData = {
 		handPosition = vec2.add(handoffset, frontOffset),
 		rotationCenter = vec2.add(vec2.div(self.bodyconfig.frontArmRotationCenter, 8), frontOffset)
 	}
-	self.backArmOffsetData = {
+	self.armData.backArmOffsetData = {
 		handPosition = vec2.add(handoffset, backOffset),
 		rotationCenter = vec2.add(vec2.div(self.bodyconfig.backArmRotationCenter, 8), backOffset)
 	}
-	status.setStatusProperty("frontarmAnimOverrideArmOffset", self.frontArmOffsetData)
-	status.setStatusProperty("backarmAnimOverrideArmOffset", self.backArmOffsetData)
+	status.setStatusProperty("frontarmAnimOverrideArmOffset", self.armData.frontArmOffsetData)
+	status.setStatusProperty("backarmAnimOverrideArmOffset", self.armData.backArmOffsetData)
 
 	for name, offset in pairs( self.speciesData.offsets or {} ) do
 		animator.resetTransformationGroup(name)
@@ -576,7 +586,7 @@ function getHandItems()
 	end
 end
 
-local armsToArm = {
+armsToArm = {
 	frontarms = "frontArm",
 	backarms = "backArm"
 }
@@ -940,15 +950,15 @@ end
 
 function rotateAimArm(aim, part)
 	local target = globalToLocal(aim)
-	local center = vec2.add(vec2.mul(self[armsToArm[part].."OffsetData"].rotationCenter, self.currentScale or 1) {0, (self.controlParameters or {}).yOffset or 0 })
+	local center = vec2.add(vec2.mul(self.armData[armsToArm[part].."OffsetData"].rotationCenter, self.currentScale or 1), {0, (self.controlParameters or {}).yOffset or 0 })
 	local angle = math.atan((target[2] - center[2]), (target[1] - center[1]))
 	animator.resetTransformationGroup( part.."rotation" )
-	animator.rotateTransformationGroup( part.."rotation", angle, center )
+	animator.rotateTransformationGroup( part.."rotation", angle, self.armData[armsToArm[part].."OffsetData"].rotationCenter )
 	return angle
 end
 
 function rotateArmAngle(part, angle)
-	local center = self[armsToArm[part].."OffsetData"].rotationCenter
+	local center = self.armData[armsToArm[part].."OffsetData"].rotationCenter
 	animator.resetTransformationGroup( part.."rotation" )
 	animator.rotateTransformationGroup( part.."rotation", angle, center )
 	return angle

@@ -218,6 +218,9 @@ function initAfterInit(inInit)
 		self.speciesData.animations.duck.controlParameters.standingPoly = nil
 		self.speciesData.animations.duck.controlParameters.crouchingPoly = nil
 	end
+	if not self.speciesData.animations.duck.duckOffset then
+		self.speciesData.animations.duck.duckOffset = self.bodyconfig.duckOffset/8
+	end
 
 
 	if type(self.speciesFile) == "table" then
@@ -461,6 +464,7 @@ function doUpdate(dt)
 	if self.lastScale ~= self.currentScale then
 		scaleUpdated(dt)
 	end
+	status.setStatusProperty("animOverridesDuckOffset", (self.duckOffset or 0) * (self.currentScale or 1))
 
 	if self.controlParameters and not status.statusProperty("speciesAnimOverrideControlParams") then
 		mcontroller.controlParameters(self.controlParameters)
@@ -1360,7 +1364,7 @@ function doAnims( anims, force )
 			setAnimTag( anim )
 		elseif state == "priority" then
 			changePriorityLength( anim )
-		elseif state == "controlParameters" or state == "scaledControlParameters" or state == "invertYOffset" then
+		elseif state == "controlParameters" or state == "scaledControlParameters" or state == "invertYOffset" or state == "duckOffset" then
 		elseif state == "state" then
 			animator.setGlobalTag("state", anim)
 		else
@@ -1372,6 +1376,7 @@ function doAnims( anims, force )
 	if (anims or {}).controlParameters then
 		animsTable = anims
 	end
+	self.duckOffset = (anims or {}).duckOffset or 0
 	if not animsTable.scaledControlParameters then
 		animsTable.scaledControlParameters = {}
 	end

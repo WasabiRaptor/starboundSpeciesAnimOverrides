@@ -35,7 +35,7 @@ function activeItemAnimationOverrideFuncs.handPosition(offset)
 	local armOffset = animationConfig.animationParameter(arm .. "armAnimOverrideArmOffset")
 	if armOffset then
 		local scale = animationConfig.animationParameter("animOverridesCurrentScale") or 1
-		local yOffset = animationConfig.animationParameter("animOverridesGlobalScaleYOffset") or 0
+		local yOffset = (animationConfig.animationParameter("animOverridesGlobalScaleYOffset") or 0) + (animationConfig.animationParameter("animOverridesDuckOffset") or 0)
 		local angle = activeItemAnimation.ownerArmAngle()
 		local position = vec2.add(vec2.sub(armOffset.handPosition, armOffset.rotationCenter), offset or { 0, 0 })
 		local center = armOffset.rotationCenter

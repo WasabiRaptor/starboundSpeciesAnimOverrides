@@ -169,7 +169,7 @@ function activeItemOverrideFuncs.handPosition(offset)
 	local armOffset = status.statusProperty(arm.."armAnimOverrideArmOffset")
 	if armOffset and itemData.setArmAngle ~= nil then
 		local scale = status.statusProperty("animOverridesCurrentScale") or 1
-		local yOffset = status.statusProperty("animOverridesGlobalScaleYOffset") or 0
+		local yOffset = (status.statusProperty("animOverridesGlobalScaleYOffset") or 0) + (status.statusProperty("animOverridesDuckOffset") or 0)
 		local angle = itemData.setArmAngle
 		local position = vec2.add(vec2.sub(armOffset.handPosition, armOffset.rotationCenter), offset or { 0, 0 })
 		local center = armOffset.rotationCenter
@@ -195,7 +195,7 @@ function activeItemOverrideFuncs.aimAngleAndDirection(aimVerticalOffset, targetP
 		if target[1] < flipLine then
 			direction = direction * -1
 		end
-		local yOffset = status.statusProperty("animOverridesGlobalScaleYOffset") or 0
+		local yOffset = (status.statusProperty("animOverridesGlobalScaleYOffset") or 0) + (status.statusProperty("animOverridesDuckOffset") or 0)
 		local center = vec2.add(scaledCenter, {0, yOffset})
 		local angle = math.atan((target[2] - center[2]), (target[1] - center[1]))
 		return angle, direction
@@ -209,7 +209,7 @@ function activeItemOverrideFuncs.aimAngle(aimVerticalOffset, targetPosition)
 	if armOffset then
 		local target = world.distance( targetPosition, mcontroller.position() )
 		local scale = status.statusProperty("animOverridesCurrentScale") or 1
-		local yOffset = status.statusProperty("animOverridesGlobalScaleYOffset") or 0
+		local yOffset = (status.statusProperty("animOverridesGlobalScaleYOffset") or 0) + (status.statusProperty("animOverridesDuckOffset") or 0)
 		local center = vec2.add(vec2.mul(vec2.add(armOffset.rotationCenter, { 0, aimVerticalOffset }), scale), { 0, yOffset })
 		center[1] = center[1] * mcontroller.facingDirection()
 		local angle = math.atan((target[2] - center[2]), (target[1] - center[1]))

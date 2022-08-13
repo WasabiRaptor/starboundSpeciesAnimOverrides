@@ -1255,7 +1255,6 @@ function checkHumanoidAnim()
 		end
 	end
 
-	animator.resetTransformationGroup("sitrotation")
 	if self.loungingIn ~= nil and not self.loungeAnim then
 		local sitOrLay = world.getObjectParameter(self.loungingIn, "sitOrientation") or "sit"
 		animator.setGlobalTag("state", sitOrLay)

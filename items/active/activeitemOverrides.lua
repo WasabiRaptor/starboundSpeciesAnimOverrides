@@ -76,6 +76,7 @@ function uninit()
 end
 
 function saveDataDoOld(funcName, ...)
+	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
 	itemData[funcName] = ...
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	return old[funcName](...)
@@ -94,7 +95,7 @@ interceptFunction("setOutsideOfHand")
 interceptFunction("setArmAngle")
 
 function transformQueue(funcName, ...)
-	itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
+	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
 	if #itemData.transformQueue < 30 then
 		table.insert(itemData.transformQueue, {funcName, ...})
 	end
@@ -113,18 +114,21 @@ interceptTransform("translateTransformationGroup")
 interceptTransform("resetTransformationGroup")
 
 function animatorOverrideFuncs.setAnimationState(statetype, state, startNew)
+	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
 	itemData.setAnimationState[statetype] = {state, startNew or false, world.time()} -- time to differentiate repeat calls
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	return old.setAnimationState(statetype, state, startNew)
 end
 
 function animatorOverrideFuncs.setGlobalTag(tagname, tagvalue)
+	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
 	itemData.setGlobalTag[tagname] = tagvalue
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	return old.setGlobalTag(tagname, tagvalue)
 end
 
 function animatorOverrideFuncs.setPartTag(part, tagname, tagvalue)
+	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
 	itemData.setPartTag[part] = itemData.setPartTag[part] or {}
 	itemData.setPartTag[part][tagname] = tagvalue
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
@@ -143,6 +147,7 @@ function globalToLocal( position )
 end
 
 function activeItemOverrideFuncs.handPosition(offset)
+	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
 	local arm = handTable[hand][mcontroller.facingDirection()+2]
 	local armOffset = status.statusProperty(arm.."armAnimOverrideArmOffset")
 	if armOffset and itemData.setArmAngle ~= nil then

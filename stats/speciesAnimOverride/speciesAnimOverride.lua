@@ -437,6 +437,14 @@ function update(dt)
 end
 
 function doUpdate(dt)
+	self.lastScale = self.currentScale
+	self.scaleTime = self.scaleTime + dt
+	if self.scaleTime < self.scaleDuration then
+		self.currentScale = self.oldScale + (self.scale - self.oldScale) * (self.scaleTime / self.scaleDuration)
+	else
+		self.currentScale = self.scale or 1
+	end
+
 	updateAnims(dt)
 	checkRPCsFinished(dt)
 	checkTimers(dt)
@@ -449,13 +457,10 @@ function doUpdate(dt)
 	animator.resetTransformationGroup("globalRotation")
 	animator.rotateTransformationGroup("globalRotation", mcontroller.rotation() * mcontroller.facingDirection())
 
-	self.scaleTime = self.scaleTime + dt
-	if self.scaleTime < self.scaleDuration then
-		self.currentScale = self.oldScale + (self.scale - self.oldScale) * (self.scaleTime / self.scaleDuration)
-	else
-		self.currentScale = self.scale or 1
-	end
 	status.setStatusProperty("animOverridesCurrentScale", self.currentScale )
+	if self.lastScale ~= self.currentScale then
+		scaleUpdated(dt)
+	end
 
 	if self.controlParameters and not status.statusProperty("speciesAnimOverrideControlParams") then
 		mcontroller.controlParameters(self.controlParameters)
@@ -465,6 +470,11 @@ function doUpdate(dt)
 		status.setStatusProperty("animOverridesGlobalScaleYOffset", self.controlParameters.yOffset or 0)
 	end
 	status.setStatusProperty("speciesAnimOverrideControlParams", nil)
+end
+
+function scaleUpdated(dt)
+	world.sendEntityMessage(entity.id(), "primaryItemUpdateScale", self.currentScale or 1, (self.controlParameters or {}).yOffset or 0)
+	world.sendEntityMessage(entity.id(), "altItemUpdateScale", self.currentScale or 1, (self.controlParameters or {}).yOffset or 0)
 end
 
 function uninit()
@@ -845,6 +855,20 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 						tags[tagname] = tostring(tag)
 					end
 				end
+				local offset = properties.offset
+				if properties.centered == false then
+					local tagtable = sb.jsonMerge(itemImages[hand].tags or {},
+						sb.jsonMerge(itemOverrideData.setGlobalTag or {},
+							sb.jsonMerge(tags or {}, itemOverrideData.setPartTag[itemPart] or {})))
+					if image and image ~= "" then
+						local path = fixFilepath(sb.replaceTags((image or ""), tags), item)
+						local success, imageSize = pcall(root.imageSize, (path))
+						if success then
+							offset = vec2.add(offset,vec2.div(imageSize,2*8))
+						end
+
+					end
+				end
 
 				itemImages[hand].parts[itemPart] = {
 					transformationGroups = properties.transformationGroups,
@@ -852,7 +876,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 					tags = tags,
 					image = image,
 					fullbright = properties.fullbright,
-					offset = properties.offset,
+					offset = offset,
 					rotationCenter = properties.rotationCenter,
 					partStates = partStates
 				}
@@ -901,15 +925,19 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 				fullbright = "_fullbright"
 			end
 
-			local tagtable = sb.jsonMerge( itemImages[hand].tags or {}, sb.jsonMerge( itemOverrideData.setGlobalTag or {}, sb.jsonMerge( data.tags or {}, itemOverrideData.setPartTag[partname] or {} )))
-			for i, stateType in ipairs(data.partStates or {}) do
-				tagtable.frame = (itemImages[hand].partStates[stateType] or {}).frame or tagtable.frame
-			end
-			tagtable.variant = ((item.parameters or {}).animationPartVariants or {})[truePartname] or ""
+			if data.image and data.image ~= "" then
+				local tagtable = sb.jsonMerge(itemImages[hand].tags or {},
+					sb.jsonMerge(itemOverrideData.setGlobalTag or {},
+						sb.jsonMerge(data.tags or {}, itemOverrideData.setPartTag[truePartname] or {})))
+				for i, stateType in ipairs(data.partStates or {}) do
+					tagtable.frame = (itemImages[hand].partStates[stateType] or {}).frame or tagtable.frame
+				end
+				tagtable.variant = ((item.parameters or {}).animationPartVariants or {})[truePartname] or ""
 
-			local path = fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item)
-			animator.setPartTag( partname, "partImage", path or "" )
-			animator.setAnimationState(partname, "item"..outside..fullbright)
+				local path = fixFilepath( sb.replaceTags( (data.image or ""), tagtable), item)
+				animator.setPartTag( partname, "partImage", path or "" )
+				animator.setAnimationState(partname, "item"..outside..fullbright)
+			end
 		end
 	end
 end

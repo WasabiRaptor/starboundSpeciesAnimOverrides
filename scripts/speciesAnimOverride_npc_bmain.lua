@@ -24,9 +24,13 @@ function init()
 
 	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
 
-	local speciesAnimOverrideData = status.statusProperty("speciesAnimOverrideData")
-	if type(speciesAnimOverrideData) == "table" then
-		status.setPersistentEffects("speciesAnimOverride", { speciesAnimOverrideData.customAnimStatus or "speciesAnimOverride"})
+	if not status.statusProperty("speciesAnimOverrideData") then
+		speciesFile = root.assetJson("/species/" .. (npc.species()) .. ".species") or {}
+		local effect = speciesFile.customAnimStatus or "speciesAnimOverride"
+		status.setStatusProperty("speciesAnimOverrideData", { customAnimStatus = effect, permanent = speciesFile.permanentAnimOverride })
+		if speciesFile.permanentAnimOverride then
+			status.setPersistentEffects("speciesAnimOverride", { effect })
+		end
 	end
 end
 

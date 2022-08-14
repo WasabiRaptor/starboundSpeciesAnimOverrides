@@ -129,10 +129,10 @@ function initAfterInit(inInit)
 	end
 
 	local originalSpecies = status.statusProperty("animOverridesStoredSpecies") or world.entitySpecies(entity.id())
-	local originalSpeciesFile = root.assetJson("/species/"..originalSpecies..".species") or {}
-	local originalSpeciesBodyConfig = root.assetJson("/humanoid.config")
-	if originalSpeciesFile.humanoidConfig ~= nil then
-		originalSpeciesBodyConfig = sb.jsonMerge(originalSpeciesBodyConfig, root.assetJson(originalSpeciesFile.humanoidConfig))
+	self.originalSpeciesFile = root.assetJson("/species/"..originalSpecies..".species") or {}
+	self.originalSpeciesBodyConfig = root.assetJson("/humanoid.config")
+	if self.originalSpeciesFile.humanoidConfig ~= nil then
+		originalSpeciesBodyConfig = sb.jsonMerge(originalSpeciesBodyConfig, root.assetJson(self.originalSpeciesFile.humanoidConfig))
 	end
 
 	local mergeConfigs = speciesData.merge or {}
@@ -346,6 +346,7 @@ function initAfterInit(inInit)
 	self.overrideData.gender = self.gender
 	self.overrideData.identity = self.identity
 	status.setStatusProperty("speciesAnimOverrideData", self.overrideData)
+	status.setPersistentEffects("species", self.speciesFile.statusEffects or {})
 
 	addDirectives()
 	local fb = ""
@@ -482,6 +483,7 @@ function scaleUpdated(dt)
 end
 
 function uninit()
+	status.setPersistentEffects("species", self.originalSpeciesFile.statusEffects or {})
 	status.setStatusProperty("beamMinerImage", beamMinerImage)
 	world.sendEntityMessage(entity.id(), "removeAnimOverrideAimTech" )
 end

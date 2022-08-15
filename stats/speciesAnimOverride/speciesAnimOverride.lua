@@ -893,10 +893,12 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 		end
 	end
 
-	for i, args in ipairs(itemOverrideData.transformQueue) do
-		queueHandItemTransform(hand, part, table.unpack(args))
+	for transformGroup, transformations in pairs(itemOverrideData.transformQueue) do
+		for i, args in ipairs(transformations) do
+			queueHandItemTransform(hand, part, transformGroup, table.unpack(args))
+		end
+		itemOverrideData.transformQueue[transformGroup] = {{}}
 	end
-	itemOverrideData.transformQueue = {{}}
 	status.setStatusProperty(hand.."ItemOverrideData", itemOverrideData)
 
 	local outside = ""
@@ -957,10 +959,10 @@ function clearAnimatedActiveItemTags(hand, part)
 	end
 end
 
-function queueHandItemTransform(hand, part, func, transformGroup, ...)
+function queueHandItemTransform(hand, part, transformGroup, func, ...)
 	if func == "resetTransformationGroup" then
 		itemImages[hand].transformationGroups[transformGroup] = {}
-	elseif type(transformGroup) == "string" then
+	elseif type(func) == "string" then
 		table.insert(itemImages[hand].transformationGroups[transformGroup], {func, ... })
 	end
 end

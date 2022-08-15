@@ -14,7 +14,7 @@ local handTable = {
 local activeItemOverrideFuncs = {}
 local animatorOverrideFuncs = {}
 local itemData = {
-	transformQueue = {{}},
+	transformQueue = {},
 	setAnimationState = {},
 	setGlobalTag = {},
 	setPartTag = {}
@@ -114,16 +114,19 @@ interceptFunction("setTwoHandedGrip")
 interceptFunction("setOutsideOfHand")
 interceptFunction("setArmAngle")
 
-function transformQueue(funcName, ...)
-	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
-	if #itemData.transformQueue < 40 then
-		table.insert(itemData.transformQueue, { funcName, ... })
+function transformQueue(funcName, transformGroup, ...)
+	local itemData = status.statusProperty(hand .. "ItemOverrideData") or itemData
+	if not itemData.transformQueue[transformGroup] then
+		itemData.transformQueue[transformGroup] = {{"resetTransformationGroup"}}
+	end
+	if #itemData.transformQueue[transformGroup] < 30 then
+		table.insert(itemData.transformQueue[transformGroup], { funcName, ... })
 	else
-		sb.logInfo("too many transformations in queue to do " .. funcName .. ": " .. sb.printJson({...}))
+		sb.logInfo("too many transformations in "..transformGroup.."'s queue to do " .. funcName .. ": " .. sb.printJson({...}))
 		sb.logInfo(sb.printJson(itemData.transformQueue,1))
 	end
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
-	return old[funcName](...)
+	return old[funcName](transformGroup,...)
 end
 function interceptTransform(func)
 	animatorOverrideFuncs[func] = function(...)
@@ -134,7 +137,12 @@ interceptTransform("rotateTransformationGroup")
 interceptTransform("scaleTransformationGroup")
 interceptTransform("transformTransformationGroup")
 interceptTransform("translateTransformationGroup")
-interceptTransform("resetTransformationGroup")
+function animatorOverrideFuncs.resetTransformationGroup(transformGroup, ...)
+	local itemData = status.statusProperty(hand .. "ItemOverrideData") or itemData
+	itemData.transformQueue[transformGroup] = {{"resetTransformationGroup"}}
+	status.setStatusProperty(hand.."ItemOverrideData", itemData)
+	return old.resetTransformationGroup(transformGroup,...)
+end
 
 function animatorOverrideFuncs.setAnimationState(statetype, state, startNew)
 	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData

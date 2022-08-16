@@ -1284,7 +1284,12 @@ function checkHumanoidAnim()
 			if found1 ~= nil then
 				local found3, found4 = imageString:find(".1", found2, found2+10 )
 				if found3 ~= nil then
-					doAnim("emoteState", imageString:sub(found2+1, found3-1))
+					local emote = imageString:sub(found2 + 1, found3 - 1)
+					if type((self.speciesData.emoteAnimations or {})[emote]) == "table" then
+						doAnims((self.speciesData.emoteAnimations or {})[emote])
+					else
+						doAnim("emoteState", emote)
+					end
 					gotEmote = true
 				end
 			end

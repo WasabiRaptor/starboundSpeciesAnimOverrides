@@ -1,5 +1,11 @@
 require("/scripts/poly.lua")
 require("/scripts/vec2.lua")
+armsToArm = {
+	frontarms = "frontArm",
+	backarms = "backArm"
+}
+beamMinerImage = "/items/tools/miningtools/beamaxe.png"
+beamMinerOffset = {-2, 0}
 
 function init()
 	self.loopedMessages = {}
@@ -483,7 +489,6 @@ function scaleUpdated(dt)
 end
 
 function uninit()
-	status.setPersistentEffects("species", self.originalSpeciesFile.statusEffects or {})
 	status.setStatusProperty("beamMinerImage", beamMinerImage)
 	world.sendEntityMessage(entity.id(), "removeAnimOverrideAimTech" )
 end
@@ -602,12 +607,6 @@ function getHandItems()
 	end
 end
 
-armsToArm = {
-	frontarms = "frontArm",
-	backarms = "backArm"
-}
-beamMinerImage = "/items/tools/miningtools/beamaxe.png"
-beamMinerOffset = {-2, 0}
 function getHandItem(hand, part, continue)
 
 	local itemDescriptor = world.entityHandItemDescriptor(entity.id(), hand)

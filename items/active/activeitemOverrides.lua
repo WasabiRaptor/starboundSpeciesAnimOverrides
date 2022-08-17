@@ -83,12 +83,12 @@ end
 
 function lockItem(lock)
 	if not locked and lock then
+		locked = lock
 		if old.uninit ~= nil then old.uninit() end
-	end
-	if locked and not lock then
+	elseif locked and not lock then
+		locked = lock
 		if old.init ~= nil then old.init() end
 	end
-	locked = lock
 end
 
 function uninit()

@@ -461,7 +461,7 @@ function doUpdate(dt)
 
 	getCosmeticItems()
 	getHandItems()
-	checkHumanoidAnim()
+	checkHumanoidAnim(dt)
 
 
 	animator.resetTransformationGroup("globalRotation")
@@ -1272,25 +1272,22 @@ function endAnim(state, statename)
 end
 
 local falling
-function checkHumanoidAnim()
+function checkHumanoidAnim(dt)
 	local portrait = world.entityPortrait(entity.id(), "full")
-	local gotEmote
 	for _, part in ipairs(portrait) do
 		local imageString = part.image
 		-- check for doing an emote animation
-		if not gotEmote then
-			local found1, found2 = imageString:find("/emote.png:")
-			if found1 ~= nil then
-				local found3, found4 = imageString:find(".1", found2, found2+10 )
-				if found3 ~= nil then
-					local emote = imageString:sub(found2 + 1, found3 - 1)
-					if type((self.speciesData.emoteAnimations or {})[emote]) == "table" then
-						doAnims((self.speciesData.emoteAnimations or {})[emote])
-					else
-						doAnim("emoteState", emote)
-					end
-					gotEmote = true
+		local found1, found2 = imageString:find("/emote.png:")
+		if found1 ~= nil then
+			local found3, found4 = imageString:find(".1", found2, found2 + 10)
+			if found3 ~= nil then
+				local emote = imageString:sub(found2 + 1, found3 - 1)
+				if type((self.speciesData.emoteAnimations or {})[emote]) == "table" then
+					doAnims((self.speciesData.emoteAnimations or {})[emote])
+				else
+					doAnim("emoteState", emote)
 				end
+				break
 			end
 		end
 	end
@@ -1306,6 +1303,7 @@ function checkHumanoidAnim()
 		return
 	elseif self.loungingIn ~= nil and self.loungeAnim then
 		doAnims(self.speciesData.animations[self.loungeAnim])
+		return
 	else
 		self.loungeAnim = false
 	end

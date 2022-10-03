@@ -122,8 +122,8 @@ function transformQueue(funcName, transformGroup, ...)
 	if #itemData.transformQueue[transformGroup] < 30 then
 		table.insert(itemData.transformQueue[transformGroup], { funcName, ... })
 	else
-		sb.logInfo("too many transformations in "..transformGroup.."'s queue to do " .. funcName .. ": " .. sb.printJson({...}))
-		sb.logInfo(sb.printJson(itemData.transformQueue,1))
+		--sb.logInfo("too many transformations in "..transformGroup.."'s queue to do " .. funcName .. ": " .. sb.printJson({...}))
+		--sb.logInfo(sb.printJson(itemData.transformQueue,1))
 	end
 	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	return old[funcName](transformGroup,...)

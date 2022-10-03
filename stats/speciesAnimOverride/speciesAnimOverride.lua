@@ -106,6 +106,13 @@ function init()
 end
 
 function initAfterInit(inInit)
+	if self.settings.noSpriteRedraw then
+		effect.setParentDirectives("")
+		animator.setGlobalTag("directives", "crop;0;0;0;0")
+		status.setStatusProperty("speciesAnimOverrideData", {})
+	else
+		effect.setParentDirectives("crop;0;0;0;0")
+	end
 	if not inInit then
 		world.sendEntityMessage(entity.id(), "giveAnimOverrideAimTech" )
 	else
@@ -447,6 +454,8 @@ function update(dt)
 end
 
 function doUpdate(dt)
+
+
 	self.lastScale = self.currentScale
 	self.scaleTime = self.scaleTime + dt
 	if self.scaleTime < self.scaleDuration then
@@ -455,13 +464,23 @@ function doUpdate(dt)
 		self.currentScale = self.scale or 1
 	end
 
-	updateAnims(dt)
-	checkRPCsFinished(dt)
-	checkTimers(dt)
+	if self.settings.noSpriteRedraw then
+		self.lastScale = 1
+		self.oldScale = 1
+		self.currentScale = 1
+		self.duckOffset = 0
+		checkRPCsFinished(dt)
+		checkTimers(dt)
+	else
+		updateAnims(dt)
+		checkRPCsFinished(dt)
+		checkTimers(dt)
 
-	getCosmeticItems()
-	getHandItems()
-	checkHumanoidAnim(dt)
+		getCosmeticItems()
+		getHandItems()
+		checkHumanoidAnim(dt)
+	end
+
 
 
 	animator.resetTransformationGroup("globalRotation")
@@ -594,6 +613,7 @@ function checkTimers(dt)
 end
 
 function getHandItems()
+	if self.settings.noHandItems then return end
 	if mcontroller.facingDirection() < 0 then
 		local continue = getHandItem("alt", "backarms", getHandItem("primary", "frontarms", {}) or {})
 		if continue then
@@ -610,6 +630,7 @@ end
 function getHandItem(hand, part, continue)
 
 	local itemDescriptor = world.entityHandItemDescriptor(entity.id(), hand)
+	clearAnimatedActiveItemTags(hand, part)
 
 	if itemDescriptor ~= nil and continue.secondArmAngle == nil then
 		local item = root.itemConfig(itemDescriptor)
@@ -620,7 +641,6 @@ function getHandItem(hand, part, continue)
 			setEmptyHand(hand, part)
 			return
 		end
-		clearAnimatedActiveItemTags(hand, part)
 
 		if itemType == "activeitem" then
 			local itemOverrideData = status.statusProperty(hand.."ItemOverrideData") or {}
@@ -747,6 +767,7 @@ local usedParts = 0
 local resetPart = {}
 function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
 	if self.settings.noAnimatedItems then return end
+
 	local newItem = false
 	local refreshImages = false
 	if itemImages[hand].name ~= itemDescriptor.name then
@@ -785,50 +806,52 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 		refreshImages = true
 	end
 
-	for stateType, data in pairs(itemImages[hand].animation.animatedParts.stateTypes or {}) do
-		if newItem then
-			itemImages[hand].partStates[stateType] = {
-				current = data.default,
-				states = data.states,
-				updated = 0,
-				time = 0,
-				frame = 1,
-			}
-		end
-
-		stateData = itemImages[hand].partStates[stateType]
-		setAnimData = itemOverrideData.setAnimationState[stateType]
-		if stateData then
-			if setAnimData and setAnimData[3] ~= stateData.updated then
-				local old = stateData.current
-				local startNew
-				stateData.current, startNew, stateData.updated = table.unpack(setAnimData)
-				if old ~= stateData.current or startNew then
-					stateData.time = -script.updateDt() -- cancel increment to 0
-				end
-				refreshImages = true
+	if not self.settings.noAnimatingItems then
+		for stateType, data in pairs(itemImages[hand].animation.animatedParts.stateTypes or {}) do
+			if newItem then
+				itemImages[hand].partStates[stateType] = {
+					current = data.default,
+					states = data.states,
+					updated = 0,
+					time = 0,
+					frame = 1,
+				}
 			end
-			stateData.time = stateData.time + script.updateDt()
-			local currentState = stateData.states[stateData.current]
-			if not currentState or not currentState.cycle or not currentState.frames then
-				stateData.frame = 1
-			elseif stateData.time < currentState.cycle then
-				stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames) + 1
-			else
-				if currentState.mode == "loop" then
-					stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames) % currentState.frames + 1
-				elseif currentState.mode == "end" then
-					stateData.frame = currentState.frames
-				elseif currentState.mode == "transition" then
-					stateData.current = currentState.transition
-					stateData.time = stateData.time - currentState.cycle
-					currentState = stateData.states[stateData.current]
-					if not currentState or not currentState.cycle or not currentState.frames then
-						stateData.frame = 1
-					else
-						stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames) + 1
+
+			stateData = itemImages[hand].partStates[stateType]
+			setAnimData = itemOverrideData.setAnimationState[stateType]
+			if stateData then
+				if setAnimData and setAnimData[3] ~= stateData.updated then
+					local old = stateData.current
+					local startNew
+					stateData.current, startNew, stateData.updated = table.unpack(setAnimData)
+					if old ~= stateData.current or startNew then
+						stateData.time = -script.updateDt() -- cancel increment to 0
 					end
 					refreshImages = true
+				end
+				stateData.time = stateData.time + script.updateDt()
+				local currentState = stateData.states[stateData.current]
+				if not currentState or not currentState.cycle or not currentState.frames then
+					stateData.frame = 1
+				elseif stateData.time < currentState.cycle then
+					stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames) + 1
+				else
+					if currentState.mode == "loop" then
+						stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames) % currentState.frames + 1
+					elseif currentState.mode == "end" then
+						stateData.frame = currentState.frames
+					elseif currentState.mode == "transition" then
+						stateData.current = currentState.transition
+						stateData.time = stateData.time - currentState.cycle
+						currentState = stateData.states[stateData.current]
+						if not currentState or not currentState.cycle or not currentState.frames then
+							stateData.frame = 1
+						else
+							stateData.frame = math.floor(stateData.time / currentState.cycle * currentState.frames) + 1
+						end
+						refreshImages = true
+					end
 				end
 			end
 		end
@@ -1009,7 +1032,6 @@ function setEmptyHand(hand, part)
 	animator.setAnimationState(part.."RotationState", "none")
 	animator.setGlobalTag( part.."RotationVisible", "?crop;0;0;0;0" )
 	animator.setGlobalTag( part.."Visible", "" )
-	clearAnimatedActiveItemTags(hand, part)
 	itemImages[hand] = { parts = {} }
 end
 

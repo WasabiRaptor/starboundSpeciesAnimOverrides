@@ -827,8 +827,8 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 					stateData.current, startNew, stateData.updated = table.unpack(setAnimData)
 					if old ~= stateData.current or startNew then
 						stateData.time = -script.updateDt() -- cancel increment to 0
+						refreshImages = true
 					end
-					refreshImages = true
 				end
 				stateData.time = stateData.time + script.updateDt()
 				local currentState = stateData.states[stateData.current]

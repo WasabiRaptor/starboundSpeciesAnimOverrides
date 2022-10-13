@@ -105,12 +105,25 @@ function init()
 	self.scaleTime = 0
 end
 
+local doNotRedraw
 function initAfterInit(inInit)
-	if self.settings.noSpriteRedraw then
+	local originalSpecies = status.statusProperty("animOverridesStoredSpecies") or world.entitySpecies(entity.id())
+	self.species = self.overrideData.species or status.statusProperty("animOverridesStoredSpecies") or world.entitySpecies(entity.id())
+	self.gender = self.overrideData.gender or status.statusProperty("animOverridesStoredGender") or world.entityGender(entity.id())
+	self.identity = self.overrideData.identity or {}
+	local blacklist = root.assetJson("/animOverrideBlacklist.config")
+
+	if self.settings.noSpriteRedraw or (originalSpecies ~= nil and blacklist[originalSpecies]) then
 		effect.setParentDirectives("")
 		animator.setGlobalTag("directives", "crop;0;0;0;0")
 		status.setStatusProperty("speciesAnimOverrideData", {})
+		doNotRedraw = true
 	else
+		if self.species ~= nil and blacklist[self.species] then
+			self.species = originalSpecies
+			self.identity = {}
+		end
+		doNotRedraw = false
 		effect.setParentDirectives("crop;0;0;0;0")
 	end
 	if not inInit then
@@ -118,10 +131,6 @@ function initAfterInit(inInit)
 	else
 		timer("techMessage", 0.5, function () world.sendEntityMessage(entity.id(), "giveAnimOverrideAimTech" ) end)
 	end
-
-	self.species = self.overrideData.species or status.statusProperty("animOverridesStoredSpecies") or world.entitySpecies(entity.id())
-	self.gender = self.overrideData.gender or status.statusProperty("animOverridesStoredGender") or world.entityGender(entity.id())
-	self.identity = self.overrideData.identity or {}
 
 	self.speciesFile = root.assetJson("/species/"..self.species..".species") or {}
 	self.bodyconfig = root.assetJson("/humanoid.config")
@@ -141,7 +150,6 @@ function initAfterInit(inInit)
 		self.bodyconfig = sb.jsonMerge(self.bodyconfig, root.assetJson(self.speciesFile.humanoidConfig))
 	end
 
-	local originalSpecies = status.statusProperty("animOverridesStoredSpecies") or world.entitySpecies(entity.id())
 	self.originalSpeciesFile = root.assetJson("/species/"..originalSpecies..".species") or {}
 	self.originalSpeciesBodyConfig = root.assetJson("/humanoid.config")
 	if self.originalSpeciesFile.humanoidConfig ~= nil then
@@ -464,7 +472,7 @@ function doUpdate(dt)
 		self.currentScale = self.scale or 1
 	end
 
-	if self.settings.noSpriteRedraw then
+	if doNotRedraw then
 		self.lastScale = 1
 		self.oldScale = 1
 		self.currentScale = 1

@@ -694,11 +694,22 @@ function getHandItem(hand, part, continue)
 				setEmptyHand(hand, part)
 			end
 		else
-			if itemType == "beamminingtool" or itemType == "wiretool" or itemType == "paintingbeamtool" or itemType == "inspectiontool" or itemType == "flashlight" then
+			if itemType == "object" or itemType == "material" or itemType == "liquid" then
+				local aim = status.statusProperty("speciesAnimOverrideAim")
+				if not aim then return end
+				rotateAimArm(aim, part)
+				local itemImage = beamMinerImage
+				local offset = beamMinerOffset
+				translateArmOffset(hand, part, offset)
+				animator.setPartTag(part .. "_item_0", "partImage", itemImage or "")
+
+				rotationArmVisible(part)
+				return
+			elseif item.config.image or item.config.inventoryIcon then
 				local aim = status.statusProperty("speciesAnimOverrideAim")
 				if not aim then return end
 				local angle = rotateAimArm(aim, part)
-				local itemImage = fixFilepath(item.config.image, item)
+				local itemImage = fixFilepath(item.config.image or item.config.inventoryIcon, item)
 				local offset = item.config.handPosition or {0,0}
 				if itemType == "inspectiontool" then
 					offset[1] = offset[1]*8
@@ -725,17 +736,6 @@ function getHandItem(hand, part, continue)
 					translateArmOffset(hand, part, offset)
 					animator.setPartTag(part .. "_item_0", "partImage", itemImage or "")
 				end
-			elseif itemType == "object" or itemType == "material" or itemType == "liquid" then
-				local aim = status.statusProperty("speciesAnimOverrideAim")
-				if not aim then return end
-				rotateAimArm(aim, part)
-				local itemImage = beamMinerImage
-				local offset = beamMinerOffset
-				translateArmOffset(hand, part, offset)
-				animator.setPartTag(part .. "_item_0", "partImage", itemImage or "")
-
-				rotationArmVisible(part)
-				return
 			else
 				setEmptyHand(hand, part)
 			end

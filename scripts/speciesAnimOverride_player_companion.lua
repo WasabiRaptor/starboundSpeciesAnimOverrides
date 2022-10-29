@@ -1,4 +1,5 @@
 local oldinit = init
+local olduninit = uninit
 function init()
 	oldinit()
 	message.setHandler("animOverrideGetEquipsAndLounge", function(_,_)
@@ -14,8 +15,6 @@ function init()
 			lounging = player.loungingIn()
 		}
 	end)
-
-	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
 
 	message.setHandler("giveHeldItemOverrideLockScript", function(_,_, itemDescriptor)
 		giveHeldItemOverrideLockScript(itemDescriptor)
@@ -50,6 +49,11 @@ function init()
 			status.setPersistentEffects("speciesAnimOverride", { effect })
 		end
 	end
+end
+
+function uninit()
+	olduninit()
+	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
 end
 
 local essentialItems = {"beamaxe", "wiretool", "painttool", "inspectiontool"}

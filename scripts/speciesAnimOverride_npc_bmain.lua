@@ -1,4 +1,5 @@
 local oldinit = init
+local olduninit = uninit
 function init()
 	oldinit()
 	message.setHandler("animOverrideGetEquipsAndLounge", function(_,_)
@@ -22,8 +23,6 @@ function init()
 		end
 	end)
 
-	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
-
 	if not status.statusProperty("speciesAnimOverrideData") then
 		speciesFile = root.assetJson("/species/" .. (npc.species()) .. ".species") or {}
 		local effect = speciesFile.customAnimStatus or "speciesAnimOverride"
@@ -32,6 +31,11 @@ function init()
 			status.setPersistentEffects("speciesAnimOverride", { effect })
 		end
 	end
+end
+
+function uninit()
+	olduninit()
+	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
 end
 
 require("/scripts/speciesAnimOverride_npc_species.lua")

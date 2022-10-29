@@ -367,8 +367,9 @@ function initAfterInit(inInit)
 	self.overrideData.gender = self.gender
 	self.overrideData.identity = self.identity
 	status.setStatusProperty("speciesAnimOverrideData", self.overrideData)
-	status.setPersistentEffects("species", self.speciesFile.statusEffects or {})
-
+	timer("persistentEffects", 0.5, function ()
+		status.setPersistentEffects("species", self.speciesFile.statusEffects or {})
+	end)
 	addDirectives()
 	local fb = ""
 	if (self.speciesFile.humanoidOverrides or {}).bodyFullbright then

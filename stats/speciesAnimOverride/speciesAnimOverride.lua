@@ -1305,7 +1305,6 @@ function endAnim(state, statename)
 end
 
 local falling
-local lounging = 0
 function checkHumanoidAnim(dt)
 	local portrait = world.entityPortrait(entity.id(), "full")
 	for _, part in ipairs(portrait) do
@@ -1327,28 +1326,19 @@ function checkHumanoidAnim(dt)
 	end
 
 	if self.loungingIn ~= nil and not self.loungeAnim then
-		lounging = 0.01
 		local sitOrLay = world.getObjectParameter(self.loungingIn, "sitOrientation") or "sit"
 		animator.setGlobalTag("state", sitOrLay)
 		self.loungeAnim = sitOrLay
 		doAnims(self.speciesData.animations[sitOrLay])
-		addRPC(world.sendEntityMessage(self.loungingIn, "animOverridesLoungeAnim", entity.id()), function(anim)
-			if anim then
-				self.loungeAnim = anim
-			end
+		addRPC(world.sendEntityMessage(self.loungingIn, "animOverridesLoungeAnim", entity.id()), function (anim)
+			self.loungeAnim = anim
 		end)
 		return
 	elseif self.loungingIn ~= nil and self.loungeAnim then
-		lounging = 0.01
 		doAnims(self.speciesData.animations[self.loungeAnim])
 		return
 	else
-		if lounging <= 0 then
-			self.loungeAnim = false
-		else
-			lounging = math.max(0, lounging - dt)
-			return
-		end
+		self.loungeAnim = false
 	end
 
 	if mcontroller.onGround() then

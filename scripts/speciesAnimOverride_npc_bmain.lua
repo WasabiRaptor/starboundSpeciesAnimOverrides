@@ -1,6 +1,7 @@
 local oldinit = init
-local olduninit = uninit
 function init()
+	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
+
 	oldinit()
 	message.setHandler("animOverrideGetEquipsAndLounge", function(_,_)
 		return {
@@ -31,11 +32,6 @@ function init()
 			status.setPersistentEffects("speciesAnimOverride", { effect })
 		end
 	end
-end
-
-function uninit()
-	olduninit()
-	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
 end
 
 require("/scripts/speciesAnimOverride_npc_species.lua")

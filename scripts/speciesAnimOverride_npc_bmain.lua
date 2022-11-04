@@ -1,4 +1,9 @@
 local oldinit = init
+
+local setLockScriptFunctions
+local old = {}
+local speciesOverride = {}
+
 function init()
 	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
 
@@ -32,6 +37,35 @@ function init()
 			status.setPersistentEffects("speciesAnimOverride", { effect })
 		end
 	end
+	message.setHandler("giveHeldItemOverrideLockScript", function(_,_, itemDescriptor)
+		giveHeldItemOverrideLockScript(itemDescriptor)
+	end)
+
+	if not setLockScriptFunctions then
+		setLockScriptFunctions = true
+		old.setItemSlot = npc.setItemSlot
+		npc.setItemSlot = speciesOverride.setItemSlot
+	end
 end
+
+function giveHeldItemOverrideLockScript(itemDescriptor)
+	old.setItemSlot("primary", reuturnLockScriptItemDescriptor(npc.getItemSlot("primary"), "/items/active/activeitemOverrides.lua"))
+	old.setItemSlot("alt", reuturnLockScriptItemDescriptor(npc.getItemSlot("alt"), "/items/active/activeitemOverrides.lua"))
+end
+
+function speciesOverride.setItemSlot(slot, itemDescriptor)
+	if slot == "primary" or slot == "alt" then
+		local itemType = root.itemType(itemDescriptor.name)
+		if (itemType == "activeitem") and not blacklistedOverrideItem(itemDescriptor.name) then
+			old.setItemSlot(slot, reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua"))
+		else
+			old.setItemSlot(slot, itemDescriptor)
+		end
+	else
+		old.setItemSlot(slot, itemDescriptor)
+	end
+end
+
+require("/scripts/speciesAnimOverride_addLockScript.lua")
 
 require("/scripts/speciesAnimOverride_npc_species.lua")

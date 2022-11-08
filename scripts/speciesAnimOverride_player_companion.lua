@@ -69,6 +69,7 @@ function giveHeldItemOverrideLockScript(itemDescriptor)
 	if cooldown > 0 then return end
 	local itemType = root.itemType(itemDescriptor.name)
 	if (itemType == "activeitem") and not blacklistedOverrideItem(itemDescriptor.name) then
+		cooldown = 0.5
 		local newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua" )
 
 		if newItemDescriptor ~= nil then

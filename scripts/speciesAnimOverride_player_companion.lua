@@ -1,5 +1,8 @@
 local oldinit = init
 local olduninit = uninit
+local oldupdate = update
+local cooldown = 0.5
+
 function init()
 	oldinit()
 	message.setHandler("animOverrideGetEquipsAndLounge", function(_,_)
@@ -50,6 +53,10 @@ function init()
 		end
 	end
 end
+function update(dt, ...)
+	oldupdate(dt, ...)
+	cooldown = math.max(0, cooldown - dt)
+end
 
 function uninit()
 	olduninit()
@@ -59,6 +66,7 @@ end
 local essentialItems = {"beamaxe", "wiretool", "painttool", "inspectiontool"}
 
 function giveHeldItemOverrideLockScript(itemDescriptor)
+	if cooldown > 0 then return end
 	local itemType = root.itemType(itemDescriptor.name)
 	if (itemType == "activeitem") and not blacklistedOverrideItem(itemDescriptor.name) then
 		local newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua" )

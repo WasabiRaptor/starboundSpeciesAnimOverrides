@@ -54,7 +54,7 @@ function giveHeldItemOverrideLockScript(itemDescriptor)
 end
 
 function speciesOverride.setItemSlot(slot, itemDescriptor)
-	if slot == "primary" or slot == "alt" then
+	if slot == "primary" or slot == "alt" and type(itemDescriptor == "table") then
 		local itemType = root.itemType(itemDescriptor.name)
 		if (itemType == "activeitem") and not blacklistedOverrideItem(itemDescriptor.name) then
 			old.setItemSlot(slot, reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua"))

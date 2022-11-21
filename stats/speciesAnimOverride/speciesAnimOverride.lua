@@ -14,7 +14,8 @@ function init()
 	self.offsets = {enabled = false, parts = {}}
 	self.rotating = {enabled = false, parts = {}}
 	self.scaling = {enabled = false, parts = {}}
-	self.animStateData = root.assetJson("/stats/speciesAnimOverride/"..config.getParameter("animationConfig")).animatedParts.stateTypes
+	self.animStateData = root.assetJson("/stats/speciesAnimOverride/" .. config.getParameter("animationConfig")).animatedParts.stateTypes
+	self.animTransformGroups = root.assetJson("/stats/speciesAnimOverride/"..config.getParameter("animationConfig")).transformationGroups
 	self.animFunctionQueue = {}
 	self.parts = {}
 	self.globalTagDefaults = root.assetJson("/stats/speciesAnimOverride/"..config.getParameter("animationConfig")).globalTagDefaults or {}
@@ -35,16 +36,32 @@ function init()
 		self.settings = sb.jsonMerge(settings, status.statusProperty("speciesAnimOverrideOverrideSettings") or {})
 	end)
 
-	message.setHandler("refreshAnimOverrides", function (_,_,fullRefresh)
-		if fullRefresh then
-			for partname, string in pairs(self.parts) do
-				animator.setPartTag(partname, "partImage", "")
-				animator.setPartTag(partname, "colorRemap", "")
-				self.parts[partname] = nil
-			end
-			for name, offset in pairs( (self.speciesData or {}).offsets or {} ) do
-				animator.resetTransformationGroup(name)
-			end
+	message.setHandler("refreshAnimOverrides", function(_, _)
+		for statename, state in pairs(self.animStateData) do
+			state.animationState = {
+				anim = state.default,
+				priority = state.states[state.default].priority,
+				cycle = state.states[state.default].cycle,
+				frames = state.states[state.default].frames,
+				mode = state.states[state.default].mode,
+				speed = state.states[state.default].frames / state.states[state.default].cycle,
+				frame = 1,
+				time = 0
+			}
+			state.tag = nil
+			self.animFunctionQueue[statename] = {}
+
+			animator.setAnimationState(statename, state.default, true)
+			animator.setGlobalTag(statename.."Frame", 1)
+			animator.setGlobalTag(statename.."Anim", state.default)
+		end
+		for partname, string in pairs(self.parts) do
+			animator.setPartTag(partname, "partImage", "")
+			animator.setPartTag(partname, "colorRemap", "")
+			self.parts[partname] = nil
+		end
+		for name, transformGroup in pairs( self.animTransformGroups or {} ) do
+			animator.resetTransformationGroup(name)
 		end
 		refreshCosmetics = true
 		self.overrideData = status.statusProperty("speciesAnimOverrideData") or {}

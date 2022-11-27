@@ -14,11 +14,19 @@ local handTable = {
 local activeItemOverrideFuncs = {}
 local animatorOverrideFuncs = {}
 local itemData = {
+	--setBackArmFrame = "",
+	--setFrontArmFrame = "",
 	transformQueue = {},
 	setAnimationState = {},
 	setGlobalTag = {},
 	setPartTag = {}
 }
+
+local arm
+local armOffset
+local armOffsets = {}
+local scale
+local yOffset
 
 require("/scripts/vec2.lua")
 
@@ -41,9 +49,6 @@ function init()
 		end
 	end
 
-	status.setStatusProperty(hand.."ItemOverrideData", itemData)
-
-
 	message.setHandler( hand.."ItemLock", function(_,_, lock)
 		lockItem(lock)
 	end)
@@ -51,27 +56,40 @@ function init()
 	message.setHandler( item.name().."Lock", function(_,_, lock)
 		lockItem(lock)
 	end)
-	message.setHandler(activeItem.hand().."ItemUpdateScale", function (_,_,scale, yOffset)
-		updateOverrideScale(scale or 1, yOffset or 0)
+	message.setHandler(activeItem.hand().."ItemUpdateScale", function (_,_,newScale, newYOffset)
+		updateOverrideScale(newScale or 1, newYOffset or 0)
+	end)
+	message.setHandler(activeItem.hand().."ItemUpdateSpecies", function (_,_)
+		updateOverrideSpecies()
 	end)
 
 	updateOverrideScale(status.statusProperty("animOverridesCurrentScale") or 1, status.statusProperty("animOverridesGlobalScaleYOffset") or 0)
 	updateOverrideSpecies()
 
 	if old.init ~= nil then old.init() end
+
+	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 end
 
 function updateOverrideSpecies()
-	activeItem.setScriptedAnimationParameter("frontarmAnimOverrideArmOffset", status.statusProperty("frontarmAnimOverrideArmOffset"))
-	activeItem.setScriptedAnimationParameter("backarmAnimOverrideArmOffset", status.statusProperty("backarmAnimOverrideArmOffset"))
+	armOffsets.front = status.statusProperty("frontarmAnimOverrideArmOffset")
+	armOffsets.back = status.statusProperty("backarmAnimOverrideArmOffset")
+	activeItem.setScriptedAnimationParameter("frontarmAnimOverrideArmOffset", armOffsets.front)
+	activeItem.setScriptedAnimationParameter("backarmAnimOverrideArmOffset", armOffsets.back)
 end
 
-function updateOverrideScale(scale, yOffset)
+function updateOverrideScale(newScale, newYOffset)
+	scale = newScale
+	yOffset = newYOffset
 	activeItem.setScriptedAnimationParameter("animOverridesCurrentScale", scale or 1)
 	activeItem.setScriptedAnimationParameter("animOverridesGlobalScaleYOffset", yOffset or 0)
 end
 
 function update(dt, fireMode, shiftHeld, moves)
+	itemData = status.statusProperty(hand .. "ItemOverrideData") or itemData
+	arm = handTable[hand][mcontroller.facingDirection()+2]
+	armOffset = armOffsets[arm]
+
 	if old.update ~= nil then
 		if locked then
 			old.update(dt, "none", false, {})
@@ -79,6 +97,7 @@ function update(dt, fireMode, shiftHeld, moves)
 			old.update(dt, fireMode, shiftHeld, moves)
 		end
 	end
+	status.setStatusProperty(hand .. "ItemOverrideData", itemData)
 end
 
 function lockItem(lock)
@@ -96,9 +115,7 @@ function uninit()
 end
 
 function saveDataDoOld(funcName, ...)
-	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
 	itemData[funcName] = ...
-	status.setStatusProperty(hand .. "ItemOverrideData", itemData)
 	return old[funcName](...)
 end
 function interceptFunction(func)
@@ -115,7 +132,6 @@ interceptFunction("setOutsideOfHand")
 interceptFunction("setArmAngle")
 
 function transformQueue(funcName, transformGroup, ...)
-	local itemData = status.statusProperty(hand .. "ItemOverrideData") or itemData
 	if not itemData.transformQueue[transformGroup] then
 		itemData.transformQueue[transformGroup] = {{"resetTransformationGroup"}}
 	end
@@ -125,7 +141,6 @@ function transformQueue(funcName, transformGroup, ...)
 		--sb.logInfo("too many transformations in "..transformGroup.."'s queue to do " .. funcName .. ": " .. sb.printJson({...}))
 		--sb.logInfo(sb.printJson(itemData.transformQueue,1))
 	end
-	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	return old[funcName](transformGroup,...)
 end
 function interceptTransform(func)
@@ -138,31 +153,23 @@ interceptTransform("scaleTransformationGroup")
 interceptTransform("transformTransformationGroup")
 interceptTransform("translateTransformationGroup")
 function animatorOverrideFuncs.resetTransformationGroup(transformGroup, ...)
-	local itemData = status.statusProperty(hand .. "ItemOverrideData") or itemData
 	itemData.transformQueue[transformGroup] = {{"resetTransformationGroup"}}
-	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	return old.resetTransformationGroup(transformGroup,...)
 end
 
 function animatorOverrideFuncs.setAnimationState(statetype, state, startNew)
-	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
 	itemData.setAnimationState[statetype] = {state, startNew or false, world.time()} -- time to differentiate repeat calls
-	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	return old.setAnimationState(statetype, state, startNew)
 end
 
 function animatorOverrideFuncs.setGlobalTag(tagname, tagvalue)
-	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
 	itemData.setGlobalTag[tagname] = tagvalue
-	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	return old.setGlobalTag(tagname, tagvalue)
 end
 
 function animatorOverrideFuncs.setPartTag(part, tagname, tagvalue)
-	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
 	itemData.setPartTag[part] = itemData.setPartTag[part] or {}
 	itemData.setPartTag[part][tagname] = tagvalue
-	status.setStatusProperty(hand.."ItemOverrideData", itemData)
 	return old.setPartTag(part, tagname, tagvalue)
 end
 
@@ -173,12 +180,7 @@ function globalToLocal( position )
 end
 
 function activeItemOverrideFuncs.handPosition(offset)
-	local itemData = status.statusProperty(hand.."ItemOverrideData") or itemData
-	local arm = handTable[hand][mcontroller.facingDirection()+2]
-	local armOffset = status.statusProperty(arm.."armAnimOverrideArmOffset")
 	if armOffset and itemData.setArmAngle ~= nil then
-		local scale = status.statusProperty("animOverridesCurrentScale") or 1
-		local yOffset = (status.statusProperty("animOverridesGlobalScaleYOffset") or 0) + (status.statusProperty("animOverridesDuckOffset") or 0)
 		local angle = itemData.setArmAngle
 		local position = vec2.add(vec2.sub(armOffset.handPosition, armOffset.rotationCenter), offset or { 0, 0 })
 		local center = armOffset.rotationCenter
@@ -192,19 +194,16 @@ function activeItemOverrideFuncs.handPosition(offset)
 		return old.handPosition(offset)
 	end
 end
+
 function activeItemOverrideFuncs.aimAngleAndDirection(aimVerticalOffset, targetPosition)
-	local arm = handTable[hand][mcontroller.facingDirection()+2]
-	local armOffset = status.statusProperty(arm.."armAnimOverrideArmOffset")
 	if armOffset then
 		local target = globalToLocal( targetPosition )
-		local scale = status.statusProperty("animOverridesCurrentScale") or 1
 		local scaledCenter = vec2.mul(vec2.add(armOffset.rotationCenter, {0, aimVerticalOffset}), scale)
 		local flipLine = math.min(0, scaledCenter[1])
 		local direction = mcontroller.facingDirection()
 		if target[1] < flipLine then
 			direction = direction * -1
 		end
-		local yOffset = (status.statusProperty("animOverridesGlobalScaleYOffset") or 0) + (status.statusProperty("animOverridesDuckOffset") or 0)
 		local center = vec2.add(scaledCenter, {0, yOffset})
 		local angle = math.atan((target[2] - center[2]), (target[1] - center[1]))
 		return angle, direction
@@ -213,12 +212,8 @@ function activeItemOverrideFuncs.aimAngleAndDirection(aimVerticalOffset, targetP
 	end
 end
 function activeItemOverrideFuncs.aimAngle(aimVerticalOffset, targetPosition)
-	local arm = handTable[hand][mcontroller.facingDirection()+2]
-	local armOffset = status.statusProperty(arm.."armAnimOverrideArmOffset")
 	if armOffset then
 		local target = world.distance( targetPosition, mcontroller.position() )
-		local scale = status.statusProperty("animOverridesCurrentScale") or 1
-		local yOffset = (status.statusProperty("animOverridesGlobalScaleYOffset") or 0) + (status.statusProperty("animOverridesDuckOffset") or 0)
 		local center = vec2.add(vec2.mul(vec2.add(armOffset.rotationCenter, { 0, aimVerticalOffset }), scale), { 0, yOffset })
 		center[1] = center[1] * mcontroller.facingDirection()
 		local angle = math.atan((target[2] - center[2]), (target[1] - center[1]))

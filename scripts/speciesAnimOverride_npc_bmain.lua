@@ -7,7 +7,6 @@ local speciesOverride = {}
 function init()
 	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
 
-	oldinit()
 	message.setHandler("animOverrideGetEquipsAndLounge", function(_,_)
 		return {
 			head = npc.getItemSlot("head"),
@@ -46,6 +45,10 @@ function init()
 		old.setItemSlot = npc.setItemSlot
 		npc.setItemSlot = speciesOverride.setItemSlot
 	end
+
+	sb.logInfo(npc.npcType().."messagesLoaded")
+
+	oldinit()
 end
 
 function giveHeldItemOverrideLockScript(itemDescriptor)

@@ -46,8 +46,6 @@ function init()
 		npc.setItemSlot = speciesOverride.setItemSlot
 	end
 
-	sb.logInfo(npc.npcType().."messagesLoaded")
-
 	oldinit()
 end
 

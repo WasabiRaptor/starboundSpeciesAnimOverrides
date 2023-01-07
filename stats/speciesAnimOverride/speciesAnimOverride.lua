@@ -546,6 +546,12 @@ function uninit()
 	world.sendEntityMessage(entity.id(), "removeAnimOverrideAimTech" )
 end
 
+function timedLoopedMessage(name, time, eid, message, args, callback, failCallback)
+	timer(name, time, function ()
+		addRPC(world.sendEntityMessage(eid, message, table.unpack(args or {})), callback, failCallback)
+	end)
+end
+
 function loopedMessage(name, eid, message, args, callback, failCallback)
 	if self.loopedMessages[name] == nil then
 		self.loopedMessages[name] = {
@@ -1072,12 +1078,13 @@ function setEmptyHand(hand, part)
 end
 
 function getCosmeticItems()
-	loopedMessage("getEquipsAndLounging", entity.id(), "animOverrideGetEquipsAndLounge", {}, function(data)
+	timedLoopedMessage("getEquipsAndLounging", 1, entity.id(), "animOverrideGetEquipsAndLounge", {}, function(data)
 		readCosmeticItemData(data)
 		self.loungingIn = data.lounging
-	end, function ()
-		sb.logInfo(entity.id().."failed")
-	end )
+	end)
+	loopedMessage("getLounging", entity.id(), "animOverrideGetLounge", {}, function(data)
+		self.loungingIn = data.lounging
+	end)
 end
 function readCosmeticItemData(data)
 	setCosmetic.head(data.headCosmetic or data.head)

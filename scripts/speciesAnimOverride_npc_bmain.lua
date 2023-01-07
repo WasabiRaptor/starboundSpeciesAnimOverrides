@@ -20,6 +20,11 @@ function init()
 			lounging = npc.loungingIn()
 		}
 	end)
+	message.setHandler("animOverrideGetLounge", function(_,_)
+		return {
+			lounging = npc.loungingIn()
+		}
+	end)
 	message.setHandler("applySpeciesAnimOverride", function ()
 		local speciesAnimOverrideData = status.statusProperty("speciesAnimOverrideData") or {}
 		local effects = status.getPersistentEffects("speciesAnimOverride")

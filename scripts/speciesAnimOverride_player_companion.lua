@@ -18,6 +18,11 @@ function init()
 			lounging = player.loungingIn()
 		}
 	end)
+	message.setHandler("animOverrideGetLounge", function(_,_)
+		return {
+			lounging = player.loungingIn()
+		}
+	end)
 
 	message.setHandler("giveHeldItemOverrideLockScript", function(_,_, itemDescriptor)
 		giveHeldItemOverrideLockScript(itemDescriptor)

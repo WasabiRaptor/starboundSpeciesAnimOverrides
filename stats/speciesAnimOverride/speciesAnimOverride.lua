@@ -424,10 +424,8 @@ function initAfterInit(inInit)
 	for partname, string in pairs(self.speciesData.partImages or {}) do
 		local part = replaceSpeciesGenderTags(string)
 		local success, notEmpty = pcall(root.nonEmptyRegion, (part))
-		if success and notEmpty ~= nil  then
-			animator.setPartTag(partname, "partImage", part)
-			animator.setPartTag(partname, "colorRemap", "")
-			self.parts[partname] = part
+		if success and notEmpty ~= nil then
+			setPartImage(partname, part)
 		else
 			animator.setPartTag(partname, "partImage", "")
 			animator.setPartTag(partname, "colorRemap", "")
@@ -449,9 +447,7 @@ function initAfterInit(inInit)
 					end
 				end
 			end
-			animator.setPartTag(partname, "partImage", part)
-			animator.setPartTag(partname, "colorRemap", colorRemap or "")
-			self.parts[partname] = part
+			setPartImage(partname, part, colorRemap)
 		end
 	end
 	for partname, data in pairs(self.speciesData.partTagDefaults or {}) do
@@ -462,6 +458,17 @@ function initAfterInit(inInit)
 	end
 
 	self.inited = true
+end
+
+function setPartImage(partname, partImage, colorRemap, tagDefaults)
+	animator.setPartTag(partname, "partImage", partImage)
+	animator.setPartTag(partname, "colorRemap", colorRemap or "")
+	self.parts[partname] = partImage
+	if not (tagDefaults or self.speciesData.globalTagDefaults or {})[partname .. "Mask"] then
+		sb.logInfo(partname.."Mask:"..partImage)
+		self.globalTagDefaults[partname .. "Mask"] = partImage
+		animator.setGlobalTag(partname .. "Mask", partImage)
+	end
 end
 
 function addDirectives()

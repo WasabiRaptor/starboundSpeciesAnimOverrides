@@ -465,7 +465,6 @@ function setPartImage(partname, partImage, colorRemap, tagDefaults)
 	animator.setPartTag(partname, "colorRemap", colorRemap or "")
 	self.parts[partname] = partImage
 	if not (tagDefaults or self.speciesData.globalTagDefaults or {})[partname .. "Mask"] then
-		sb.logInfo(partname.."Mask:"..partImage)
 		self.globalTagDefaults[partname .. "Mask"] = partImage
 		animator.setGlobalTag(partname .. "Mask", partImage)
 	end

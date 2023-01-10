@@ -436,7 +436,7 @@ function initAfterInit(inInit)
 	end
 	for partname, remapPart in pairs(self.speciesData.remapParts) do
 		if not self.parts[partname] then
-			local part = replaceSpeciesGenderTags(string, remapPart.imagePath or remapPart.species, remapPart.reskin)
+			local part = replaceSpeciesGenderTags((self.speciesData.partImages or {})[partname] or ("/humanoid/<species>/"..partname..".png"), remapPart.imagePath or remapPart.species, remapPart.reskin)
 			local success2, baseColorMap = pcall(root.assetJson, "/species/" .. (remapPart.species or "human") .. ".species:baseColorMap")
 			local colorRemap
 			if success2 and baseColorMap ~= nil and remapPart.remapColors and self.speciesFile.baseColorMap then

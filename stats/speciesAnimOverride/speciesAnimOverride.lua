@@ -428,8 +428,14 @@ function initAfterInit(inInit)
 			animator.setPartTag(partname, "partImage", part)
 			animator.setPartTag(partname, "colorRemap", "")
 			self.parts[partname] = part
-		elseif (self.speciesData.remapParts or {})[partname] then
-			local remapPart = self.speciesData.remapParts[partname]
+		else
+			animator.setPartTag(partname, "partImage", "")
+			animator.setPartTag(partname, "colorRemap", "")
+			self.parts[partname] = nil
+		end
+	end
+	for partname, remapPart in pairs(self.speciesData.remapParts) do
+		if not self.parts[partname] then
 			local part = replaceSpeciesGenderTags(string, remapPart.imagePath or remapPart.species, remapPart.reskin)
 			local success2, baseColorMap = pcall(root.assetJson, "/species/" .. (remapPart.species or "human") .. ".species:baseColorMap")
 			local colorRemap
@@ -446,10 +452,6 @@ function initAfterInit(inInit)
 			animator.setPartTag(partname, "partImage", part)
 			animator.setPartTag(partname, "colorRemap", colorRemap or "")
 			self.parts[partname] = part
-		else
-			animator.setPartTag(partname, "partImage", "")
-			animator.setPartTag(partname, "colorRemap", "")
-			self.parts[partname] = nil
 		end
 	end
 	for partname, data in pairs(self.speciesData.partTagDefaults or {}) do
@@ -547,7 +549,7 @@ function uninit()
 end
 
 function timedLoopedMessage(name, time, eid, message, args, callback, failCallback)
-	timer(name, time, function ()
+	return timer(name, time, function ()
 		addRPC(world.sendEntityMessage(eid, message, table.unpack(args or {})), callback, failCallback)
 	end)
 end

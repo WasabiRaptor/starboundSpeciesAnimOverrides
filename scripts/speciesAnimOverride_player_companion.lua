@@ -83,9 +83,15 @@ function giveHeldItemOverrideLockScript(itemDescriptor)
 				player.setSwapSlotItem(newItemDescriptor)
 				return
 			else
+				sb.logInfo("item To Consume")
+				sb.logInfo(sb.printJson(itemDescriptor))
 				local consumed = player.consumeItem(itemDescriptor, false, true)
+				sb.logInfo("Consumed")
+				sb.logInfo(sb.printJson(consumed))
 				if consumed ~= nil then
 					player.giveItem(newItemDescriptor)
+					sb.logInfo("Replaced")
+					sb.logInfo(sb.printJson(newItemDescriptor))
 					return
 				else
 					for i, item in ipairs(essentialItems) do

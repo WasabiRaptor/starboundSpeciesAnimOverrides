@@ -432,7 +432,7 @@ function initAfterInit(inInit)
 			self.parts[partname] = nil
 		end
 	end
-	for partname, remapPart in pairs(self.speciesData.remapParts) do
+	for partname, remapPart in pairs(self.speciesData.remapParts or {}) do
 		if not self.parts[partname] then
 			local part = replaceSpeciesGenderTags((self.speciesData.partImages or {})[partname] or ("/humanoid/<species>/"..partname..".png"), remapPart.imagePath or remapPart.species, remapPart.reskin)
 			local success2, baseColorMap = pcall(root.assetJson, "/species/" .. (remapPart.species or "human") .. ".species:baseColorMap")
@@ -849,6 +849,7 @@ function animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, 
 			usedParts = math.max(usedParts, (i-1))
 			itemImages[hand].partMap[part.name] = i - 1
 		end
+		usedParts = math.min(usedParts, config.getParameter("itemAnimationLayers") or 10)
 
 		newItem = true
 		refreshImages = true

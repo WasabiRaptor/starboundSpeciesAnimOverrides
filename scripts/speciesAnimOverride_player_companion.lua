@@ -72,8 +72,9 @@ local essentialItems = {"beamaxe", "wiretool", "painttool", "inspectiontool"}
 
 function giveHeldItemOverrideLockScript(itemDescriptor)
 	if cooldown > 0 then return end
+	player.cleanupItems()
 	local itemType = root.itemType(itemDescriptor.name)
-	if (itemType == "activeitem") and not blacklistedOverrideItem(itemDescriptor.name) then
+	if (itemType == "activeitem") and player.hasItem(itemDescriptor, true) and not blacklistedOverrideItem(itemDescriptor.name) then
 		cooldown = 0.5
 		local newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua" )
 
@@ -83,15 +84,9 @@ function giveHeldItemOverrideLockScript(itemDescriptor)
 				player.setSwapSlotItem(newItemDescriptor)
 				return
 			else
-				sb.logInfo("item To Consume")
-				sb.logInfo(sb.printJson(itemDescriptor))
 				local consumed = player.consumeItem(itemDescriptor, false, true)
-				sb.logInfo("Consumed")
-				sb.logInfo(sb.printJson(consumed))
-				if consumed ~= nil then
+				if (consumed ~= nil) then
 					player.giveItem(newItemDescriptor)
-					sb.logInfo("Replaced")
-					sb.logInfo(sb.printJson(newItemDescriptor))
 					return
 				else
 					for i, item in ipairs(essentialItems) do

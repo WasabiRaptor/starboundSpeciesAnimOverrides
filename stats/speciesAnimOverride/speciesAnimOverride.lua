@@ -457,6 +457,13 @@ function initAfterInit(inInit)
 		end
 	end
 
+	timer("getInitEquips", 0, function ()
+		addRPC(world.sendEntityMessage(entity.id(), "animOverrideGetEquipsAndLounge"), function (data)
+			readCosmeticItemData(data)
+			self.loungingIn = data.lounging
+		end)
+	end)
+
 	self.inited = true
 end
 
@@ -699,6 +706,8 @@ function getHandItem(hand, part, continue)
 
 				if item.config.animation then
 					if itemOverrideData.setTwoHandedGrip then
+						animator.setGlobalTag("frontarmsRotationFrame", itemOverrideData.setFrontArmFrame or "rotation")
+						animator.setGlobalTag("backarmsRotationFrame", itemOverrideData.setBackArmFrame or "rotation")
 						if part == "backarms" then
 							return { secondArmAngle = angle, secondArmAnimatedItem = hand, itemOverrideData = itemOverrideData, itemDescriptor = itemDescriptor, item = item }
 						else
@@ -706,6 +715,12 @@ function getHandItem(hand, part, continue)
 							return { secondArmAngle = angle }
 						end
 					else
+						if part == "frontarms" then
+							animator.setGlobalTag("frontarmsRotationFrame", itemOverrideData.setFrontArmFrame or "rotation")
+						end
+						if part == "backarms" then
+							animator.setGlobalTag("backarmsRotationFrame", itemOverrideData.setBackArmFrame or "rotation")
+						end
 						animatedActiveItem(item, itemDescriptor, itemOverrideData, hand, part, continue)
 						return
 					end
@@ -718,6 +733,8 @@ function getHandItem(hand, part, continue)
 					local itemImage = fixFilepath(item.config.inventoryIcon, item)
 
 					if itemOverrideData.setTwoHandedGrip then
+						animator.setGlobalTag("frontarmsRotationFrame", itemOverrideData.setFrontArmFrame or "rotation")
+						animator.setGlobalTag("backarmsRotationFrame", itemOverrideData.setBackArmFrame or "rotation")
 						if part == "backarms" then
 							return { secondArmAngle = angle, secondArmImage = itemImage, outside = outside }
 						else
@@ -726,6 +743,12 @@ function getHandItem(hand, part, continue)
 							return { secondArmAngle = angle }
 						end
 					else
+						if part == "frontarms" then
+							animator.setGlobalTag("frontarmsRotationFrame", itemOverrideData.setFrontArmFrame or "rotation")
+						end
+						if part == "backarms" then
+							animator.setGlobalTag("backarmsRotationFrame", itemOverrideData.setBackArmFrame or "rotation")
+						end
 						animator.setPartTag(part .. "_item_0", "partImage", itemImage or "")
 						animator.setAnimationState(part .. "_item_0", "item"..(outside), itemImage or "")
 					end

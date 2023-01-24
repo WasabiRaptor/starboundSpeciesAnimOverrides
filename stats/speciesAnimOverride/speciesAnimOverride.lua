@@ -79,6 +79,13 @@ function init()
 		self.loungeAnim = anim
 	end)
 
+	message.setHandler("AORefreshClothesNow", function()
+		addRPC(world.sendEntityMessage(entity.id(), "animOverrideGetEquipsAndLounge"), function (data)
+			readCosmeticItemData(data)
+			self.loungingIn = data.lounging
+		end)
+	end)
+
 	for statename, state in pairs(self.animStateData) do
 		state.animationState = {
 			anim = state.default,
@@ -467,6 +474,48 @@ function initAfterInit(inInit)
 	self.inited = true
 end
 
+function resetPart(partname)
+	local partPath = (self.speciesData.partImages or {})[partname]
+	if type(partPath) == "string" then
+		local part = replaceSpeciesGenderTags(partPath)
+		local success, notEmpty = pcall(root.nonEmptyRegion, (part))
+		if success and notEmpty ~= nil then
+			setPartImage(partname, part)
+		else
+			animator.setPartTag(partname, "partImage", "")
+			animator.setPartTag(partname, "colorRemap", "")
+			self.parts[partname] = nil
+		end
+	end
+	local remapPart = (self.speciesData.remapParts or {})[partname]
+	if type(remapPart) == "table" then
+		if not self.parts[partname] then
+			local part = replaceSpeciesGenderTags((self.speciesData.partImages or {})[partname] or ("/humanoid/<species>/"..partname..".png"), remapPart.imagePath or remapPart.species, remapPart.reskin)
+			local success2, baseColorMap = pcall(root.assetJson, "/species/" .. (remapPart.species or "human") .. ".species:baseColorMap")
+			local colorRemap
+			if success2 and baseColorMap ~= nil and remapPart.remapColors and self.speciesFile.baseColorMap then
+				colorRemap = "?replace"
+				for _, data in ipairs(remapPart.remapColors) do
+					local from = baseColorMap[data[1]]
+					local to = self.speciesFile.baseColorMap[data[2]]
+					for i, color in ipairs(from or {}) do
+						colorRemap = colorRemap .. ";" .. color .. "=" .. (to[i] or to[#to])
+					end
+				end
+			end
+			setPartImage(partname, part, colorRemap)
+		end
+	end
+	local partTags = (self.speciesData.partImages or {})[partname]
+	if type(partTags) == "table" then
+		for tagname, string in pairs(partTags) do
+			local part = replaceSpeciesGenderTags(string)
+			animator.setPartTag(partname, tagname, part)
+		end
+	end
+end
+
+
 function setPartImage(partname, partImage, colorRemap, tagDefaults)
 	animator.setPartTag(partname, "partImage", partImage)
 	animator.setPartTag(partname, "colorRemap", colorRemap or "")
@@ -481,10 +530,10 @@ function addDirectives()
 end
 
 function replaceSpeciesGenderTags(string, speciesPath, reskinPath)
-	return sb.replaceTags(string, { gender = self.gender, species = speciesPath or self.identity.imagePath, reskin = reskinPath or self.reskin or "",
-		hair = self.identity.hairType, hairGroup = self.identity.hairGroup,
-		facialHair = self.identity.facialHairType, facialHairGroup = self.identity.facialHairGroup,
-		facialMask = self.identity.facialMaskType, facialMaskGroup = self.identity.facialMaskGroup,
+	return sb.replaceTags(string, { gender = self.gender, species = (speciesPath or self.identity.imagePath or "any"), reskin = (reskinPath or self.reskin or ""),
+		hair = (self.identity.hairType or "0"), hairGroup = (self.identity.hairGroup or "hair"),
+		facialHair = (self.identity.facialHairType or "0"), facialHairGroup = (self.identity.facialHairGroup or "facialHair"),
+		facialMask = (self.identity.facialMaskType or "0"), facialMaskGroup = (self.identity.facialMaskGroup or "facialMask"),
 	})
 end
 

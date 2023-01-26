@@ -506,7 +506,7 @@ function resetPart(partname)
 			setPartImage(partname, part, colorRemap)
 		end
 	end
-	local partTags = (self.speciesData.partImages or {})[partname]
+	local partTags = (self.speciesData.partTagDefaults or {})[partname]
 	if type(partTags) == "table" then
 		for tagname, string in pairs(partTags) do
 			local part = replaceSpeciesGenderTags(string)

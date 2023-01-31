@@ -121,7 +121,7 @@ function init()
 		end
 	end
 
-	message.setHandler("animOverrideScale", function (_,_, scale, duration)
+	message.setHandler("animOverrideScale", function(_, _, scale, duration)
 		self.oldScale = math.min(self.settings.scaleMax or 3, math.max(self.currentScale or self.scale or 1, self.settings.scaleMin or 0.1))
 		self.scale = math.min(self.settings.scaleMax or 3, math.max(scale, self.settings.scaleMin or 0.1))
 		self.scaleDuration = duration or 1
@@ -258,6 +258,12 @@ function initAfterInit(inInit)
 		self.speciesData.animations.idle.controlParameters.collisionPoly = sb.jsonMerge({}, self.bodyconfig.movementParameters.standingPoly)
 		self.speciesData.animations.idle.controlParameters.standingPoly = nil
 		self.speciesData.animations.idle.controlParameters.crouchingPoly = nil
+	end
+	if not self.speciesData.animations.sit.controlParameters then
+		self.speciesData.animations.sit.controlParameters = sb.jsonMerge((self.bodyconfig.movementParameters or {}), self.playerMovementParams)
+		self.speciesData.animations.sit.controlParameters.collisionPoly = sb.jsonMerge({}, self.bodyconfig.movementParameters.standingPoly)
+		self.speciesData.animations.sit.controlParameters.standingPoly = nil
+		self.speciesData.animations.sit.controlParameters.crouchingPoly = nil
 	end
 	if not self.speciesData.animations.lay.controlParameters then
 		self.speciesData.animations.lay.controlParameters = sb.jsonMerge((self.bodyconfig.movementParameters or {}), self.playerMovementParams)
@@ -1337,13 +1343,9 @@ function doAnims( anims, force )
 		local scaledControlParameters = animsTable.scaledControlParameters[currentScale]
 		scaledControlParameters.collisionPoly = poly.scale(scaledControlParameters.collisionPoly, {currentScale,currentScale})
 
-		local unscaledBox = poly.boundBox(animsTable.controlParameters.collisionPoly)
-		local scaledBox = poly.boundBox(scaledControlParameters.collisionPoly)
-		if (anims or {}).invertYOffset then
-			scaledControlParameters.yOffset = unscaledBox[4] - scaledBox[4] -- second pair of coords in a rect is the upper right, so we want the difference in y between the top so we can translate that
-		else
-			scaledControlParameters.yOffset = unscaledBox[2] - scaledBox[2] -- first pair of coords in a rect is the lower left, so we want the difference in y between the bottom so we can translate that
-		end
+		local yOffset = ((((anims or {}).offset or {}).scaled or {}).y or 0)/8
+
+		scaledControlParameters.yOffset = yOffset - (yOffset * currentScale)
 
 		scaledControlParameters.collisionPoly = poly.translate(scaledControlParameters.collisionPoly, {0, scaledControlParameters.yOffset})
 

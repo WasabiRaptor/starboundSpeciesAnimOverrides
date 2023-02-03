@@ -522,7 +522,7 @@ function resetPart(partname)
 end
 
 
-function setPartImage(partname, partImage, colorRemap, tagDefaults)
+function setPartImage(partname, partImage, colorRemap, customDirectives, tagDefaults)
 	animator.setPartTag(partname, "partImage", partImage)
 	animator.setPartTag(partname, "colorRemap", colorRemap or "")
 	self.parts[partname] = partImage
@@ -530,6 +530,7 @@ function setPartImage(partname, partImage, colorRemap, tagDefaults)
 		self.globalTagDefaults[partname .. "Mask"] = partImage
 		animator.setGlobalTag(partname .. "Mask", partImage)
 	end
+	animator.setPartTag(partname, "customDirectives", customDirectives or self.overrideData.directives or "")
 end
 
 function addDirectives()

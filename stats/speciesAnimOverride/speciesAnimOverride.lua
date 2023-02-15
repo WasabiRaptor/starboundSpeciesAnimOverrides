@@ -435,11 +435,16 @@ function initAfterInit(inInit)
 		animator.setGlobalTag(tagname, part)
 	end
 	for partname, string in pairs(self.speciesData.partImages or {}) do
-		local part = replaceSpeciesGenderTags(string)
-		local success, notEmpty = pcall(root.nonEmptyRegion, (part))
-		if success and notEmpty ~= nil then
-			setPartImage(partname, part)
-		else
+		local set = false
+		if type(string) == "string" then
+			local part = replaceSpeciesGenderTags(string)
+			local success, notEmpty = pcall(root.nonEmptyRegion, (part))
+			if success and notEmpty ~= nil then
+				setPartImage(partname, part)
+				set = true
+			end
+		end
+		if not set then
 			animator.setPartTag(partname, "partImage", "")
 			animator.setPartTag(partname, "colorRemap", "")
 			self.parts[partname] = nil

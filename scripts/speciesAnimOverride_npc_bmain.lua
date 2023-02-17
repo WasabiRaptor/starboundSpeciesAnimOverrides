@@ -41,6 +41,14 @@ function init()
 			status.setPersistentEffects("speciesAnimOverride", { effect })
 		end
 	end
+	local scale = status.statusProperty("animOverrideScale") or 1
+	if scale ~= 1 then
+		local speciesAnimOverrideData = status.statusProperty("speciesAnimOverrideData") or {}
+		local effects = status.getPersistentEffects("speciesAnimOverride")
+		if not effects[1] then
+			status.setPersistentEffects("speciesAnimOverride", {  speciesAnimOverrideData.customAnimStatus or "speciesAnimOverride" })
+		end
+	end
 	message.setHandler("giveHeldItemOverrideLockScript", function(_,_, itemDescriptor)
 		giveHeldItemOverrideLockScript(itemDescriptor)
 	end)

@@ -194,3 +194,34 @@ end
 function movement.flying()
 	doAnims(self.speciesData.animations.fly)
 end
+
+function scaleUpdated(dt)
+	world.sendEntityMessage(entity.id(), "primaryItemUpdateScale", self.currentScale or 1, (self.controlParameters or {}).yOffset or 0)
+	world.sendEntityMessage(entity.id(), "altItemUpdateScale", self.currentScale or 1, (self.controlParameters or {}).yOffset or 0)
+end
+
+function createScaledHitbox(anims, animsTable, currentScale)
+	animsTable.scaledControlParameters[currentScale] = sb.jsonMerge(self.playerMovementParams, animsTable.controlParameters or {})
+
+	local scaledControlParameters = animsTable.scaledControlParameters[currentScale]
+	scaledControlParameters.collisionPoly = poly.scale(scaledControlParameters.collisionPoly, {currentScale,currentScale})
+
+	local yOffset = ((((anims or {}).offset or {}).scaled or {}).y or 0)/8
+
+	scaledControlParameters.yOffset = yOffset - (yOffset * currentScale)
+
+	scaledControlParameters.collisionPoly = poly.translate(scaledControlParameters.collisionPoly, {0, scaledControlParameters.yOffset})
+
+	scaledControlParameters.walkSpeed = scaledControlParameters.walkSpeed * currentScale
+	scaledControlParameters.runSpeed = scaledControlParameters.runSpeed * currentScale
+	scaledControlParameters.flySpeed = scaledControlParameters.flySpeed * currentScale
+	scaledControlParameters.airJumpProfile.jumpSpeed = scaledControlParameters.airJumpProfile.jumpSpeed * currentScale
+	scaledControlParameters.liquidJumpProfile.jumpSpeed = scaledControlParameters.liquidJumpProfile.jumpSpeed * currentScale
+	if currentScale < 1 then
+		scaledControlParameters.gravityMultiplier = scaledControlParameters.gravityMultiplier * currentScale
+	end
+	scaledControlParameters.mass = scaledControlParameters.mass * currentScale
+	scaledControlParameters.groundForce = scaledControlParameters.groundForce * currentScale
+	scaledControlParameters.airForce = scaledControlParameters.airForce * currentScale
+	scaledControlParameters.liquidForce = scaledControlParameters.liquidForce * currentScale
+end

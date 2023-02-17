@@ -1,5 +1,5 @@
 local _init = init
-local speciesOverride = {}
+speciesOverride = {}
 
 function init()
 

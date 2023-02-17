@@ -242,13 +242,6 @@ function initAfterInit(inInit)
 		animator.translateTransformationGroup(name, {offset[1]/8, offset[2]/8})
 	end
 
-	animator.resetTransformationGroup("head_cosmetic_offset")
-	if self.speciesData.hatOffset then
-		animator.translateTransformationGroup("head_cosmetic_offset", {self.speciesData.hatOffset[1]/8,self.speciesData.hatOffset[2]/8})
-		animator.setGlobalTag("headMaskX", self.speciesData.hatOffset[1])
-		animator.setGlobalTag("headMaskY", self.speciesData.hatOffset[2])
-	end
-
 	self.playerMovementParams = sb.jsonMerge(root.assetJson("/default_actor_movement.config"), root.assetJson("/player.config").movementParameters)
 	self.playerMovementParams.standingPoly = nil
 	self.playerMovementParams.crouchingPoly = nil
@@ -281,6 +274,20 @@ function initAfterInit(inInit)
 		self.speciesData.animations.duck.duckOffset = self.bodyconfig.duckOffset/8
 	end
 
+	for animTableName, anims in pairs(self.speciesData.animations) do
+		local animsTable = self.speciesData.animations.idle
+		local currentScale = self.currentScale or 1
+		if (anims or {}).controlParameters then
+			animsTable = anims
+		end
+		self.duckOffset = (anims or {}).duckOffset or 0
+		if not animsTable.scaledControlParameters then
+			animsTable.scaledControlParameters = {}
+		end
+		if not animsTable.scaledControlParameters[currentScale] then
+			createScaledHitbox(anims, animsTable, currentScale)
+		end
+	end
 
 	if type(self.speciesFile) == "table" then
 		for i, data in ipairs(self.speciesFile.genders or {}) do
@@ -586,8 +593,10 @@ function doUpdate(dt)
 		self.oldScale = 1
 		self.currentScale = 1
 		self.duckOffset = 0
+		updateAnimsNoRedraw(dt)
 		checkRPCsFinished(dt)
 		checkTimers(dt)
+		checkHumanoidAnimNoRedraw(dt)
 	else
 		updateAnims(dt)
 		checkRPCsFinished(dt)
@@ -617,11 +626,6 @@ function doUpdate(dt)
 		status.setStatusProperty("animOverridesGlobalScaleYOffset", self.controlParameters.yOffset or 0)
 	end
 	status.setStatusProperty("speciesAnimOverrideControlParams", nil)
-end
-
-function scaleUpdated(dt)
-	world.sendEntityMessage(entity.id(), "primaryItemUpdateScale", self.currentScale or 1, (self.controlParameters or {}).yOffset or 0)
-	world.sendEntityMessage(entity.id(), "altItemUpdateScale", self.currentScale or 1, (self.controlParameters or {}).yOffset or 0)
 end
 
 function uninit()
@@ -1257,6 +1261,27 @@ function updateAnims(dt)
 	end
 end
 
+function updateAnimsNoRedraw(dt)
+	for statename, state in pairs(self.animStateData) do
+		state.animationState.time = state.animationState.time + dt
+		local ended, times, time = hasAnimEnded(statename)
+		if (not ended) or (state.animationState.mode == "loop") then
+			local frame = math.floor( time * state.animationState.speed )
+			state.animationState.frame = frame + 1
+			state.animationState.reverseFrame = math.abs(frame - state.animationState.frames)
+			animator.setGlobalTag( statename.."Frame", state.animationState.frame or 1 )
+		elseif ended and state.animationState.mode == "transition" then
+			doAnim(statename, state.animationState.transition)
+		end
+	end
+
+	for statename, state in pairs(self.animStateData) do
+		if state.animationState.time >= state.animationState.cycle then
+			endAnim(state, statename)
+		end
+	end
+end
+
 function endAnim(state, statename)
 	for _, func in pairs(self.animFunctionQueue[statename]) do
 		func()
@@ -1322,6 +1347,20 @@ function checkHumanoidAnim(dt)
 	if mcontroller.flying() then falling = false movement.flying() return end
 end
 
+function checkHumanoidAnimNoRedraw(dt)
+	if mcontroller.onGround() then
+		falling = false
+		if mcontroller.walking() then movement.walking() return end
+		if mcontroller.running() then movement.running() return end
+		if mcontroller.crouching() then movement.crouching() return end
+		movement.idle() return
+	end
+	if mcontroller.liquidMovement() then falling = false movement.liquidMovement() return end
+	if mcontroller.jumping() then falling = false movement.jumping() return end
+	if mcontroller.falling() then movement.falling() return end
+	if mcontroller.flying() then falling = false movement.flying() return end
+end
+
 function doAnims( anims, force )
 	for state,anim in pairs( anims or {} ) do
 		if state == "offset" then
@@ -1347,31 +1386,8 @@ function doAnims( anims, force )
 		animsTable = anims
 	end
 	self.duckOffset = (anims or {}).duckOffset or 0
-	if not animsTable.scaledControlParameters then
-		animsTable.scaledControlParameters = {}
-	end
 	if not animsTable.scaledControlParameters[currentScale] then
-		animsTable.scaledControlParameters[currentScale] = sb.jsonMerge(self.playerMovementParams, animsTable.controlParameters or {})
-
-		local scaledControlParameters = animsTable.scaledControlParameters[currentScale]
-		scaledControlParameters.collisionPoly = poly.scale(scaledControlParameters.collisionPoly, {currentScale,currentScale})
-
-		local yOffset = ((((anims or {}).offset or {}).scaled or {}).y or 0)/8
-
-		scaledControlParameters.yOffset = yOffset - (yOffset * currentScale)
-
-		scaledControlParameters.collisionPoly = poly.translate(scaledControlParameters.collisionPoly, {0, scaledControlParameters.yOffset})
-
-		scaledControlParameters.walkSpeed = scaledControlParameters.walkSpeed * currentScale
-		scaledControlParameters.runSpeed = scaledControlParameters.runSpeed * currentScale
-		scaledControlParameters.flySpeed = scaledControlParameters.flySpeed * currentScale
-		scaledControlParameters.airJumpProfile.jumpSpeed = scaledControlParameters.airJumpProfile.jumpSpeed * currentScale
-		scaledControlParameters.liquidJumpProfile.jumpSpeed = scaledControlParameters.liquidJumpProfile.jumpSpeed * currentScale
-		scaledControlParameters.gravityMultiplier = scaledControlParameters.gravityMultiplier * currentScale
-		-- scaledControlParameters.mass = scaledControlParameters.mass * currentScale
-		scaledControlParameters.groundForce = scaledControlParameters.groundForce * currentScale
-		scaledControlParameters.airForce = scaledControlParameters.airForce * currentScale
-		scaledControlParameters.liquidForce = scaledControlParameters.liquidForce * currentScale
+		createScaledHitbox(anims, animsTable, currentScale)
 	end
 
 	self.controlParameters = animsTable.scaledControlParameters[currentScale] or self.speciesData.animations.idle.scaledControlParameters[currentScale] or self.speciesData.animations.idle.controlParameters

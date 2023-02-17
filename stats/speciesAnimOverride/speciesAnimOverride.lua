@@ -1,5 +1,6 @@
 require("/scripts/poly.lua")
 require("/scripts/vec2.lua")
+require("/scripts/speciesAnimOverride_validateIdentity.lua")
 armsToArm = {
 	frontarms = "frontArm",
 	backarms = "backArm"
@@ -142,6 +143,7 @@ function initAfterInit(inInit)
 	self.species = self.overrideData.species or status.statusProperty("animOverridesStoredSpecies") or world.entitySpecies(entity.id())
 	self.gender = self.overrideData.gender or status.statusProperty("animOverridesStoredGender") or world.entityGender(entity.id())
 	self.identity = self.overrideData.identity or {}
+	validateIdentity(self.identity)
 	local blacklist = root.assetJson("/animOverrideBlacklist.config")
 
 	if self.settings.noSpriteRedraw or (originalSpecies ~= nil and blacklist[originalSpecies]) then

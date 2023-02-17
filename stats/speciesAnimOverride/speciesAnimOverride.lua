@@ -292,9 +292,9 @@ function initAfterInit(inInit)
 	if type(self.speciesFile) == "table" then
 		for i, data in ipairs(self.speciesFile.genders or {}) do
 			if data.name == (status.statusProperty("animOverridesStoredGender") or world.entityGender(entity.id())) then
-				self.identity.hairGroup = (self.identity.hairGroup and self.identity.hairGroup ~= "") or (data.hairGroup and data.hairGroup ~= "") or "hair"
-				self.identity.facialHairGroup = (self.identity.facialHairGroup and self.identity.facialHairGroup ~= "") or (data.facialHairGroup and data.facialHairGroup ~= "") or "facialHair"
-				self.identity.facialMaskGroup = (self.identity.facialMaskGroup and self.identity.facialHairGroup ~= "") or (data.facialMaskGroup and data.facialMaskGroup ~= "") or "facialMask"
+				self.identity.hairGroup = ((self.identity.hairGroup ~= "") and self.identity.hairGroup) or ((data.hairGroup ~= "") and data.hairGroup) or "hair"
+				self.identity.facialHairGroup = ((self.identity.facialHairGroup ~= "") and self.identity.facialHairGroup) or ((data.facialHairGroup ~= "") and data.facialHairGroup) or "facialHair"
+				self.identity.facialMaskGroup = ((self.identity.facialMaskGroup ~= "") and self.identity.facialMaskGroup) or ((data.facialMaskGroup ~= "") and data.facialMaskGroup) or "facialMask"
 			end
 		end
 	end

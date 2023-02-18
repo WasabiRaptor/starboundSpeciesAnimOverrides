@@ -225,3 +225,12 @@ function createScaledHitbox(anims, animsTable, currentScale)
 	scaledControlParameters.airForce = scaledControlParameters.airForce * currentScale
 	scaledControlParameters.liquidForce = scaledControlParameters.liquidForce * currentScale
 end
+
+function animOverrideScale(scale, duration)
+	self.oldScale = math.min(self.settings.scaleMax or 3, math.max(self.currentScale or self.scale or 1, self.settings.scaleMin or 0.1))
+	self.scale = math.min(self.settings.scaleMax or 3, math.max(scale, self.settings.scaleMin or 0.1))
+	self.scaleDuration = duration or 1
+	self.scaleTime = 0
+	status.setStatusProperty("animOverrideScale", self.scale)
+
+end

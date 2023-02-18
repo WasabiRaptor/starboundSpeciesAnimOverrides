@@ -122,12 +122,8 @@ function init()
 		end
 	end
 
-	message.setHandler("animOverrideScale", function(_, _, scale, duration)
-		self.oldScale = math.min(self.settings.scaleMax or 3, math.max(self.currentScale or self.scale or 1, self.settings.scaleMin or 0.1))
-		self.scale = math.min(self.settings.scaleMax or 3, math.max(scale, self.settings.scaleMin or 0.1))
-		self.scaleDuration = duration or 1
-		self.scaleTime = 0
-		status.setStatusProperty("animOverrideScale", self.scale)
+	message.setHandler("animOverrideScale", function(_, _, ...)
+		animOverrideScale(...)
 	end)
 	if self.scale == nil then
 		self.scale = status.statusProperty("animOverrideScale") or 1

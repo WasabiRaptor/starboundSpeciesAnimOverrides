@@ -311,9 +311,9 @@ function initAfterInit(inInit)
 
 		if not self.identity.imagePath and not self.overrideData.species then
 			local found1, found2 = imageString:find("humanoid/")
-			if found1 then
+			if type(found1) == "number" and type(found2) == "number" then
 				local found3, found4 = imageString:find("/"..status.statusProperty("animOverridesStoredGender") or world.entityGender(entity.id()).."body")
-				if found3 then
+				if type(found3) == "number" and type(found4) == "number" then
 					self.identity.imagePath = imageString:sub(found2+1, found3-1)
 				end
 			end
@@ -324,7 +324,7 @@ function initAfterInit(inInit)
 		--get personality values
 		if (not self.identity.body) or (not self.identity.bodyDirectives) then
 			local found1, found2 = imageString:find("body.png:idle.")
-			if found1 ~= nil then
+			if type(found1) == "number" and type(found2) == "number" then
 				self.identity.body = self.identity.body or imageString:sub(found2+1, found2+1)
 
 				local found3 = imageString:find("?")
@@ -334,7 +334,7 @@ function initAfterInit(inInit)
 		end
 		if not self.identity.emoteDirectives then
 			local found1, found2 = imageString:find("emote.png")
-			if found1 ~= nil then
+			if type(found1) == "number" and type(found2) == "number" then
 				local found3 = imageString:find("?")
 				local directives = imageString:sub(found3)
 				self.identity.emoteDirectives = self.identity.emoteDirectives or directives
@@ -342,14 +342,14 @@ function initAfterInit(inInit)
 		end
 		if not self.identity.arm then
 			local found1, found2 = imageString:find("backarm.png:idle.")
-			if found1 ~= nil then
+			if type(found1) == "number" and type(found2) == "number" then
 				self.identity.arm = imageString:sub(found2+1, found2+1)
 			end
 		end
 
 		if (not self.identity.hairType) or (not self.identity.hairDirectives) then
 			local found1, found2 = imageString:find("/"..(self.identity.hairGroup or "hair").."/")
-			if found1 ~= nil then
+			if type(found1) == "number" and type(found2) == "number" then
 				local found3, found4 = imageString:find(".png:normal")
 				self.identity.hairType = self.identity.hairType or imageString:sub(found2+1, found3-1)
 
@@ -362,7 +362,7 @@ function initAfterInit(inInit)
 
 		if (not self.identity.facialHairType) or not (self.identity.facialHairDirectives) then
 			local found1, found2 = imageString:find("/"..(self.identity.facialHairGroup or "facialHair").."/")
-			if found1 ~= nil then
+			if type(found1) == "number" and type(found2) == "number" then
 				found3, found4 = imageString:find(".png:normal")
 				self.identity.facialHairType = self.identity.facialHairType or imageString:sub(found2+1, found3-1)
 
@@ -374,7 +374,7 @@ function initAfterInit(inInit)
 
 		if (not self.identity.facialMaskType) or (not self.identity.facialMaskDirectives) then
 			local found1, found2 = imageString:find("/"..(self.identity.facialMaskGroup or "facialMask").."/")
-			if found1 ~= nil then
+			if type(found1) == "number" and type(found2) == "number" then
 				found3, found4 = imageString:find(".png:normal")
 				self.identity.facialMaskType = self.identity.facialMaskType or imageString:sub(found2+1, found3-1)
 

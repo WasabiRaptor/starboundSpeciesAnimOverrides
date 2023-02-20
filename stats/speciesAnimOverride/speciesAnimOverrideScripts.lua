@@ -232,5 +232,4 @@ function animOverrideScale(scale, duration)
 	self.scaleDuration = duration or 1
 	self.scaleTime = 0
 	status.setStatusProperty("animOverrideScale", self.scale)
-
 end

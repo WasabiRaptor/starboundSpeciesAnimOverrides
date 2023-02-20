@@ -5,16 +5,17 @@ local cooldown = 0.5
 
 function init()
 	oldinit()
-	message.setHandler("animOverrideGetEquipsAndLounge", function(_,_)
+	message.setHandler("animOverrideGetEquipsAndLounge", function(_, _)
+		local nude = status.statPositive("nude")
 		return {
-			head = player.equippedItem("head"),
-			chest = player.equippedItem("chest"),
-			legs = player.equippedItem("legs"),
-			back = player.equippedItem("back"),
-			headCosmetic = player.equippedItem("headCosmetic"),
-			chestCosmetic = player.equippedItem("chestCosmetic"),
-			legsCosmetic = player.equippedItem("legsCosmetic"),
-			backCosmetic = player.equippedItem("backCosmetic"),
+			head = not nude and player.equippedItem("head"),
+			chest = not nude and player.equippedItem("chest"),
+			legs = not nude and player.equippedItem("legs"),
+			back = not nude and player.equippedItem("back"),
+			headCosmetic = not nude and player.equippedItem("headCosmetic"),
+			chestCosmetic = not nude and player.equippedItem("chestCosmetic"),
+			legsCosmetic = not nude and player.equippedItem("legsCosmetic"),
+			backCosmetic = not nude and player.equippedItem("backCosmetic"),
 			lounging = player.loungingIn()
 		}
 	end)

@@ -7,16 +7,17 @@ local speciesOverride = {}
 function init()
 	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
 
-	message.setHandler("animOverrideGetEquipsAndLounge", function(_,_)
+	message.setHandler("animOverrideGetEquipsAndLounge", function(_, _)
+		local nude = status.statPositive("nude")
 		return {
-			head = npc.getItemSlot("head"),
-			chest = npc.getItemSlot("chest"),
-			legs = npc.getItemSlot("legs"),
-			back = npc.getItemSlot("back"),
-			headCosmetic = npc.getItemSlot("headCosmetic"),
-			chestCosmetic = npc.getItemSlot("chestCosmetic"),
-			legsCosmetic = npc.getItemSlot("legsCosmetic"),
-			backCosmetic = npc.getItemSlot("backCosmetic"),
+			head = not nude and npc.getItemSlot("head"),
+			chest = not nude and npc.getItemSlot("chest"),
+			legs = not nude and npc.getItemSlot("legs"),
+			back = not nude and npc.getItemSlot("back"),
+			headCosmetic = not nude and npc.getItemSlot("headCosmetic"),
+			chestCosmetic = not nude and npc.getItemSlot("chestCosmetic"),
+			legsCosmetic = not nude and npc.getItemSlot("legsCosmetic"),
+			backCosmetic = not nude and npc.getItemSlot("backCosmetic"),
 			lounging = npc.loungingIn()
 		}
 	end)

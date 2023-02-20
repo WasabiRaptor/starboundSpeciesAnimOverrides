@@ -487,11 +487,13 @@ function initAfterInit(inInit)
 		end
 	end
 
-	timer("getInitEquips", 0, function ()
+	timer("getInitEquips", 0, function()
 		addRPC(world.sendEntityMessage(entity.id(), "animOverrideGetEquipsAndLounge"), function (data)
 			readCosmeticItemData(data)
 			self.loungingIn = data.lounging
 		end)
+		movement.idle()
+		scaleUpdated(0)
 	end)
 
 	self.inited = true

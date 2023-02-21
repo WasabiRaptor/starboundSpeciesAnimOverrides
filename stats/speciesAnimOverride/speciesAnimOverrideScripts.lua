@@ -1,5 +1,5 @@
 function setCosmetic.head(cosmetic)
-	if cosmetic ~= nil then
+	if type(cosmetic)=="table" then
 		if (currentCosmeticName.head == cosmetic.name) and (not refreshCosmetics) then return end
 
 		equipmentChanged = true
@@ -30,7 +30,7 @@ end
 
 
 function setCosmetic.chest(cosmetic)
-	if cosmetic ~= nil then
+	if type(cosmetic)=="table" then
 		if (currentCosmeticName.chest == cosmetic.name) and (not refreshCosmetics) then return end
 
 		equipmentChanged = true
@@ -88,7 +88,7 @@ function setCosmetic.chest_clear(cosmetic)
 end
 
 function setCosmetic.legs(cosmetic)
-	if cosmetic ~= nil then
+	if type(cosmetic)=="table" then
 		if (currentCosmeticName.legs == cosmetic.name) and (not refreshCosmetics) then return end
 		equipmentChanged = true
 		currentCosmeticName.legs = cosmetic.name
@@ -135,7 +135,7 @@ function setCosmetic.legs_clear(cosmetic)
 end
 
 function setCosmetic.back(cosmetic)
-	if cosmetic ~= nil then
+	if type(cosmetic)=="table" then
 		if (currentCosmeticName.back == cosmetic.name) and (not refreshCosmetics) then return end
 
 		equipmentChanged = true

@@ -461,23 +461,7 @@ function initAfterInit(inInit)
 			local success2, baseColorMap = pcall(root.assetJson, "/species/" .. (remapPart.species or "human") .. ".species:baseColorMap")
 			local colorRemap
 			if success2 and baseColorMap ~= nil and remapPart.remapColors and self.speciesFile.baseColorMap then
-				colorRemap = "?replace"
-				for _, data in ipairs(remapPart.remapColors) do
-					if not data[1] then
-						for color, replace in pairs(data or {}) do
-							colorRemap = colorRemap .. ";" .. color .. "=" .. replace
-						end
-						colorRemap = colorRemap .. "?replace"
-					else
-						local from = baseColorMap[data[1]]
-						local to = self.speciesFile.baseColorMap[data[2]]
-						if from and to then
-							for i, color in ipairs(from or {}) do
-								colorRemap = colorRemap .. ";" .. color .. "=" .. (to[i] or to[#to])
-							end
-						end
-					end
-				end
+				colorRemap = remapBaseColors(remapPart.remapColors, baseColorMap, self.speciesFile.baseColorMap)
 			end
 			setPartImage(partname, part, colorRemap)
 		end
@@ -501,6 +485,32 @@ function initAfterInit(inInit)
 	self.inited = true
 end
 
+function remapBaseColors(remapColors, baseColorMapFrom, baseColorMapTo)
+	colorRemap = "?replace"
+	for _, data in ipairs(remapColors) do
+		if not data[1] then
+			for color, replace in pairs(data or {}) do
+				if type(replace) == "string" then
+					colorRemap = colorRemap .. ";" .. color .. "=" .. replace
+				end
+			end
+			colorRemap = colorRemap .. "?replace"
+		else
+			local from = baseColorMapFrom[data[1]]
+			local to = baseColorMapTo[data[2]]
+			local check = data[3]
+			if (not check) or check and checkSettings(self.settings, check) then
+				if from and to then
+					for i, color in ipairs(from or {}) do
+						colorRemap = colorRemap .. ";" .. color .. "=" .. (to[i] or to[#to])
+					end
+				end
+			end
+		end
+	end
+	return colorRemap
+end
+
 function resetPart(partname)
 	local partPath = (self.speciesData.partImages or {})[partname]
 	if type(partPath) == "string" then
@@ -521,16 +531,7 @@ function resetPart(partname)
 			local success2, baseColorMap = pcall(root.assetJson, "/species/" .. (remapPart.species or "human") .. ".species:baseColorMap")
 			local colorRemap
 			if success2 and baseColorMap ~= nil and remapPart.remapColors and self.speciesFile.baseColorMap then
-				colorRemap = "?replace"
-				for _, data in ipairs(remapPart.remapColors) do
-					local from = baseColorMap[data[1]]
-					local to = self.speciesFile.baseColorMap[data[2]]
-					if from and to then
-						for i, color in ipairs(from or {}) do
-							colorRemap = colorRemap .. ";" .. color .. "=" .. (to[i] or to[#to])
-						end
-					end
-				end
+				colorRemap = remapBaseColors(remapPart.remapColors, baseColorMap, self.speciesFile.baseColorMap)
 			end
 			setPartImage(partname, part, colorRemap)
 		end
@@ -1743,4 +1744,35 @@ function getDirectives()
 		directives = directives.."?"..directive
 	end
 	return directives
+end
+
+function checkSettings(settings, check)
+	for setting, value in pairs(check or {}) do
+		if (type(settings[setting]) == "table") and settings[setting].name ~= nil then
+			if not value then return false
+			elseif type(value) == "table" then
+				if not checkTable(value, settings[setting]) then return false end
+			end
+		elseif type(value) == "table" then
+			local match = false
+			for i, value in ipairs(value) do if (settings[setting] or false) == value then
+				match = true
+				break
+			end end
+			if not match then return false end
+		elseif (settings[setting] or false) ~= value then return false
+		end
+	end
+	return true
+end
+
+function checkTable(check, checked)
+	for k, v in pairs(check) do
+		if type(v) == "table" then
+			if not checkTable(v, (checked or {})[k]) then return false end
+		elseif v == true and type((checked or {})[k]) ~= "boolean" and ((checked or {})[k]) ~= nil then
+		elseif not (v == (checked or {})[k] or false) then return false
+		end
+	end
+	return true
 end

@@ -489,12 +489,14 @@ function remapBaseColors(remapColors, baseColorMapFrom, baseColorMapTo)
 	colorRemap = "?replace"
 	for _, data in ipairs(remapColors) do
 		if not data[1] then
-			for color, replace in pairs(data or {}) do
-				if type(replace) == "string" then
-					colorRemap = colorRemap .. ";" .. color .. "=" .. replace
+			if not data.check or data.check and checkSettings(self.settings, data.check) then
+				for color, replace in pairs(data or {}) do
+					if type(replace) == "string" then
+						colorRemap = colorRemap .. ";" .. color .. "=" .. replace
+					end
 				end
+				colorRemap = colorRemap .. "?replace"
 			end
-			colorRemap = colorRemap .. "?replace"
 		else
 			local from = baseColorMapFrom[data[1]]
 			local to = baseColorMapTo[data[2]]

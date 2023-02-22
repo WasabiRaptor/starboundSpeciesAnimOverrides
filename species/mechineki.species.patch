@@ -13,5 +13,12 @@
 			"hair" : ["735e3a", "a38d59", "d9c189", "f7e7b2"],
 			"flesh" : ["951500", "be1b00", "dc1f00", "f32200"]
 		}
+	},
+	{
+		"op": "add",
+		"path": "/animOverrideDefaultSettings",
+		"value": {
+			"visibleNavel" : true
+		}
 	}
 ]

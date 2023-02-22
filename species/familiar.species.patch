@@ -15,6 +15,13 @@
 		"value": "speciesAnimOverride.config"
 	},
 	{
+		"op": "add",
+		"path": "/animOverrideDefaultSettings",
+		"value": {
+			"visibleNavel" : false
+		}
+	},
+	{
 		"op": "replace",
 		"path": "/humanoidOverrides/bodyFullbright",
 		"value": false

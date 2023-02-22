@@ -13,5 +13,12 @@
 			"tertiary" : ["000000", "3f3524"],
 			"flesh" : ["951500", "be1b00", "dc1f00"]
 		}
+	},
+	{
+		"op": "add",
+		"path": "/animOverrideDefaultSettings",
+		"value": {
+			"visibleNavel" : false
+		}
 	}
 ]

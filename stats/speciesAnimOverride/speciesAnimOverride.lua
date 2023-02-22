@@ -40,7 +40,7 @@ function init()
 	self.settings = sb.jsonMerge(status.statusProperty("speciesAnimOverrideSettings") or {}, status.statusProperty("speciesAnimOverrideOverrideSettings") or {})
 
 	message.setHandler("speciesAnimOverrideRefreshSettings", function (_,_, settings)
-		self.settings = sb.jsonMerge(settings, status.statusProperty("speciesAnimOverrideOverrideSettings") or {})
+		self.settings = settings
 	end)
 
 	message.setHandler("refreshAnimOverrides", function(_, _)
@@ -184,6 +184,8 @@ function initAfterInit(inInit)
 	if self.originalSpeciesFile.humanoidConfig ~= nil then
 		originalSpeciesBodyConfig = sb.jsonMerge(originalSpeciesBodyConfig, root.assetJson(self.originalSpeciesFile.humanoidConfig))
 	end
+
+	self.settings = sb.jsonMerge(self.speciesFile.animOverrideDefaultSettings or {}, self.settings)
 
 	local mergeConfigs = speciesData.merge or {}
 	local configs = { speciesData }

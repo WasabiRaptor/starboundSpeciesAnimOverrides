@@ -15,6 +15,13 @@
 		}
 	},
 	{
+		"op": "add",
+		"path": "/animOverrideDefaultSettings",
+		"value": {
+			"visibleNavel" : true
+		}
+	},
+	{
 	  "op": "replace",
 	  "path": "/undyColor/0/f32200",
 	  "value": "ef0000fe"
@@ -114,4 +121,4 @@
 	  "path": "/undyColor/9/dc1f00",
 	  "value": "cbcbcbfe"
 	}
-  ]
+]

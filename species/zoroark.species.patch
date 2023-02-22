@@ -15,5 +15,12 @@
 			"flesh" : ["702c55", "8b3c6c", "a94783"]
 
 		}
+	},
+	{
+		"op": "add",
+		"path": "/animOverrideDefaultSettings",
+		"value": {
+			"visibleNavel" : false
+		}
 	}
 ]

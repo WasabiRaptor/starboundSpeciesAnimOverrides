@@ -69,13 +69,15 @@ function uninit()
 	status.setStatusProperty("speciesAnimOverrideDirectives", nil)
 end
 
-local essentialItems = {"beamaxe", "wiretool", "painttool", "inspectiontool"}
+local essentialItems = { "beamaxe", "wiretool", "painttool", "inspectiontool" }
+
 
 function giveHeldItemOverrideLockScript(itemDescriptor)
 	if cooldown > 0 then return end
 	player.cleanupItems()
 	local itemType = root.itemType(itemDescriptor.name)
 	if (itemType == "activeitem") and player.hasItem(itemDescriptor, true) and not blacklistedOverrideItem(itemDescriptor.name) then
+		local count = player.hasCountOfItem(itemDescriptor, true)
 		cooldown = 0.5
 		local newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua" )
 
@@ -86,7 +88,9 @@ function giveHeldItemOverrideLockScript(itemDescriptor)
 				return
 			else
 				local consumed = player.consumeItem(itemDescriptor, false, true)
-				if (consumed ~= nil) then
+				player.cleanupItems()
+				local newCount = player.hasCountOfItem(itemDescriptor, true)
+				if (consumed ~= nil) and (newCount < count) then
 					player.giveItem(newItemDescriptor)
 					return
 				else

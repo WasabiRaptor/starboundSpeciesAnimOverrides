@@ -64,15 +64,15 @@ function init()
 end
 
 function giveHeldItemOverrideLockScript(itemDescriptor)
-	old.setItemSlot("primary", reuturnLockScriptItemDescriptor(npc.getItemSlot("primary"), "/items/active/activeitemOverrides.lua"))
-	old.setItemSlot("alt", reuturnLockScriptItemDescriptor(npc.getItemSlot("alt"), "/items/active/activeitemOverrides.lua"))
+	old.setItemSlot("primary", returnLockScriptItemDescriptor(npc.getItemSlot("primary"), "/items/active/activeitemOverrides.lua"))
+	old.setItemSlot("alt", returnLockScriptItemDescriptor(npc.getItemSlot("alt"), "/items/active/activeitemOverrides.lua"))
 end
 
 function speciesOverride.setItemSlot(slot, itemDescriptor)
 	if (slot == "primary" or slot == "alt") and type(itemDescriptor) == "table" then
 		local itemType = root.itemType(itemDescriptor.name)
 		if (itemType == "activeitem") and not blacklistedOverrideItem(itemDescriptor.name) then
-			old.setItemSlot(slot, reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua"))
+			old.setItemSlot(slot, returnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua"))
 		else
 			old.setItemSlot(slot, itemDescriptor)
 		end

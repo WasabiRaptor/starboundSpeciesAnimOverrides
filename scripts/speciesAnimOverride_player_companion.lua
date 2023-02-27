@@ -79,7 +79,7 @@ function giveHeldItemOverrideLockScript(itemDescriptor)
 	if (itemType == "activeitem") and player.hasItem(itemDescriptor, true) and not blacklistedOverrideItem(itemDescriptor.name) then
 		local count = player.hasCountOfItem(itemDescriptor, true)
 		cooldown = 0.5
-		local newItemDescriptor = reuturnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua" )
+		local newItemDescriptor = returnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua" )
 
 		if newItemDescriptor ~= nil then
 			local itemDescriptorString = sb.printJson(itemDescriptor)

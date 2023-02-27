@@ -3,7 +3,7 @@ function blacklistedOverrideItem(itemName)
 	return blacklist[itemName]
 end
 
-function reuturnLockScriptItemDescriptor(itemDescriptor, script)
+function returnLockScriptItemDescriptor(itemDescriptor, script)
 	if not itemDescriptor then return end
 	local item = root.itemConfig(itemDescriptor)
 	local newItemDescriptor = { parameters = {

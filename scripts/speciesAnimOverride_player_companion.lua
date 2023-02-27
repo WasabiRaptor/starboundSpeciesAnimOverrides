@@ -82,15 +82,14 @@ function giveHeldItemOverrideLockScript(itemDescriptor)
 		local newItemDescriptor = returnLockScriptItemDescriptor(itemDescriptor, "/items/active/activeitemOverrides.lua" )
 
 		if newItemDescriptor ~= nil then
-			local itemDescriptorString = sb.printJson(itemDescriptor)
-			if sb.printJson(player.swapSlotItem()) == itemDescriptorString then
+			if root.itemDescriptorsMatch(player.swapSlotItem(), itemDescriptor) then
 				player.setSwapSlotItem(newItemDescriptor)
 				return
 			else
 				local consumed = player.consumeItem(itemDescriptor, false, true)
 				player.cleanupItems()
 				local newCount = player.hasCountOfItem(itemDescriptor, true)
-				if (consumed ~= nil) and (newCount < count) then
+				if (consumed ~= nil) and (consumed.count == itemDescriptor.count) and (newCount < count) then
 					player.giveItem(newItemDescriptor)
 					return
 				else

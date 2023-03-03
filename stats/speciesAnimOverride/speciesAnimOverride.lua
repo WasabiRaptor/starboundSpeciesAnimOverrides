@@ -517,15 +517,16 @@ end
 
 function resetPart(partname)
 	local partPath = (self.speciesData.partImages or {})[partname]
+
+	animator.setPartTag(partname, "partImage", "")
+	animator.setPartTag(partname, "colorRemap", "")
+	self.parts[partname] = nil
+
 	if type(partPath) == "string" then
 		local part = replaceSpeciesGenderTags(partPath)
 		local success, notEmpty = pcall(root.nonEmptyRegion, (part))
 		if success and notEmpty ~= nil then
 			setPartImage(partname, part)
-		else
-			animator.setPartTag(partname, "partImage", "")
-			animator.setPartTag(partname, "colorRemap", "")
-			self.parts[partname] = nil
 		end
 	end
 	local remapPart = (self.speciesData.remapParts or {})[partname]

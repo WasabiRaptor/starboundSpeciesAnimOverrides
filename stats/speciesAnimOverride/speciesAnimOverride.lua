@@ -1253,8 +1253,6 @@ function updateAnims(dt)
 			state.animationState.frame = frame + 1
 			state.animationState.reverseFrame = math.abs(frame - state.animationState.frames)
 			animator.setGlobalTag( statename.."Frame", state.animationState.frame or 1 )
-		elseif ended and state.animationState.mode == "transition" then
-			doAnim(statename, state.animationState.transition)
 		end
 	end
 
@@ -1265,8 +1263,12 @@ function updateAnims(dt)
 	animator.setGlobalTag( "directives", getDirectives() )
 
 	for statename, state in pairs(self.animStateData) do
-		if state.animationState.time >= state.animationState.cycle then
+		local ended, times, time = hasAnimEnded(statename)
+		if ended then
 			endAnim(state, statename)
+		end
+		if ended and state.animationState.mode == "transition" then
+			doAnim(statename, state.animationState.transition)
 		end
 	end
 end

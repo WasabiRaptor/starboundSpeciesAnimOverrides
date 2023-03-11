@@ -11,6 +11,11 @@
 	},
 	{
 		"op": "add",
+		"path": "/aliases/duck.1",
+		"value": "duck"
+	},
+	{
+		"op": "add",
 		"path": "/aliases/jump.1",
 		"value": "chest.1"
 	},

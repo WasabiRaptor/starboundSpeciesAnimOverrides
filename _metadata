@@ -1,5 +1,5 @@
 {
-	"version" : "0.3.1",
+	"version" : "0.3.2",
 	"friendlyName" : "Starbound Species Anim Overrides",
 	"name" : "starboundSpeciesAnimOverrides",
 	"author" : "Wasabi_Raptor",
@@ -12,7 +12,8 @@
 		"EeveeModReMIX", "Braixen Race Fired Up", "argonian", "Latex Race", "Zoroark Race (WIP)",
 		"Hisuian Zoroark Race (WIP)", "Zoroark Race","Hisuian Zoroark Race", "sylveonoid", "Bunnykin",
 		"Yharian Race mod", "Mechineki", "Saurian Race", "WIP: The Viera of Ivalice", "The Viera of Ivalice",
-		"everisracemod", "Boss Monsters / Dreemurrers",
+		"everisracemod", "Boss Monsters / Dreemurrers", "Glaceon Race", "Glaceon Race V2.1",
+		"Espeon Race!", "JolteonRaceMod", "Twilit Wolves",
 		"FrackinUniverse",
 		"lox_sexbound", "sexbound", "Sexbound",
 		"XRC_BETA_STARBOUND"

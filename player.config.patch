@@ -7,6 +7,6 @@
 	{
 		"op": "add",
 		"path": "/deploymentConfig/scripts/-",
-		"value": "/scripts/speciesAnimOverride_player_species.lua"
+		"value": "/scripts/speciesAnimOverride_player_deployment.lua"
 	}
 ]

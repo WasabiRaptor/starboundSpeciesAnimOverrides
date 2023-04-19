@@ -42,6 +42,36 @@ function init()
 	message.setHandler("speciesAnimOverrideRefreshSettings", function (_,_, settings)
 		self.settings = settings
 	end)
+	message.setHandler("AOHideHead", function(_, _, duration)
+		self.hideHead = true
+		setCosmetic.head()
+		forceTimer("hideHead", duration or 1, function ()
+			self.hideHead = false
+		end)
+	end)
+	message.setHandler("AOHideLegs", function(_, _, duration)
+		self.hideLegs = true
+		setCosmetic.legs()
+		forceTimer("hideLegs", duration or 1, function ()
+			self.hideLegs = false
+		end)
+	end)
+	message.setHandler("AOHideChest", function(_, _, duration)
+		self.hideChest = true
+		setCosmetic.chest()
+		forceTimer("hideChest", duration or 1, function ()
+			self.hideChest = false
+		end)
+	end)
+	message.setHandler("AOHideBack", function(_, _, duration)
+		self.hideBack = true
+		setCosmetic.back()
+		forceTimer("hideBack", duration or 1, function ()
+			self.hideBack = false
+		end)
+	end)
+
+
 
 	message.setHandler("refreshAnimOverrides", function(_, _)
 		for statename, state in pairs(self.animStateData) do

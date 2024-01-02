@@ -8,7 +8,7 @@
 		"hairGroup" : "hair",
 		"facialHairGroup" : "",
 		"facialMaskGroup" : "",
-		"hairType" : "male1",
+		"hairType" : "",
 		"facialHairType" : "",
 		"facialMaskType" : "",
 		"hairDirectives" : "",
@@ -27,7 +27,8 @@
 		"headArmorDirectives" : "",
 		"backArmorDirectives" : "",
 		"chestArmorDirectives" : "",
-		"legsArmorDirectives" : ""
+		"legsArmorDirectives" : "",
+		"dummyImagePath" : ""
 	},
 	"animatedParts": {
 		"stateTypes": {
@@ -48,6 +49,14 @@
 				}
 			},
 			"noFacialMask" : {
+				"priority" : 10,
+				"default": "ignore",
+				"states" : {
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
+					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+				}
+			},
+			"noHair" : {
 				"priority" : 10,
 				"default": "ignore",
 				"states" : {
@@ -199,7 +208,7 @@
 				},
 				"partStates": {
 					"bodyState": {
-						"idle": { "properties": { "image": "<gender>body.png:<personalityIdle><bodyDirectives>" } },
+						"idle": { "properties": { "image": "<dummyImagePath><gender>body.png:<personalityIdle><bodyDirectives>" } },
 						"duck": { "properties": { "image": "<gender>body.png:<bodyStateAnim>.<bodyStateFrame><bodyDirectives>" } },
 						"sit" : "duck",
 						"lay" : "duck",
@@ -336,7 +345,7 @@
 				},
 				"partStates": {
 					"bodyState": {
-						"idle": { "properties": { "image": "frontarm.png:<personalityArmIdle><bodyDirectives>", "transformationGroups" : ["armBob"] } },
+						"idle": { "properties": { "image": "<dummyImagePath>frontarm.png:<personalityArmIdle><bodyDirectives>", "transformationGroups" : ["armBob"] } },
 						"duck": { "properties": { "image": "frontarm.png:<bodyStateAnim>.<bodyStateFrame><bodyDirectives>" } },
 						"sit" : "duck",
 						"lay" : "duck",
@@ -378,7 +387,7 @@
 				},
 				"partStates": {
 					"bodyState": {
-						"idle": { "properties": { "image": "backarm.png:<personalityArmIdle><bodyDirectives>", "transformationGroups" : ["armBob"] } },
+						"idle": { "properties": { "image": "<dummyImagePath>backarm.png:<personalityArmIdle><bodyDirectives>", "transformationGroups" : ["armBob"] } },
 						"duck": { "properties": { "image": "backarm.png:<bodyStateAnim>.<bodyStateFrame><bodyDirectives>" } },
 						"sit" : "duck",
 						"lay" : "duck",
@@ -559,6 +568,9 @@
 					},
 					"hiddenState" : {
 						"none": { "properties": {} }
+					},
+					"noHair" : {
+						"none": { "properties": {} }
 					}
 				}
 			},
@@ -570,7 +582,7 @@
 				},
 				"partStates": {
 					"headState": {
-						"normal": { "properties": { "image": "<gender>head.png:<headStateAnim><bodyDirectives>" } },
+						"normal": { "properties": { "image": "<dummyImagePath><gender>head.png:<headStateAnim><bodyDirectives>" } },
 						"idle": { "properties": { "image": "<gender>head.png:<headStateAnim>.<headStateFrame>" } },
 						"none": { "properties": {} }
 					},

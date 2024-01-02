@@ -2,7 +2,7 @@
 	"name" : "storeDirectivesEmpty",
 	"type" : "head",
 
-	"scripts" : ["/tech/storeDirectives.lua"],
+	"scripts" : [],
 
 	"description" : "",
 	"shortDescription" : "",

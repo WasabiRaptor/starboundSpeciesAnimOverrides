@@ -1,14 +1,7 @@
 [
-	[
-		{
-			"op": "test",
-			"path": "/scripts/0",
-			"value": "/npcs/bmain.lua"
-		},
-		{
-			"op": "add",
-			"path": "/scripts/-",
-			"value": "/scripts/speciesAnimOverride_npc_bmain.lua"
-		}
-	]
+	{
+		"op": "add",
+		"path": "/scripts/-",
+		"value": "/scripts/speciesAnimOverride_npc_uninstall.lua"
+	}
 ]

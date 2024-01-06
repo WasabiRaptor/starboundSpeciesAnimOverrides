@@ -3,5 +3,11 @@
 		"op": "add",
 		"path": "/companionsConfig/scripts/-",
 		"value": "/scripts/speciesAnimOverride_player_uninstall.lua"
+	},
+
+	{
+		"op": "add",
+		"path": "/deploymentConfig/scripts/-",
+		"value": "/scripts/HumanoidScripts.lua"
 	}
 ]

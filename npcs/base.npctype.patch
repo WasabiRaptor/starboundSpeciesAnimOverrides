@@ -3,5 +3,10 @@
 		"op": "add",
 		"path": "/scripts/-",
 		"value": "/scripts/speciesAnimOverride_npc_uninstall.lua"
+	},
+	{
+		"op": "add",
+		"path": "/scripts/-",
+		"value": "/scripts/HumanoidScripts.lua"
 	}
 ]

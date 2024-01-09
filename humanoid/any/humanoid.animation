@@ -134,7 +134,7 @@
 					"fall": { "frames": 4, "cycle": 0.25, "mode": "end", "priority": 0 },
 
 					"swim": { "frames": 7, "cycle": 0.50, "mode": "loop", "priority": 0 },
-					"swimIdle": { "frames": 2, "cycle": 0.50, "mode": "loop", "priority": 0 },
+					"swimIdle": { "frames": 2, "cycle": 0.50, "mode": "end", "priority": 0 },
 
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
 					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
@@ -174,13 +174,13 @@
 				"states": {
 					"idle": { "frames": 1, "cycle": 1, "mode": "end", "priority": 0 },
 
-					"blabber": { "frames": 2, "cycle": 0.3, "mode": "end", "priority": 1 },
-					"shout": { "frames": 2, "cycle": 0.3, "mode": "end", "priority": 1 },
+					"blabber": { "frames": 2, "cycle": 0.3, "mode": "loop", "priority": 1 },
+					"shout": { "frames": 2, "cycle": 0.3, "mode": "loop", "priority": 1 },
 
 					"happy": { "frames": 2, "cycle": 0.3, "mode": "end", "priority": 1 },
-					"sad": { "frames": 5, "cycle": 1, "mode": "end", "priority": 1 },
+					"sad": { "frames": 5, "cycle": 1, "mode": "loop", "priority": 1 },
 					"neutral": { "frames": 2, "cycle": 0.3, "mode": "end", "priority": 1 },
-					"laugh": { "frames": 2, "cycle": 0.5, "mode": "end", "priority": 1 },
+					"laugh": { "frames": 2, "cycle": 0.5, "mode": "loop", "priority": 1 },
 
 					"annoyed": { "frames": 2, "cycle": 1, "mode": "end", "priority": 1 },
 
@@ -190,14 +190,13 @@
 					"blink": { "frames": 3, "cycle": 1, "mode": "end", "priority": 1 },
 					"wink": { "frames": 5, "cycle": 0.5, "mode": "end", "priority": 1 },
 
-					"eat": { "frames": 2, "cycle": 0.3, "mode": "end", "priority": 1 },
-					"sleep": { "frames": 2, "cycle": 1, "mode": "end", "priority": 1 },
+					"eat": { "frames": 2, "cycle": 0.3, "mode": "loop", "priority": 1 },
+					"sleep": { "frames": 2, "cycle": 1, "mode": "loop", "priority": 1 },
 
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
 					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
 				}
 			}
-
 		},
 		"parts": {
 			"body": {

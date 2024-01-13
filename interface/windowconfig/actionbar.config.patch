@@ -1,0 +1,54 @@
+[
+    {
+        "op": "add", "path": "/paneLayout/essentialBar1Overlay",
+        "value": {
+            "type" : "image",
+            "file" : "/interface/actionbar/actionbaroverlay.png",
+            "position" : [144, 3],
+            "visible" : false,
+            "zlevel" : 3
+        }
+    },
+    {
+        "op": "copy", "path": "/paneLayout/essentialBar1Overlay/position", "from": "/paneLayout/essentialBar1/position"
+    },
+    {
+        "op": "add", "path": "/paneLayout/essentialBar2Overlay",
+        "value": {
+            "type" : "image",
+            "file" : "/interface/actionbar/actionbaroverlay.png",
+            "position" : [163, 3],
+            "visible" : false,
+            "zlevel" : 3
+        }
+    },
+    {
+        "op": "copy", "path": "/paneLayout/essentialBar2Overlay/position", "from": "/paneLayout/essentialBar2/position"
+    },
+    {
+        "op": "add", "path": "/paneLayout/essentialBar3Overlay",
+        "value": {
+            "type" : "image",
+            "file" : "/interface/actionbar/actionbaroverlay.png",
+            "position" : [182, 3],
+            "visible" : false,
+            "zlevel" : 3
+        }
+    },
+    {
+        "op": "copy", "path": "/paneLayout/essentialBar3Overlay/position", "from": "/paneLayout/essentialBar3/position"
+    },
+    {
+        "op": "add", "path": "/paneLayout/essentialBar4Overlay",
+        "value": {
+            "type" : "image",
+            "file" : "/interface/actionbar/actionbaroverlay.png",
+            "position" : [201, 3],
+            "visible" : false,
+            "zlevel" : 3
+        }
+    },
+    {
+        "op": "copy", "path": "/paneLayout/essentialBar4Overlay/position", "from": "/paneLayout/essentialBar4/position"
+    }
+]

@@ -651,7 +651,9 @@
 		"movementOffset": {"interpolated": false},
 		"armOffset": {"interpolated": false},
 		"frontarmrotation": {"interpolated": true},
-		"backarmrotation": {"interpolated": true}
+		"backarmrotation": {"interpolated": true},
+		"frontHandPosition": {"interpolated": false},
+		"backHandPosition": {"interpolated": false}
 	},
 	"sounds": {
 	},

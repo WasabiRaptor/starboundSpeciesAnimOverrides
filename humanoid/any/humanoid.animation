@@ -37,164 +37,164 @@
 				"priority" : 10,
 				"default": "ignore",
 				"states" : {
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"head": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"ignore": { "frames": 0, "cycle": 0, "mode": "end" },
+					"head": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"noFacialHair" : {
 				"priority" : 10,
 				"default": "ignore",
 				"states" : {
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"noFacialMask" : {
 				"priority" : 10,
 				"default": "ignore",
 				"states" : {
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"noHair" : {
 				"priority" : 10,
 				"default": "ignore",
 				"states" : {
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"bodyHiddenState" : {
 				"priority" : 100,
 				"default": "ignore",
 				"states" : {
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"hiddenState" : {
 				"priority" : 1000,
 				"default": "ignore",
 				"states" : {
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"clothesHiddenState" : {
 				"priority" : 100,
 				"default": "ignore",
 				"states" : {
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"bodyDanceState" : {
 				"priority" : 10,
 				"default": "ignore",
 				"states" : {
-					"dance": { "frames": 1, "cycle": 0, "mode": "end", "priority": 0 },
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"dance": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"frontarmDanceState" : {
 				"priority" : 10,
 				"default": "ignore",
 				"states" : {
-					"dance": { "frames": 1, "cycle": 0, "mode": "end", "priority": 0 },
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"dance": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"backarmDanceState" : {
 				"priority" : 10,
 				"default": "ignore",
 				"states" : {
-					"dance": { "frames": 1, "cycle": 0, "mode": "end", "priority": 0 },
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"dance": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"bodyState": {
 				"priority" : 0,
 				"default": "idle",
 				"states": {
-					"idle": { "frames": 1, "cycle": 1, "mode": "end", "priority": 0 },
-					"duck": { "frames": 1, "cycle": 1, "mode": "end", "priority": 0 },
-					"sit": { "frames": 1, "cycle": 1, "mode": "end", "priority": 0, "properties" :{
+					"idle": { "frames": 1, "cycle": 1, "mode": "end" },
+					"duck": { "frames": 1, "cycle": 1, "mode": "end" },
+					"sit": { "frames": 1, "cycle": 1, "mode": "end", "properties" :{
 						"scaleDifference" : [0, -13]
 					}},
-					"lay": { "frames": 1, "cycle": 1, "mode": "end", "priority": 0 },
+					"lay": { "frames": 1, "cycle": 1, "mode": "end" },
 
-					"walk": { "frames": 8, "cycle": 0.75, "mode": "loop", "priority": 0 },
-					"run": { "frames": 8, "cycle": 0.75, "mode": "loop", "priority": 0 },
+					"walk": { "frames": 8, "cycle": 0.75, "mode": "loop" },
+					"run": { "frames": 8, "cycle": 0.75, "mode": "loop" },
 
-					"jump": { "frames": 4, "cycle": 0.25, "mode": "end", "priority": 2 },
-					"fall": { "frames": 4, "cycle": 0.25, "mode": "end", "priority": 0 },
+					"jump": { "frames": 4, "cycle": 0.25, "mode": "end" },
+					"fall": { "frames": 4, "cycle": 0.25, "mode": "end" },
 
-					"swim": { "frames": 7, "cycle": 0.50, "mode": "loop", "priority": 0 },
-					"swimIdle": { "frames": 2, "cycle": 0.50, "mode": "end", "priority": 0 },
+					"swim": { "frames": 7, "cycle": 0.50, "mode": "loop" },
+					"swimIdle": { "frames": 2, "cycle": 0.50, "mode": "end" },
 
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"frontarmRotationState": {
 				"priority" : 1,
 				"default": "ignore",
 				"states": {
-					"rotation": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"rotation": { "frames": 1, "cycle": 1, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"backarmRotationState": {
 				"priority" : 1,
 				"default": "ignore",
 				"states": {
-					"rotation": { "frames": 1, "cycle": 1, "mode": "end", "priority": 5 },
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"rotation": { "frames": 1, "cycle": 1, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"headState": {
 				"priority" : 0,
 				"default": "normal",
 				"states": {
-					"normal": { "frames": 1, "cycle": 1, "mode": "end", "priority": 0 },
-					"idle": { "frames": 1, "cycle": 1, "mode": "end", "priority": 0 },
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"normal": { "frames": 1, "cycle": 1, "mode": "end" },
+					"idle": { "frames": 1, "cycle": 1, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"emoteState": {
 				"priority" : 0,
 				"default": "idle",
 				"states": {
-					"idle": { "frames": 1, "cycle": 1, "mode": "end", "priority": 0 },
+					"idle": { "frames": 1, "cycle": 1, "mode": "end" },
 
-					"blabber": { "frames": 2, "cycle": 0.3, "mode": "loop", "priority": 1 },
-					"shout": { "frames": 2, "cycle": 0.3, "mode": "loop", "priority": 1 },
+					"blabber": { "frames": 2, "cycle": 0.3, "mode": "loop" },
+					"shout": { "frames": 2, "cycle": 0.3, "mode": "loop" },
 
-					"happy": { "frames": 2, "cycle": 0.3, "mode": "end", "priority": 1 },
-					"sad": { "frames": 5, "cycle": 1, "mode": "loop", "priority": 1 },
-					"neutral": { "frames": 2, "cycle": 0.3, "mode": "end", "priority": 1 },
-					"laugh": { "frames": 2, "cycle": 0.5, "mode": "loop", "priority": 1 },
+					"happy": { "frames": 2, "cycle": 0.3, "mode": "end" },
+					"sad": { "frames": 5, "cycle": 1, "mode": "loop" },
+					"neutral": { "frames": 2, "cycle": 0.3, "mode": "end" },
+					"laugh": { "frames": 2, "cycle": 0.5, "mode": "loop" },
 
-					"annoyed": { "frames": 2, "cycle": 1, "mode": "end", "priority": 1 },
+					"annoyed": { "frames": 2, "cycle": 1, "mode": "end" },
 
-					"oh": { "frames": 2, "cycle": 1, "mode": "end", "priority": 1 },
-					"oooh": { "frames": 3, "cycle": 1, "mode": "end", "priority": 1 },
+					"oh": { "frames": 2, "cycle": 1, "mode": "end" },
+					"oooh": { "frames": 3, "cycle": 1, "mode": "end" },
 
-					"blink": { "frames": 3, "cycle": 1, "mode": "end", "priority": 1 },
-					"wink": { "frames": 5, "cycle": 0.5, "mode": "end", "priority": 1 },
+					"blink": { "frames": 3, "cycle": 1, "mode": "end" },
+					"wink": { "frames": 5, "cycle": 0.5, "mode": "end" },
 
-					"eat": { "frames": 2, "cycle": 0.3, "mode": "loop", "priority": 1 },
-					"sleep": { "frames": 2, "cycle": 1, "mode": "loop", "priority": 1 },
+					"eat": { "frames": 2, "cycle": 0.3, "mode": "loop" },
+					"sleep": { "frames": 2, "cycle": 1, "mode": "loop" },
 
-					"ignore": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 },
-					"none": { "frames": 1, "cycle": 0, "mode": "end", "priority": -1 }
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			}
 		},

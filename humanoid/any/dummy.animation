@@ -1,0 +1,95 @@
+{
+	"animatedParts": {
+		"stateTypes": {
+			"justHead" : {
+				"priority" : 10,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"noFacialHair" : {
+				"priority" : 10,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"noFacialMask" : {
+				"priority" : 10,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"noHair" : {
+				"priority" : 10,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"bodyHiddenState" : {
+				"priority" : 100,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"hiddenState" : {
+				"priority" : 1000,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"clothesHiddenState" : {
+				"priority" : 100,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"bodyDanceState" : {
+				"priority" : 10,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"frontarmDanceState" : {
+				"priority" : 10,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"backarmDanceState" : {
+				"priority" : 10,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"bodyState": {
+				"priority" : 0,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"frontarmRotationState": {
+				"priority" : 1,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"backarmRotationState": {
+				"priority" : 1,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"headState": {
+				"priority" : 0,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			},
+			"emoteState": {
+				"priority" : 0,
+				"states" : {"none": { "frames": 0, "cycle": 0, "mode": "end" }}
+			}
+		},
+		"parts": {
+			"body": {},
+			"legs_cosmetic": {},
+			"chest_cosmetic": {},
+			"back_cosmetic": {},
+			"frontarm": {},
+			"backarm": {},
+			"frontarm_cosmetic": {},
+			"backarm_cosmetic": {},
+			"facialHair": {},
+			"facialMask": {},
+			"hair": {},
+			"head": {},
+			"emote": {},
+			"head_cosmetic": {}
+		}
+	},
+	"transformationGroups": {
+		"headOffset": {},
+		"movementOffset": {},
+		"armOffset": {},
+		"frontarmrotation": {},
+		"backarmrotation": {},
+		"frontHandPosition": {},
+		"backHandPosition": {}
+	},
+	"sounds": {
+	},
+	"particleEmitters": {
+	}
+}

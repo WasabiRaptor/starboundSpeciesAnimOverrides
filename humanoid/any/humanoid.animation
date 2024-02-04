@@ -305,7 +305,7 @@
 			"back_cosmetic": {
 				"properties": {
 					"centered": true,
-					"zLevel": -2,
+					"zLevel": -5,
 					"transformationGroups": ["movementOffset"]
 				},
 				"partStates": {

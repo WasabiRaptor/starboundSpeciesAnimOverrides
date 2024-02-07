@@ -1,6 +1,5 @@
 {
 	"useModifiedAnimator" : true,
-	"humanoidAnimConfig": "/humanoid/any/humanoidAnim.config",
 	"globalTagDefaults" : {
 		"partImage" : "",
 		"personality" : "1",
@@ -199,12 +198,13 @@
 			}
 		},
 		"parts": {
+			"anchor" : {},
 			"body": {
 				"properties": {
 					"centered": true,
 					"zLevel": 0,
-					"transformationGroups": []
-
+					"transformationGroups": [],
+					"anchorPart" : "anchor"
 				},
 				"partStates": {
 					"bodyState": {
@@ -271,7 +271,8 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 0.2,
-					"transformationGroups": ["movementOffset"]
+					"transformationGroups": ["movementOffset"],
+					"anchorPart" : "body"
 				},
 				"partStates": {
 					"bodyState": {
@@ -306,7 +307,8 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -5,
-					"transformationGroups": ["movementOffset"]
+					"transformationGroups": ["movementOffset"],
+					"anchorPart" : "body"
 				},
 				"partStates": {
 					"bodyState": {
@@ -341,7 +343,8 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 4,
-					"transformationGroups": []
+					"transformationGroups": [],
+					"anchorPart" : "body"
 				},
 				"partStates": {
 					"bodyState": {
@@ -383,7 +386,8 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -4,
-					"transformationGroups": []
+					"transformationGroups": [],
+					"anchorPart" : "body"
 				},
 				"partStates": {
 					"bodyState": {
@@ -576,7 +580,8 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -1.2,
-					"transformationGroups": ["headOffset", "movementOffset"]
+					"transformationGroups": ["headOffset", "movementOffset"],
+					"anchorPart" : "body"
 				},
 				"partStates": {
 					"headState": {

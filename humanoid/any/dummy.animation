@@ -63,6 +63,7 @@
 			}
 		},
 		"parts": {
+			"anchor" : {},
 			"body": {},
 			"legs_cosmetic": {},
 			"chest_cosmetic": {},

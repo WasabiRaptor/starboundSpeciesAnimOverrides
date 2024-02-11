@@ -36,7 +36,7 @@
 				"priority" : 10,
 				"default": "ignore",
 				"states" : {
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
 					"head": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
@@ -119,12 +119,12 @@
 				"priority" : 0,
 				"default": "idle",
 				"states": {
-					"idle": { "frames": 1, "cycle": 1, "mode": "end" },
-					"duck": { "frames": 1, "cycle": 1, "mode": "end" },
-					"sit": { "frames": 1, "cycle": 1, "mode": "end", "properties" :{
+					"idle": { "frames": 1, "cycle": 0, "mode": "end" },
+					"duck": { "frames": 1, "cycle": 0, "mode": "end" },
+					"sit": { "frames": 1, "cycle": 0, "mode": "end", "properties" :{
 						"scaleDifference" : [0, -13]
 					}},
-					"lay": { "frames": 1, "cycle": 1, "mode": "end" },
+					"lay": { "frames": 1, "cycle": 0, "mode": "end" },
 
 					"walk": { "frames": 8, "cycle": 0.75, "mode": "loop" },
 					"run": { "frames": 8, "cycle": 0.75, "mode": "loop" },
@@ -143,7 +143,7 @@
 				"priority" : 1,
 				"default": "ignore",
 				"states": {
-					"rotation": { "frames": 1, "cycle": 1, "mode": "end" },
+					"rotation": { "frames": 1, "cycle": 0, "mode": "end" },
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
 					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
@@ -152,7 +152,7 @@
 				"priority" : 1,
 				"default": "ignore",
 				"states": {
-					"rotation": { "frames": 1, "cycle": 1, "mode": "end" },
+					"rotation": { "frames": 1, "cycle": 0, "mode": "end" },
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
 					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
@@ -161,8 +161,8 @@
 				"priority" : 0,
 				"default": "normal",
 				"states": {
-					"normal": { "frames": 1, "cycle": 1, "mode": "end" },
-					"idle": { "frames": 1, "cycle": 1, "mode": "end" },
+					"normal": { "frames": 1, "cycle": 0, "mode": "end" },
+					"idle": { "frames": 1, "cycle": 0, "mode": "end" },
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
 					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
@@ -344,7 +344,8 @@
 					"centered": true,
 					"zLevel": 4,
 					"transformationGroups": [],
-					"anchorPart" : "body"
+					"anchorPart" : "body",
+					"itemHidden" : true
 				},
 				"partStates": {
 					"bodyState": {
@@ -362,6 +363,7 @@
 					},
 					"frontarmRotationState" : {
 						"rotation": { "properties": {
+							"itemHidden" : false,
 							"transformationGroups": ["frontarmrotation", "movementOffset"],
 							"image": "<bodyImagePath>frontarm.png:<frontarmRotationFrame><bodyDirectives>"
 						} },
@@ -387,7 +389,8 @@
 					"centered": true,
 					"zLevel": -4,
 					"transformationGroups": [],
-					"anchorPart" : "body"
+					"anchorPart" : "body",
+					"itemHidden" : true
 				},
 				"partStates": {
 					"bodyState": {
@@ -405,6 +408,7 @@
 					},
 					"backarmRotationState" : {
 						"rotation": { "properties": {
+							"itemHidden" : false,
 							"transformationGroups": ["backarmrotation", "movementOffset"],
 							"image": "<bodyImagePath>backarm.png:<backarmRotationFrame><bodyDirectives>"
 						} },

@@ -63,21 +63,21 @@
 			}
 		},
 		"parts": {
-			"anchor" : {},
-			"body": {},
-			"legs_cosmetic": {},
-			"chest_cosmetic": {},
-			"back_cosmetic": {},
-			"frontarm": {},
-			"backarm": {},
-			"frontarm_cosmetic": {},
-			"backarm_cosmetic": {},
-			"facialHair": {},
-			"facialMask": {},
-			"hair": {},
-			"head": {},
-			"emote": {},
-			"head_cosmetic": {}
+			"anchor" : {"properties":{}},
+			"body": {"properties":{}},
+			"legs_cosmetic": {"properties":{}},
+			"chest_cosmetic": {"properties":{}},
+			"back_cosmetic": {"properties":{}},
+			"frontarm": {"properties":{"itemHidden":true}},
+			"backarm": {"properties":{"itemHidden":true}},
+			"frontarm_cosmetic": {"properties":{}},
+			"backarm_cosmetic": {"properties":{}},
+			"facialHair": {"properties":{}},
+			"facialMask": {"properties":{}},
+			"hair": {"properties":{}},
+			"head": {"properties":{}},
+			"emote": {"properties":{}},
+			"head_cosmetic": {"properties":{}}
 		}
 	},
 	"transformationGroups": {

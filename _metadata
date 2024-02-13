@@ -1,7 +1,7 @@
 {
-	"version" : "0.3.3",
-	"friendlyName" : "Starbound Species Anim Overrides",
-	"name" : "starboundSpeciesAnimOverrides",
+	"version" : "0.0",
+	"friendlyName" : "SBQ Engine Assets",
+	"name" : "SBQ Engine Assets",
 	"author" : "Wasabi_Raptor",
 	"description" : "Base assets required for the SBQ engine.",
 	"includes" : []

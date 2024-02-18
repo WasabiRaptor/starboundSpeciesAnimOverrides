@@ -204,7 +204,8 @@
 					"centered": true,
 					"zLevel": 0,
 					"transformationGroups": [],
-					"anchorPart" : "anchor"
+					"anchorPart" : "anchor",
+					"bodyFullbright" : true
 				},
 				"partStates": {
 					"bodyState": {
@@ -345,7 +346,8 @@
 					"zLevel": 4,
 					"transformationGroups": [],
 					"anchorPart" : "body",
-					"itemHidden" : true
+					"itemHidden" : true,
+					"bodyFullbright" : true
 				},
 				"partStates": {
 					"bodyState": {
@@ -390,7 +392,8 @@
 					"zLevel": -4,
 					"transformationGroups": [],
 					"anchorPart" : "body",
-					"itemHidden" : true
+					"itemHidden" : true,
+					"bodyFullbright" : true
 				},
 				"partStates": {
 					"bodyState": {
@@ -515,7 +518,8 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.5,
-					"anchorPart": "head"
+					"anchorPart": "head",
+					"bodyFullbright" : true
 				},
 				"partStates": {
 					"headState": {
@@ -538,7 +542,8 @@
 				"properties": {
 					"centered": true,
 					"zLevel": 2.6,
-					"anchorPart": "head"
+					"anchorPart": "head",
+					"bodyFullbright" : true
 				},
 				"partStates": {
 					"headState": {
@@ -561,7 +566,8 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -1,
-					"anchorPart": "head"
+					"anchorPart": "head",
+					"bodyFullbright" : true
 				},
 				"partStates": {
 					"headState": {
@@ -585,7 +591,8 @@
 					"centered": true,
 					"zLevel": -1.2,
 					"transformationGroups": ["headOffset", "movementOffset"],
-					"anchorPart" : "body"
+					"anchorPart" : "body",
+					"bodyFullbright" : true
 				},
 				"partStates": {
 					"headState": {
@@ -605,7 +612,8 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -1.1,
-					"anchorPart": "head"
+					"anchorPart": "head",
+					"bodyFullbright" : true
 				},
 				"partStates": {
 					"emoteState": {

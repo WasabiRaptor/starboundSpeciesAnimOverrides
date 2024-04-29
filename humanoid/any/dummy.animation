@@ -63,6 +63,35 @@
 					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
 				}
 			},
+			"legsCosmeticHiddenState" : {
+				"priority" : 100,
+				"states" : {
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
+				}
+			},
+			"chestCosmeticHiddenState" : {
+				"priority" : 100,
+				"states" : {
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
+				}
+			},
+			"headCosmeticHiddenState" : {
+				"priority" : 100,
+				"states" : {
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
+				}
+			},
+			"backCosmeticHiddenState" : {
+				"priority" : 100,
+				"states" : {
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
+				}
+			},
+
 			"bodyDanceState" : {
 				"priority" : 10,
 				"states" : {

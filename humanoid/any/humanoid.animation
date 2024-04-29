@@ -88,6 +88,39 @@
 					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
+			"legsCosmeticHiddenState" : {
+				"priority" : 100,
+				"default": "ignore",
+				"states" : {
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
+				}
+			},
+			"chestCosmeticHiddenState" : {
+				"priority" : 100,
+				"default": "ignore",
+				"states" : {
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
+				}
+			},
+			"headCosmeticHiddenState" : {
+				"priority" : 100,
+				"default": "ignore",
+				"states" : {
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
+				}
+			},
+			"backCosmeticHiddenState" : {
+				"priority" : 100,
+				"default": "ignore",
+				"states" : {
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
+				}
+			},
+
 			"bodyDanceState" : {
 				"priority" : 10,
 				"default": "ignore",
@@ -267,6 +300,9 @@
 					},
 					"justHead" : {
 						"head": { "properties": {} }
+					},
+					"legsCosmeticHiddenState" : {
+						"none": { "properties": {} }
 					}
 				}
 			},
@@ -304,6 +340,9 @@
 					},
 					"justHead" : {
 						"head": { "properties": {} }
+					},
+					"chestCosmeticHiddenState" : {
+						"none": { "properties": {} }
 					}
 				}
 			},
@@ -341,6 +380,9 @@
 					},
 					"justHead" : {
 						"head": { "properties": {} }
+					},
+					"backCosmeticHiddenState" : {
+						"none": { "properties": {} }
 					}
 				}
 			},
@@ -477,6 +519,9 @@
 					},
 					"justHead" : {
 						"head": { "properties": {} }
+					},
+					"chestCosmeticHiddenState" : {
+						"none": { "properties": {} }
 					}
 				}
 			},
@@ -519,6 +564,9 @@
 					},
 					"justHead" : {
 						"head": { "properties": {} }
+					},
+					"chestCosmeticHiddenState" : {
+						"none": { "properties": {} }
 					}
 				}
 			},
@@ -671,6 +719,9 @@
 						"none": { "properties": {} }
 					},
 					"clothesHiddenState" : {
+						"none": { "properties": {} }
+					},
+					"headCosmeticHiddenState" : {
 						"none": { "properties": {} }
 					}
 				}

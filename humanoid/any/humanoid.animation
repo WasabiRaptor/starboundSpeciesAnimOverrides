@@ -172,6 +172,29 @@
 					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
+			"bodyStateHighPriority": {
+				"priority" : 50,
+				"default": "idle",
+				"states": {
+					"idle": { "frames": 1, "cycle": 0, "mode": "end" },
+					"duck": { "frames": 1, "cycle": 0, "mode": "end" },
+					"sit": { "frames": 1, "cycle": 0, "mode": "end" },
+					"lay": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"walk": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"run": { "frames": 1, "cycle": 0, "mode": "loop" },
+
+					"jump": { "frames": 1, "cycle": 0, "mode": "end" },
+					"fall": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"swim": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"swimIdle": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
+				}
+			},
+
 			"frontarmRotationState": {
 				"priority" : 1,
 				"default": "ignore",
@@ -228,7 +251,37 @@
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
 					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
+			},
+			"emoteStateHighPriority": {
+				"priority" : 50,
+				"default": "idle",
+				"states": {
+					"idle": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"blabber": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"shout": { "frames": 1, "cycle": 0, "mode": "loop" },
+
+					"happy": { "frames": 1, "cycle": 0, "mode": "end" },
+					"sad": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"neutral": { "frames": 1, "cycle": 0, "mode": "end" },
+					"laugh": { "frames": 1, "cycle": 0, "mode": "loop" },
+
+					"annoyed": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"oh": { "frames": 1, "cycle": 0, "mode": "end" },
+					"oooh": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"blink": { "frames": 1, "cycle": 0, "mode": "end" },
+					"wink": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"eat": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"sleep": { "frames": 1, "cycle": 0, "mode": "loop" },
+
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
+				}
 			}
+
 		},
 		"parts": {
 			"anchor" : {},

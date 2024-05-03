@@ -120,6 +120,13 @@
 					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
 				}
 			},
+			"bodyStateHighPriority": {
+				"priority" : 50,
+				"states" : {
+					"none": { "frames": 0, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+				}
+			},
 			"frontarmRotationState": {
 				"priority" : 1,
 				"states" : {
@@ -143,6 +150,13 @@
 			},
 			"emoteState": {
 				"priority" : 0,
+				"states" : {
+					"none": { "frames": 0, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+				}
+			},
+			"emoteStateHighPriority": {
+				"priority" : 50,
 				"states" : {
 					"none": { "frames": 0, "cycle": 0, "mode": "end" },
 					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }

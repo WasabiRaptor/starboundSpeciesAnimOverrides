@@ -442,7 +442,7 @@
 			"frontarm": {
 				"properties": {
 					"centered": true,
-					"zLevel": 4,
+					"zLevel": 6,
 					"transformationGroups": [],
 					"anchorPart" : "body",
 					"itemHidden" : true,
@@ -536,7 +536,7 @@
 			"frontarm_cosmetic": {
 				"properties": {
 					"centered": true,
-					"zLevel": 4.1,
+					"zLevel": 6.01,
 					"anchorPart": "frontarm",
 					"processingDirectives" : "<chestArmorDirectives>"
 				},
@@ -581,7 +581,7 @@
 			"backarm_cosmetic": {
 				"properties": {
 					"centered": true,
-					"zLevel": -3.9,
+					"zLevel": -3.99,
 					"anchorPart": "backarm",
 					"processingDirectives" : "<chestArmorDirectives>"
 				},

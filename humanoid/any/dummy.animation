@@ -4,67 +4,80 @@
 		"stateTypes": {
 			"busy" : {
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"none": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"teleport" : {
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"none": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
-			"justHead" : {
-				"priority" : 10,
+			"portraitMode" : {
+				"priority" : 80,
+				"default": "ignore",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"head": { "frames": 1, "cycle": 0, "mode": "end" },
+					"bust": { "frames": 1, "cycle": 0, "mode": "end" },
+					"full": { "frames": 1, "cycle": 0, "mode": "end" },
+					"fullneutral": { "frames": 1, "cycle": 0, "mode": "end" },
+					"fullnude": { "frames": 1, "cycle": 0, "mode": "end" },
+					"fullneutralnude": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"noFacialHair" : {
-				"priority" : 10,
+				"priority" : 1000,
+				"default": "ignore",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"none": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"noFacialMask" : {
-				"priority" : 10,
+				"priority" : 1000,
+				"default": "ignore",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"none": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"noHair" : {
-				"priority" : 10,
+				"priority" : 1000,
+				"default": "ignore",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"none": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"bodyHiddenState" : {
 				"priority" : 100,
+				"default": "ignore",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"none": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"hiddenState" : {
 				"priority" : 1000,
+				"default": "ignore",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"none": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"clothesHiddenState" : {
-				"priority" : 100,
+				"priority" : 200,
+				"default": "ignore",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"none": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"legsCosmeticHiddenState" : {
 				"priority" : 100,
+				"default": "ignore",
 				"states" : {
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
 					"none": { "frames": 1, "cycle": 0, "mode": "end" }
@@ -72,6 +85,7 @@
 			},
 			"chestCosmeticHiddenState" : {
 				"priority" : 100,
+				"default": "ignore",
 				"states" : {
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
 					"none": { "frames": 1, "cycle": 0, "mode": "end" }
@@ -79,6 +93,7 @@
 			},
 			"headCosmeticHiddenState" : {
 				"priority" : 100,
+				"default": "ignore",
 				"states" : {
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
 					"none": { "frames": 1, "cycle": 0, "mode": "end" }
@@ -86,6 +101,7 @@
 			},
 			"backCosmeticHiddenState" : {
 				"priority" : 100,
+				"default": "ignore",
 				"states" : {
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
 					"none": { "frames": 1, "cycle": 0, "mode": "end" }
@@ -93,73 +109,149 @@
 			},
 
 			"bodyDanceState" : {
-				"priority" : 10,
+				"priority" : 20,
+				"default": "ignore",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"dance": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"frontarmDanceState" : {
 				"priority" : 10,
+				"default": "ignore",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"dance": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"backarmDanceState" : {
 				"priority" : 10,
+				"default": "ignore",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"dance": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" },
+					"none": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"bodyState": {
 				"priority" : 0,
+				"default" : "idle",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"idle": { "frames": 1, "cycle": 0, "mode": "end" },
+					"duck": { "frames": 1, "cycle": 0, "mode": "end" },
+					"sit": { "frames": 1, "cycle": 0, "mode": "end" },
+					"lay": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"walk": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"run": { "frames": 1, "cycle": 0, "mode": "loop" },
+
+					"jump": { "frames": 1, "cycle": 0, "mode": "end" },
+					"fall": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"swim": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"swimIdle": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"none": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"bodyStateHighPriority": {
 				"priority" : 50,
+				"default" : "idle",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"idle": { "frames": 1, "cycle": 0, "mode": "end" },
+					"duck": { "frames": 1, "cycle": 0, "mode": "end" },
+					"sit": { "frames": 1, "cycle": 0, "mode": "end" },
+					"lay": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"walk": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"run": { "frames": 1, "cycle": 0, "mode": "loop" },
+
+					"jump": { "frames": 1, "cycle": 0, "mode": "end" },
+					"fall": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"swim": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"swimIdle": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"none": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"frontarmRotationState": {
+				"default": "ignore",
 				"priority" : 1,
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"rotation": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"backarmRotationState": {
+				"default": "ignore",
 				"priority" : 1,
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"rotation": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"headState": {
 				"priority" : 0,
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"normal": { "frames": 1, "cycle": 0, "mode": "end" },
+					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
 			},
 			"emoteState": {
 				"priority" : 0,
+				"default" : "idle",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"idle": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"blabber": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"shout": { "frames": 1, "cycle": 0, "mode": "loop" },
+
+					"happy": { "frames": 1, "cycle": 0, "mode": "end" },
+					"sad": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"neutral": { "frames": 1, "cycle": 0, "mode": "end" },
+					"laugh": { "frames": 1, "cycle": 0, "mode": "loop" },
+
+					"annoyed": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"oh": { "frames": 1, "cycle": 0, "mode": "end" },
+					"oooh": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"blink": { "frames": 1, "cycle": 0, "mode": "end" },
+					"wink": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"eat": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"sleep": { "frames": 1, "cycle": 0, "mode": "loop" }
 				}
 			},
 			"emoteStateHighPriority": {
 				"priority" : 50,
+				"default" : "idle",
 				"states" : {
-					"none": { "frames": 0, "cycle": 0, "mode": "end" },
-					"ignore": { "frames": 0, "cycle": 0, "mode": "end" }
+					"idle": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"blabber": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"shout": { "frames": 1, "cycle": 0, "mode": "loop" },
+
+					"happy": { "frames": 1, "cycle": 0, "mode": "end" },
+					"sad": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"neutral": { "frames": 1, "cycle": 0, "mode": "end" },
+					"laugh": { "frames": 1, "cycle": 0, "mode": "loop" },
+
+					"annoyed": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"oh": { "frames": 1, "cycle": 0, "mode": "end" },
+					"oooh": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"blink": { "frames": 1, "cycle": 0, "mode": "end" },
+					"wink": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"eat": { "frames": 1, "cycle": 0, "mode": "loop" },
+					"sleep": { "frames": 1, "cycle": 0, "mode": "loop" }
 				}
 			}
 		},

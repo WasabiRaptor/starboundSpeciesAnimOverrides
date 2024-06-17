@@ -1,0 +1,8 @@
+[
+	{"op":"merge","path":"","value":{
+		// used for when a species internal name changes
+		"updateSpecies" : {},
+		"updateNPCType" : {},
+		"updateItemType" : {}
+	}}
+]

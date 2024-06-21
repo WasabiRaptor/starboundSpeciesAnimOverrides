@@ -252,7 +252,7 @@
 					},
 					"portraitMode" : {
 						"head": { "properties": {} },
-						"bust": { "properties": { "image": "<backArmor>:<personalityIdle>?addmask=/humanoid/portraitMask.png;0;0" } }
+						"bust": { "properties": {} }
 					},
 					"backCosmeticHiddenState" : {
 						"none": { "properties": {} }

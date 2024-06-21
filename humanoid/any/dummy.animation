@@ -196,7 +196,7 @@
 				}
 			},
 			"headState": {
-				"priority" : 0,
+				"priority" : 1,
 				"states" : {
 					"normal": { "frames": 1, "cycle": 0, "mode": "end" },
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }

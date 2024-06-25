@@ -153,6 +153,9 @@
 					"swim": { "frames": 1, "cycle": 0, "mode": "loop" },
 					"swimIdle": { "frames": 1, "cycle": 0, "mode": "end" },
 
+					"crawl": { "frames": 1, "cycle": 0, "mode": "end" },
+					"fly": { "frames": 1, "cycle": 0, "mode": "end" },
+
 					"none": { "frames": 1, "cycle": 0, "mode": "end" },
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }
 				}
@@ -174,6 +177,9 @@
 
 					"swim": { "frames": 1, "cycle": 0, "mode": "loop" },
 					"swimIdle": { "frames": 1, "cycle": 0, "mode": "end" },
+
+					"crawl": { "frames": 1, "cycle": 0, "mode": "end" },
+					"fly": { "frames": 1, "cycle": 0, "mode": "end" },
 
 					"none": { "frames": 1, "cycle": 0, "mode": "end" },
 					"ignore": { "frames": 1, "cycle": 0, "mode": "end" }

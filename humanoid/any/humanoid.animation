@@ -194,8 +194,8 @@
 						"run": { "properties": { "image": "<chestArmor>:<bodyStateAnim>" } },
 						"jump" : "sit",
 						"fall" : "sit",
-						"swim" : "run",
-						"swimIdle" : "run",
+						"swim" : { "properties": { "image": "<chestArmor>:swim" } },
+						"swimIdle" : "swim",
 						"none": { "properties": {} }
 					},
 					"bodyDanceState" : {

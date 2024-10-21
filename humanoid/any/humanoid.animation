@@ -221,7 +221,7 @@
 				"properties": {
 					"centered": true,
 					"zLevel": -5,
-					"transformationGroups": ["movementOffset"],
+					"transformationGroups": [],
 					"anchorPart" : "body",
 					"processingDirectives" : "<backArmorDirectives>"
 				},
@@ -232,7 +232,7 @@
 						"sit" : "duck",
 						"lay" : "duck",
 						"walk" : "duck",
-						"run" : "duck",
+						"run": { "properties": { "image": "<backArmor>:<bodyRunDirection>.<bodyStateFrame>" } },
 						"jump" : "duck",
 						"fall" : "duck",
 						"swim" : "duck",

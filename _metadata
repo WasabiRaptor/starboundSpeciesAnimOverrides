@@ -4,5 +4,10 @@
 	"name" : "SBQ Engine Assets",
 	"author" : "Wasabi_Raptor",
 	"description" : "Base assets required for the SBQ engine.",
-	"includes" : []
+	"includes" : [
+		"Bigger Action Bar(8 slots)",
+		"Bigger Action Bar(10 slots)",
+		"Bigger Action Bar(12 slots)",
+		"Bigger Action Bar(20 slots)"
+	]
 }
